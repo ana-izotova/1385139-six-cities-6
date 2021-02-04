@@ -1,7 +1,7 @@
 # Личный проект «Шесть городов» [![Build status][travis-image]][travis-url]
 
-* Студент: [Анастасия](https://up.htmlacademy.ru/react/6/user/1385139).
-* Наставник: `Неизвестно`.
+* Студент: [Анастасия Изотова](https://up.htmlacademy.ru/react/6/user/1385139).
+* Наставник: [Артем Брилев](https://htmlacademy.ru/profile/id1126425).
 
 ---
 
