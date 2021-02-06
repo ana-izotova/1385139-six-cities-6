@@ -7,9 +7,10 @@ const OFFERS_PER_PAGE = 5;
 fetch(`https://6.react.pages.academy/six-cities/hotels`)
   .then((response) => response.json())
   .then((response) => {
-    const offers = response.slice(0, OFFERS_PER_PAGE);
+    const cards = response.slice(0, OFFERS_PER_PAGE);
+    console.log(cards)
     ReactDom.render(
-      React.createElement(App, offers),
+      React.createElement(App, {cards}),
       document.querySelector(`#root`)
     )
   });

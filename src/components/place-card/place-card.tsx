@@ -1,7 +1,7 @@
 import React from "react";
-import {OfferCard} from "../../offer-cards-interface";
+import {OfferCard} from "../../types";
 
-const PlaceCard = (props: OfferCard) => {
+const PlaceCard: React.FC<OfferCard> = (props: OfferCard) => {
   const {preview_image: previewImage, is_premium: isPremium, price, title, type, rating} = props;
   const ratingInPercents = rating * 10 * 2 + `%`;
 

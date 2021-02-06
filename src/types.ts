@@ -35,6 +35,6 @@ interface OfferCard {
   city: City
 }
 
-type OfferCards = Array<OfferCard>;
+type OfferCards = {cards: Array<OfferCard>};
 
 export {OfferCard, OfferCards};

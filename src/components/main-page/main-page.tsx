@@ -1,9 +1,9 @@
 import React from 'react';
 import PlaceCard from "../place-card/place-card";
-import {OfferCards, OfferCard} from "../../offer-cards-interface";
+import {OfferCards, OfferCard} from "../../types";
 
-const MainPage = (props: OfferCards) => {
-  const cards = props;
+const MainPage: React.FC<OfferCards> = (props) => {
+  const {cards} = props;
 
   return (
     <div className="page page--gray page--main">
@@ -89,7 +89,7 @@ const MainPage = (props: OfferCards) => {
                 </ul>
               </form>
               <div className="cities__places-list places__list tabs__content">
-                {Object.values(cards).map((card: OfferCard) => <PlaceCard {...card} key={card.id} />)}
+                {cards.map((card: OfferCard) => <PlaceCard {...card} key={card.id} />)}
               </div>
             </section>
             <div className="cities__right-section">

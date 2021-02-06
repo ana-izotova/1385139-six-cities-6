@@ -1,11 +1,13 @@
 import React from "react";
 import MainPage from "../main-page/main-page";
-import {OfferCards} from "../../offer-cards-interface";
+import {OfferCards} from "../../types";
 
-const App = (cards: OfferCards) => {
+const App: React.FC<OfferCards> = (props) => {
+  const {cards} = props;
+
   return (
     <MainPage
-      {...cards}
+      cards = {cards}
     />
   );
 }
