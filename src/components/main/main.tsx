@@ -2,7 +2,7 @@ import React from 'react';
 import PlaceCard from "../place-card/place-card";
 import {OfferCards, OfferCard} from "../../types";
 
-const MainPage: React.FC<OfferCards> = (props) => {
+const Main: React.FC<OfferCards> = (props) => {
   const {cards} = props;
 
   return (
@@ -102,4 +102,4 @@ const MainPage: React.FC<OfferCards> = (props) => {
   );
 }
 
-export default MainPage;
+export default Main;
