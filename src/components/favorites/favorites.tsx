@@ -18,8 +18,8 @@ const EmptyFavorites: React.FC = () => {
 
 const FavoritePlace: React.FC<OfferCard> = (props) => {
   const {
-    preview_image: previewImage,
-    is_premium: isPremium,
+    previewImage,
+    isPremium,
     price,
     title,
     type,
@@ -111,13 +111,10 @@ const FavoriteCards: React.FC<{
 const Favorites: React.FC<OfferCards> = (props) => {
   const {cards} = props;
 
-  const favoriteCards: Array<OfferCard> = cards.filter((card) => {
-    const {is_favorite: isFavorite} = card;
-    return isFavorite;
-  });
+  const favoriteCards: Array<OfferCard> = cards.filter(({isFavorite}) => isFavorite);
 
-  const cities = Array.from(
-      new Set(favoriteCards.map((card) => card.city.name))
+  const cities: Array<string> = Array.from(
+      new Set(favoriteCards.map<string>((card) => card.city.name))
   );
 
   return (

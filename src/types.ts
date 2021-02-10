@@ -7,8 +7,8 @@ interface Location {
 interface Host {
   id: number,
   name: string,
-  is_pro: boolean,
-  avatar_url: string
+  isPro: boolean,
+  avatarUrl: string
 }
 
 interface City {
@@ -18,16 +18,16 @@ interface City {
 
 export interface OfferCard {
   id: number,
-  preview_image: string,
+  previewImage: string,
   rating: number,
   price: number,
   title: string,
   type: string,
-  is_favorite: boolean,
-  is_premium: boolean,
+  isFavorite: boolean,
+  isPremium: boolean,
   bedrooms: number,
   description: string,
-  max_adults: number,
+  maxAdults: number,
   images: Array<string>,
   goods: Array<string>,
   location: Location,

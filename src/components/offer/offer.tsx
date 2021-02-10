@@ -41,22 +41,22 @@ const capitalize = (string: string) =>
 const Offer: React.FC<OfferCardsWithMatchingId> = ({cards, id}) => {
   const card = cards.find((item) => item.id === Number(id));
   const {
-    is_premium: isPremium,
+    isPremium,
     price,
     title,
     type,
     rating,
     images,
     bedrooms,
-    max_adults: maxAdults,
+    maxAdults,
     goods,
     host,
     description,
   } = card;
   const {
     name: hostName,
-    is_pro: hostIsPro,
-    avatar_url: hostAvatar,
+    isPro: hostIsPro,
+    avatarUrl: hostAvatar,
   } = host;
   const ratingInPercents = rating * 10 * 2 + `%`;
 

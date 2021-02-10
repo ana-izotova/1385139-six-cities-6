@@ -4,7 +4,7 @@ import PlaceCardInfo from "../place-card-info/place-card-info";
 import {OfferCards, OfferCard} from "../../types";
 
 const CityPlaceCard: React.FC<OfferCard> = ({card, children}) => {
-  const {preview_image: previewImage, is_premium: isPremium} = card;
+  const {previewImage, isPremium} = card;
 
   return (
     <article className="cities__place-card place-card">
