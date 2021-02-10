@@ -16,7 +16,7 @@ interface City {
   location: Location
 }
 
-interface OfferCard {
+export interface OfferCard {
   id: number,
   preview_image: string,
   rating: number,
@@ -35,6 +35,4 @@ interface OfferCard {
   city: City
 }
 
-type OfferCards = {cards: Array<OfferCard>};
-
-export {OfferCard, OfferCards};
+export type OfferCards = { cards: Array<OfferCard> };
