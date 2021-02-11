@@ -1,6 +1,24 @@
-import {OfferCard} from "./types";
+import {OfferCard, Comment} from "./types";
 
-export const adaptToClient: (card) => OfferCard = function (card): OfferCard {
+export const recalculteRatingToPercents = (rating: number): string =>
+  rating * 10 * 2 + `%`;
+
+const adaptCommentToClient = (comment: any): Comment => {
+  const adaptedComment = {
+    ...comment,
+    avatarUrl: comment.user.avatar_url,
+    isPro: comment.user.is_pro
+  };
+
+  delete adaptedComment.user.avatar_url;
+  delete adaptedComment.user.is_pro;
+
+  return adaptedComment;
+};
+
+export const adaptToClient = (card: any, comments: Array<unknown>): OfferCard => {
+  const adaptedComments = comments.map((comment) => adaptCommentToClient(comment));
+
   const adaptedCard = {
     ...card,
     previewImage: card.preview_image,
@@ -11,7 +29,8 @@ export const adaptToClient: (card) => OfferCard = function (card): OfferCard {
       ...card.host,
       avatarUrl: card.host.avatar_url,
       isPro: card.host.is_pro,
-    }
+    },
+    comments: adaptedComments
   };
 
   delete adaptedCard.preview_image;
@@ -20,7 +39,6 @@ export const adaptToClient: (card) => OfferCard = function (card): OfferCard {
   delete adaptedCard.max_adults;
   delete adaptedCard.host.is_pro;
   delete adaptedCard.host.avatar_url;
-
 
   return adaptedCard;
 };

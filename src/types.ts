@@ -16,6 +16,23 @@ interface City {
   location: Location
 }
 
+interface CommentAuthor {
+  avatarUrl: string,
+  id: number,
+  isPro: boolean,
+  name: string
+}
+
+export interface Comment {
+  comment: string,
+  date: Date,
+  id: number,
+  rating: number,
+  user: CommentAuthor
+}
+
+export type Comments = Array<Comment>;
+
 export interface OfferCard {
   id: number,
   previewImage: string,
@@ -32,7 +49,8 @@ export interface OfferCard {
   goods: Array<string>,
   location: Location,
   host: Host,
-  city: City
+  city: City,
+  comments: Comments
 }
 
 export type OfferCards = { cards: Array<OfferCard> };

@@ -2,16 +2,21 @@ import React from "react";
 import {OfferCard} from "../../types";
 import {Link} from "react-router-dom";
 import PlaceCardInfo from "../place-card-info/place-card-info";
+import {recalculteRatingToPercents} from "../../utils";
 
-const IMAGES_PER_PPAGE = 6;
+const IMAGES_PER_PAGE = 6;
 
 interface OfferCardsWithMatchingId {
   cards: Array<OfferCard>;
   id: string;
 }
 
-const NearPlaceCard: React.FC<OfferCard> = ({card, children}) => {
-  const {preview_image: previewImage, is_premium: isPremium} = card;
+interface NearPlaceCardProps {
+  card: OfferCard;
+}
+
+const NearPlaceCard: React.FC<NearPlaceCardProps> = ({card, children}) => {
+  const {previewImage, isPremium} = card;
   return (
     <article className="near-places__card place-card">
       {isPremium && (
@@ -58,7 +63,9 @@ const Offer: React.FC<OfferCardsWithMatchingId> = ({cards, id}) => {
     isPro: hostIsPro,
     avatarUrl: hostAvatar,
   } = host;
-  const ratingInPercents = rating * 10 * 2 + `%`;
+  const ratingInPercents: string = recalculteRatingToPercents(rating);
+
+  fetch;
 
   return (
     <div className="page">
@@ -97,7 +104,7 @@ const Offer: React.FC<OfferCardsWithMatchingId> = ({cards, id}) => {
         <section className="property">
           <div className="property__gallery-container container">
             <div className="property__gallery">
-              {images.slice(0, IMAGES_PER_PPAGE).map((image) => (
+              {images.slice(0, IMAGES_PER_PAGE).map((image) => (
                 <div
                   className="property__image-wrapper"
                   key={image.slice(52, -4)}

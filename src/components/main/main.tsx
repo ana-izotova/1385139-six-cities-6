@@ -3,7 +3,11 @@ import {Link} from "react-router-dom";
 import PlaceCardInfo from "../place-card-info/place-card-info";
 import {OfferCards, OfferCard} from "../../types";
 
-const CityPlaceCard: React.FC<OfferCard> = ({card, children}) => {
+interface CityPlaceCardProps {
+  card: OfferCard;
+}
+
+const CityPlaceCard: React.FC<CityPlaceCardProps> = ({card, children}) => {
   const {previewImage, isPremium} = card;
 
   return (

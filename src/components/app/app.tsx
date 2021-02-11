@@ -3,22 +3,16 @@ import Main from "../main/main";
 import {
   Switch,
   Route,
-  BrowserRouter,
-  RouteComponentProps,
+  BrowserRouter
 } from "react-router-dom";
 import {OfferCards} from "../../types";
 import Favorites from "../favorites/favorites";
 import Login from "../login/login";
 import Offer from "../offer/offer";
 import NotFound from "../not-found/not-found";
+import {Props} from "./app-types";
 
 const OFFERS_PER_PAGE = 5;
-
-interface MatchParams {
-  id: string;
-}
-
-type Props = RouteComponentProps<MatchParams>
 
 const App: React.FC<OfferCards> = (props) => {
   const {cards} = props;
