@@ -65,8 +65,6 @@ const Offer: React.FC<OfferCardsWithMatchingId> = ({cards, id}) => {
   } = host;
   const ratingInPercents: string = recalculteRatingToPercents(rating);
 
-  fetch;
-
   return (
     <div className="page">
       <header className="header">
