@@ -25,7 +25,7 @@ interface CommentAuthor {
 
 export interface Comment {
   comment: string,
-  date: Date,
+  date: string,
   id: number,
   rating: number,
   user: CommentAuthor

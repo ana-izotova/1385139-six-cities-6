@@ -1,7 +1,7 @@
 import React from "react";
 import {OfferCard} from "../../types";
 
-export const PlaceCardInfo: React.FC<OfferCard> = ({
+const PlaceCardInfo: React.FC<OfferCard> = ({
   price,
   title,
   type,

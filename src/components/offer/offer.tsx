@@ -2,7 +2,9 @@ import React from "react";
 import {OfferCard} from "../../types";
 import {Link} from "react-router-dom";
 import PlaceCardInfo from "../place-card-info/place-card-info";
-import {recalculteRatingToPercents} from "../../utils";
+import {convertRatingToPercents, capitalize} from "../../utils";
+import CommentItem from "../comment-item/comment-item";
+import NewCommentForm from "../new-comment-form/new-comment-form";
 
 const IMAGES_PER_PAGE = 6;
 
@@ -40,9 +42,6 @@ const NearPlaceCard: React.FC<NearPlaceCardProps> = ({card, children}) => {
   );
 };
 
-const capitalize = (string: string) =>
-  string[0].toUpperCase() + string.slice(1);
-
 const Offer: React.FC<OfferCardsWithMatchingId> = ({cards, id}) => {
   const card = cards.find((item) => item.id === Number(id));
   const {
@@ -57,13 +56,14 @@ const Offer: React.FC<OfferCardsWithMatchingId> = ({cards, id}) => {
     goods,
     host,
     description,
+    comments
   } = card;
   const {
     name: hostName,
     isPro: hostIsPro,
     avatarUrl: hostAvatar,
   } = host;
-  const ratingInPercents: string = recalculteRatingToPercents(rating);
+  const ratingInPercents: string = convertRatingToPercents(rating);
 
   return (
     <div className="page">
@@ -84,13 +84,15 @@ const Offer: React.FC<OfferCardsWithMatchingId> = ({cards, id}) => {
             <nav className="header__nav">
               <ul className="header__nav-list">
                 <li className="header__nav-item user">
-                  <a
+                  <Link
                     className="header__nav-link header__nav-link--profile"
-                    href="#"
+                    to="/"
                   >
                     <div className="header__avatar-wrapper user__avatar-wrapper"></div>
-                    <span className="header__login">Sign in</span>
-                  </a>
+                    <span className="header__user-name user__name">
+                      Oliver.conner@gmail.com
+                    </span>
+                  </Link>
                 </li>
               </ul>
             </nav>
@@ -200,40 +202,12 @@ const Offer: React.FC<OfferCardsWithMatchingId> = ({cards, id}) => {
               </div>
               <section className="property__reviews reviews">
                 <h2 className="reviews__title">
-                  Reviews &middot; <span className="reviews__amount">1</span>
+                  Reviews &middot; <span className="reviews__amount">{comments.length}</span>
                 </h2>
                 <ul className="reviews__list">
-                  <li className="reviews__item">
-                    <div className="reviews__user user">
-                      <div className="reviews__avatar-wrapper user__avatar-wrapper">
-                        <img
-                          className="reviews__avatar user__avatar"
-                          src="img/avatar-max.jpg"
-                          width="54"
-                          height="54"
-                          alt="Reviews avatar"
-                        />
-                      </div>
-                      <span className="reviews__user-name">Max</span>
-                    </div>
-                    <div className="reviews__info">
-                      <div className="reviews__rating rating">
-                        <div className="reviews__stars rating__stars">
-                          <span style={{width: `80%`}}></span>
-                          <span className="visually-hidden">Rating</span>
-                        </div>
-                      </div>
-                      <p className="reviews__text">
-                        A quiet cozy and picturesque that hides behind a a river
-                        by the unique lightness of Amsterdam. The building is
-                        green and from 18th century.
-                      </p>
-                      <time className="reviews__time" dateTime="2019-04-24">
-                        April 2019
-                      </time>
-                    </div>
-                  </li>
+                  {comments.map((comment) => <CommentItem {...comment} key={comment.id}/>)}
                 </ul>
+                <NewCommentForm/>
               </section>
             </div>
           </div>

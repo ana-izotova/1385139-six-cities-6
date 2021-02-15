@@ -1,13 +1,26 @@
 import {OfferCard, Comment} from "./types";
 
-export const recalculteRatingToPercents = (rating: number): string =>
+export const convertRatingToPercents = (rating: number): string =>
   rating * 10 * 2 + `%`;
+
+export const capitalize = (string: string): string =>
+  string[0].toUpperCase() + string.slice(1);
+
+export const formatDate = (date: string): string => {
+  const dateObj = new Date(date);
+  const month = dateObj.toLocaleString(`default`, {month: `long`});
+  const year = dateObj.getFullYear();
+  return `${month} ${year}`;
+};
 
 const adaptCommentToClient = (comment: any): Comment => {
   const adaptedComment = {
     ...comment,
-    avatarUrl: comment.user.avatar_url,
-    isPro: comment.user.is_pro
+    user: {
+      ...comment.user,
+      avatarUrl: comment.user.avatar_url,
+      isPro: comment.user.is_pro
+    },
   };
 
   delete adaptedComment.user.avatar_url;
