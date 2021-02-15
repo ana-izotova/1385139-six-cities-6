@@ -1,8 +1,39 @@
-import React from 'react';
-import PlaceCard from "../place-card/place-card";
+import React from "react";
+import {Link} from "react-router-dom";
+import PlaceCardInfo from "../place-card-info/place-card-info";
 import {OfferCards, OfferCard} from "../../types";
 
-const MainPage: React.FC<OfferCards> = (props) => {
+interface CityPlaceCardProps {
+  card: OfferCard;
+}
+
+const CityPlaceCard: React.FC<CityPlaceCardProps> = ({card, children}) => {
+  const {previewImage, isPremium} = card;
+
+  return (
+    <article className="cities__place-card place-card">
+      {isPremium && (
+        <div className="place-card__mark">
+          <span>Premium</span>
+        </div>
+      )}
+      <div className="cities__image-wrapper place-card__image-wrapper">
+        <a href="#">
+          <img
+            className="place-card__image"
+            src={previewImage}
+            width="260"
+            height="200"
+            alt="Place image"
+          />
+        </a>
+      </div>
+      {children}
+    </article>
+  );
+};
+
+const Main: React.FC<OfferCards> = (props) => {
   const {cards} = props;
 
   return (
@@ -12,17 +43,26 @@ const MainPage: React.FC<OfferCards> = (props) => {
           <div className="header__wrapper">
             <div className="header__left">
               <a className="header__logo-link header__logo-link--active">
-                <img className="header__logo" src="img/logo.svg" alt="6 cities logo" style={{width: 81, height: 41}} />
+                <img
+                  className="header__logo"
+                  src="img/logo.svg"
+                  alt="6 cities logo"
+                  style={{width: 81, height: 41}}
+                />
               </a>
             </div>
             <nav className="header__nav">
               <ul className="header__nav-list">
                 <li className="header__nav-item user">
-                  <a className="header__nav-link header__nav-link--profile" href="#">
-                    <div className="header__avatar-wrapper user__avatar-wrapper">
-                    </div>
-                    <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-                  </a>
+                  <Link
+                    className="header__nav-link header__nav-link--profile"
+                    to="/"
+                  >
+                    <div className="header__avatar-wrapper user__avatar-wrapper"></div>
+                    <span className="header__user-name user__name">
+                      Oliver.conner@gmail.com
+                    </span>
+                  </Link>
                 </li>
               </ul>
             </nav>
@@ -77,19 +117,37 @@ const MainPage: React.FC<OfferCards> = (props) => {
                 <span className="places__sorting-caption">Sort by</span>
                 <span className="places__sorting-type" tabIndex={0}>
                   Popular
-                  <svg className="places__sorting-arrow" style={{width: 7, height: 4}}>
+                  <svg
+                    className="places__sorting-arrow"
+                    style={{width: 7, height: 4}}
+                  >
                     <use xlinkHref="#icon-arrow-select"></use>
                   </svg>
                 </span>
                 <ul className="places__options places__options--custom places__options--opened">
-                  <li className="places__option places__option--active" tabIndex={0}>Popular</li>
-                  <li className="places__option" tabIndex={0}>Price: low to high</li>
-                  <li className="places__option" tabIndex={0}>Price: high to low</li>
-                  <li className="places__option" tabIndex={0}>Top rated first</li>
+                  <li
+                    className="places__option places__option--active"
+                    tabIndex={0}
+                  >
+                    Popular
+                  </li>
+                  <li className="places__option" tabIndex={0}>
+                    Price: low to high
+                  </li>
+                  <li className="places__option" tabIndex={0}>
+                    Price: high to low
+                  </li>
+                  <li className="places__option" tabIndex={0}>
+                    Top rated first
+                  </li>
                 </ul>
               </form>
               <div className="cities__places-list places__list tabs__content">
-                {cards.map((card: OfferCard) => <PlaceCard {...card} key={card.id} />)}
+                {cards.map((card) => (
+                  <CityPlaceCard card={card} key={card.id}>
+                    <PlaceCardInfo {...card} />
+                  </CityPlaceCard>
+                ))}
               </div>
             </section>
             <div className="cities__right-section">
@@ -100,6 +158,6 @@ const MainPage: React.FC<OfferCards> = (props) => {
       </main>
     </div>
   );
-}
+};
 
-export default MainPage;
+export default Main;

@@ -7,8 +7,8 @@ interface Location {
 interface Host {
   id: number,
   name: string,
-  is_pro: boolean,
-  avatar_url: string
+  isPro: boolean,
+  avatarUrl: string
 }
 
 interface City {
@@ -16,25 +16,41 @@ interface City {
   location: Location
 }
 
-interface OfferCard {
+interface CommentAuthor {
+  avatarUrl: string,
   id: number,
-  preview_image: string,
+  isPro: boolean,
+  name: string
+}
+
+export interface Comment {
+  comment: string,
+  date: string,
+  id: number,
+  rating: number,
+  user: CommentAuthor
+}
+
+export type Comments = Array<Comment>;
+
+export interface OfferCard {
+  id: number,
+  previewImage: string,
   rating: number,
   price: number,
   title: string,
   type: string,
-  is_favorite: boolean,
-  is_premium: boolean,
+  isFavorite: boolean,
+  isPremium: boolean,
   bedrooms: number,
   description: string,
-  max_adults: number,
+  maxAdults: number,
   images: Array<string>,
   goods: Array<string>,
   location: Location,
   host: Host,
-  city: City
+  city: City,
+  comments: Comments
 }
 
-type OfferCards = {cards: Array<OfferCard>};
-
-export {OfferCard, OfferCards};
+export type OfferCards = { cards: Array<OfferCard> };
