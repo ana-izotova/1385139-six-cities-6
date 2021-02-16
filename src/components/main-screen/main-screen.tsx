@@ -1,39 +1,9 @@
 import React from "react";
 import {Link} from "react-router-dom";
-import PlaceCardInfo from "../place-card-info/place-card-info";
-import {OfferCards, OfferCard} from "../../types";
+import {OfferCards} from "../../types";
+import OfferList from "../offer-list/offer-list";
 
-interface CityPlaceCardProps {
-  card: OfferCard;
-}
-
-const CityPlaceCard: React.FC<CityPlaceCardProps> = ({card, children}) => {
-  const {previewImage, isPremium} = card;
-
-  return (
-    <article className="cities__place-card place-card">
-      {isPremium && (
-        <div className="place-card__mark">
-          <span>Premium</span>
-        </div>
-      )}
-      <div className="cities__image-wrapper place-card__image-wrapper">
-        <a href="#">
-          <img
-            className="place-card__image"
-            src={previewImage}
-            width="260"
-            height="200"
-            alt="Place image"
-          />
-        </a>
-      </div>
-      {children}
-    </article>
-  );
-};
-
-const Main: React.FC<OfferCards> = (props) => {
+const MainScreen: React.FC<OfferCards> = (props) => {
   const {cards} = props;
 
   return (
@@ -142,13 +112,7 @@ const Main: React.FC<OfferCards> = (props) => {
                   </li>
                 </ul>
               </form>
-              <div className="cities__places-list places__list tabs__content">
-                {cards.map((card) => (
-                  <CityPlaceCard card={card} key={card.id}>
-                    <PlaceCardInfo {...card} />
-                  </CityPlaceCard>
-                ))}
-              </div>
+              <OfferList cards={cards} offerType="cities"/>
             </section>
             <div className="cities__right-section">
               <section className="cities__map map"></section>
@@ -160,4 +124,4 @@ const Main: React.FC<OfferCards> = (props) => {
   );
 };
 
-export default Main;
+export default MainScreen;

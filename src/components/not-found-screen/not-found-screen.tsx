@@ -1,7 +1,7 @@
 import React from "react";
 import {Link} from "react-router-dom";
 
-const NotFound: React.FC = () => {
+const NotFoundScreen: React.FC = () => {
   return (
     <div className="page page--gray page--main">
       <header className="header">
@@ -35,4 +35,4 @@ const NotFound: React.FC = () => {
   );
 };
 
-export default NotFound;
+export default NotFoundScreen;
