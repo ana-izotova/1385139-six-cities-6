@@ -1,7 +1,6 @@
 import React from "react";
 import {OfferCard} from "../../types";
 import {Link} from "react-router-dom";
-import PlaceCardInfo from "../place-card-info/place-card-info";
 import {convertRatingToPercents, capitalize} from "../../utils";
 import CommentItem from "../comment-item/comment-item";
 import NewCommentForm from "../new-comment-form/new-comment-form";
@@ -192,7 +191,7 @@ const RoomScreen: React.FC<OfferCardsWithMatchingId> = ({cards, id}) => {
             </h2>
             <div className="near-places__list places__list">
               {cards.slice(0, 3).map((item) => (
-                <PlaceCard offerType="near-places" card={card} key={card.id}/>
+                <PlaceCard offerType="near-places" card={item} key={item.id}/>
               ))}
             </div>
           </section>

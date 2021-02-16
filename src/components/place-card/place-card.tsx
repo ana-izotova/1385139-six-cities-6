@@ -1,6 +1,7 @@
 import React from "react";
+import {Link} from "react-router-dom";
 import {ClassNames, PlaceCardProps} from "./place-card-types";
-import {convertRatingToPercents} from "../../utils";
+import {convertRatingToPercents, capitalize} from "../../utils";
 
 const getClassNames = (type: string): ClassNames => {
   let articleClassNames = [`${type}__card`, `place-card`];
@@ -19,7 +20,7 @@ const getClassNames = (type: string): ClassNames => {
 };
 
 const PlaceCard: React.FC<PlaceCardProps> = ({card, offerType}) => {
-  const {previewImage, isPremium, price, title, type, rating} = card;
+  const {previewImage, isPremium, price, title, type, rating, id} = card;
   const ratingInPercents = convertRatingToPercents(rating);
   const {
     articleClassNames,
@@ -35,7 +36,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({card, offerType}) => {
         </div>
       )}
       <div className={imageWrapperClassNames.join(` `)}>
-        <a href="#">
+        <Link to={`/offer/${id}`}>
           <img
             className="place-card__image"
             src={previewImage}
@@ -43,7 +44,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({card, offerType}) => {
             height={offerType === `favorites` ? `110` : `200`}
             alt="Place image"
           />
-        </a>
+        </Link>
       </div>
       <div className={cardInfoClassNames.join(` `)}>
         <div className="place-card__price-wrapper">
@@ -65,9 +66,9 @@ const PlaceCard: React.FC<PlaceCardProps> = ({card, offerType}) => {
           </div>
         </div>
         <h2 className="place-card__name">
-          <a href="#">{title}</a>
+          <Link to={`/offer/${id}`}>{title}</Link>
         </h2>
-        <p className="place-card__type">{type}</p>
+        <p className="place-card__type">{capitalize(type)}</p>
       </div>
     </article>
   );
