@@ -19,7 +19,11 @@ const getClassNames = (type: string): ClassNames => {
   return {articleClassNames, imageWrapperClassNames, cardInfoClassNames};
 };
 
-const PlaceCard: React.FC<PlaceCardProps> = ({card, offerType}) => {
+const PlaceCard: React.FC<PlaceCardProps> = ({
+  card,
+  offerType,
+  changeStateHandler,
+}) => {
   const {previewImage, isPremium, price, title, type, rating, id} = card;
   const ratingInPercents = convertRatingToPercents(rating);
   const {
@@ -28,8 +32,19 @@ const PlaceCard: React.FC<PlaceCardProps> = ({card, offerType}) => {
     cardInfoClassNames,
   } = getClassNames(offerType);
 
+  const handleCursorHover = () => {
+    changeStateHandler(id);
+  };
+  const handleCursorLeave = () => {
+    changeStateHandler(null);
+  };
+
   return (
-    <article className={articleClassNames.join(` `)}>
+    <article
+      onMouseEnter={type !== `favorites` ? handleCursorHover : null}
+      onMouseLeave={type !== `favorites` ? handleCursorLeave : null}
+      className={articleClassNames.join(` `)}
+    >
       {isPremium && (
         <div className="place-card__mark">
           <span>Premium</span>

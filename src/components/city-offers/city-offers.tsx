@@ -1,5 +1,5 @@
 import React from "react";
-import OfferList from "../offer-list/offer-list";
+import OffersList from "../offers-list/offers-list";
 import SortingList from "../sorting-list/sorting-list";
 import {CityOffersProps, NoCityOffersProps} from "./city-offers-types";
 
@@ -43,7 +43,7 @@ const CityOffers: React.FC<CityOffersProps> = ({cards, city}) => {
               </span>
               <SortingList />
             </form>
-            <OfferList cards={cards} offerType="cities" />
+            <OffersList cards={cards} offerType="cities" />
           </section>
           <div className="cities__right-section">
             <section className="cities__map map"></section>

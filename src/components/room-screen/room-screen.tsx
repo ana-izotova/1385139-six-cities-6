@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {OfferCard} from "../../types";
 import {Link} from "react-router-dom";
 import {convertRatingToPercents, capitalize} from "../../utils";
@@ -35,6 +35,11 @@ const RoomScreen: React.FC<OfferCardsWithMatchingId> = ({cards, id}) => {
     avatarUrl: hostAvatar,
   } = host;
   const ratingInPercents: string = convertRatingToPercents(rating);
+
+  const [, setActiveCard] = useState(null);
+  const activeCardChangeStateHandler = (cardId: number): void => {
+    setActiveCard(cardId);
+  };
 
   return (
     <div className="page">
@@ -191,7 +196,7 @@ const RoomScreen: React.FC<OfferCardsWithMatchingId> = ({cards, id}) => {
             </h2>
             <div className="near-places__list places__list">
               {cards.slice(0, 3).map((item) => (
-                <PlaceCard offerType="near-places" card={item} key={item.id}/>
+                <PlaceCard offerType="near-places" card={item} key={item.id} changeStateHandler={activeCardChangeStateHandler}/>
               ))}
             </div>
           </section>
