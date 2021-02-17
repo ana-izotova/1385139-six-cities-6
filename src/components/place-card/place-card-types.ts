@@ -7,7 +7,7 @@ export interface PlaceCardProps {
 }
 
 export interface ClassNames {
-  articleClassNames: Array<string>;
-  imageWrapperClassNames: Array<string>;
-  cardInfoClassNames: Array<string>;
+  articleClassNames: string;
+  imageWrapperClassNames: string;
+  cardInfoClassNames: string;
 }

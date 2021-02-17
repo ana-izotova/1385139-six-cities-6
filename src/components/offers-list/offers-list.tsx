@@ -3,7 +3,7 @@ import PlaceCard from "../place-card/place-card";
 import {OffersListProps} from "./offers-list-types";
 
 const OffersList: React.FC<OffersListProps> = ({cards, offerType}) => {
-  const [activeCard, setActiveCard] = useState(null);
+  const [, setActiveCard] = useState(null);
   const activeCardChangeStateHandler = (id: number): void => {
     setActiveCard(id);
   };

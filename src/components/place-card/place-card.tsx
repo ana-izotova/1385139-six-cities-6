@@ -4,16 +4,13 @@ import {ClassNames, PlaceCardProps} from "./place-card-types";
 import {convertRatingToPercents, capitalize} from "../../utils";
 
 const getClassNames = (type: string): ClassNames => {
-  let articleClassNames = [`${type}__card`, `place-card`];
-  const imageWrapperClassNames = [
-    `${type}__image-wrapper`,
-    `place-card__image-wrapper`,
-  ];
-  let cardInfoClassNames = [`${type}__card-info`, `place-card__info`];
+  let articleClassNames = `${type}__card place-card`;
+  const imageWrapperClassNames = `${type}__image-wrapper place-card__image-wrapper`;
+  let cardInfoClassNames = `${type}__card-info place-card__info`;
 
   if (type === `cities`) {
-    articleClassNames = [`cities__place-card`, `place-card`];
-    cardInfoClassNames = [`place-card__info`];
+    articleClassNames = `cities__place-card place-card`;
+    cardInfoClassNames = `place-card__info`;
   }
 
   return {articleClassNames, imageWrapperClassNames, cardInfoClassNames};
@@ -41,16 +38,16 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
 
   return (
     <article
-      onMouseEnter={type !== `favorites` ? handleCursorHover : null}
-      onMouseLeave={type !== `favorites` ? handleCursorLeave : null}
-      className={articleClassNames.join(` `)}
+      onMouseEnter={type === `cities` ? handleCursorHover : null}
+      onMouseLeave={type === `cities` ? handleCursorLeave : null}
+      className={articleClassNames}
     >
       {isPremium && (
         <div className="place-card__mark">
           <span>Premium</span>
         </div>
       )}
-      <div className={imageWrapperClassNames.join(` `)}>
+      <div className={imageWrapperClassNames}>
         <Link to={`/offer/${id}`}>
           <img
             className="place-card__image"
@@ -61,7 +58,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
           />
         </Link>
       </div>
-      <div className={cardInfoClassNames.join(` `)}>
+      <div className={cardInfoClassNames}>
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
             <b className="place-card__price-value">&euro;{price}</b>

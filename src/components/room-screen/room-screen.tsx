@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useLayoutEffect} from "react";
 import {OfferCard} from "../../types";
 import {Link} from "react-router-dom";
 import {convertRatingToPercents, capitalize} from "../../utils";
@@ -36,10 +36,17 @@ const RoomScreen: React.FC<OfferCardsWithMatchingId> = ({cards, id}) => {
   } = host;
   const ratingInPercents: string = convertRatingToPercents(rating);
 
-  const [, setActiveCard] = useState(null);
-  const activeCardChangeStateHandler = (cardId: number): void => {
-    setActiveCard(cardId);
-  };
+  useLayoutEffect(() => {
+    try {
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: `smooth`,
+      });
+    } catch (error) {
+      window.scrollTo(0, 0);
+    }
+  }, [id]);
 
   return (
     <div className="page">
@@ -196,7 +203,7 @@ const RoomScreen: React.FC<OfferCardsWithMatchingId> = ({cards, id}) => {
             </h2>
             <div className="near-places__list places__list">
               {cards.slice(0, 3).map((item) => (
-                <PlaceCard offerType="near-places" card={item} key={item.id} changeStateHandler={activeCardChangeStateHandler}/>
+                <PlaceCard offerType="near-places" card={item} key={item.id} />
               ))}
             </div>
           </section>
