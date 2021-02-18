@@ -1,10 +1,10 @@
-import React from "react";
+import React, {useLayoutEffect} from "react";
 import {OfferCard} from "../../types";
 import {Link} from "react-router-dom";
-import PlaceCardInfo from "../place-card-info/place-card-info";
 import {convertRatingToPercents, capitalize} from "../../utils";
 import CommentItem from "../comment-item/comment-item";
 import NewCommentForm from "../new-comment-form/new-comment-form";
+import PlaceCard from "../place-card/place-card";
 
 const IMAGES_PER_PAGE = 6;
 
@@ -13,36 +13,7 @@ interface OfferCardsWithMatchingId {
   id: string;
 }
 
-interface NearPlaceCardProps {
-  card: OfferCard;
-}
-
-const NearPlaceCard: React.FC<NearPlaceCardProps> = ({card, children}) => {
-  const {previewImage, isPremium} = card;
-  return (
-    <article className="near-places__card place-card">
-      {isPremium && (
-        <div className="place-card__mark">
-          <span>Premium</span>
-        </div>
-      )}
-      <div className="near-places__image-wrapper place-card__image-wrapper">
-        <a href="#">
-          <img
-            className="place-card__image"
-            src={previewImage}
-            width="260"
-            height="200"
-            alt="Place image"
-          />
-        </a>
-      </div>
-      {children}
-    </article>
-  );
-};
-
-const Offer: React.FC<OfferCardsWithMatchingId> = ({cards, id}) => {
+const RoomScreen: React.FC<OfferCardsWithMatchingId> = ({cards, id}) => {
   const card = cards.find((item) => item.id === Number(id));
   const {
     isPremium,
@@ -64,6 +35,18 @@ const Offer: React.FC<OfferCardsWithMatchingId> = ({cards, id}) => {
     avatarUrl: hostAvatar,
   } = host;
   const ratingInPercents: string = convertRatingToPercents(rating);
+
+  useLayoutEffect(() => {
+    try {
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: `smooth`,
+      });
+    } catch (error) {
+      window.scrollTo(0, 0);
+    }
+  }, [id]);
 
   return (
     <div className="page">
@@ -220,9 +203,7 @@ const Offer: React.FC<OfferCardsWithMatchingId> = ({cards, id}) => {
             </h2>
             <div className="near-places__list places__list">
               {cards.slice(0, 3).map((item) => (
-                <NearPlaceCard card={item} key={item.id}>
-                  <PlaceCardInfo {...item} />
-                </NearPlaceCard>
+                <PlaceCard offerType="near-places" card={item} key={item.id} />
               ))}
             </div>
           </section>
@@ -232,4 +213,4 @@ const Offer: React.FC<OfferCardsWithMatchingId> = ({cards, id}) => {
   );
 };
 
-export default Offer;
+export default RoomScreen;
