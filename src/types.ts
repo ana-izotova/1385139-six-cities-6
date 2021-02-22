@@ -11,7 +11,7 @@ interface Host {
   avatarUrl: string
 }
 
-interface City {
+export interface City {
   name: string,
   location: Location
 }
