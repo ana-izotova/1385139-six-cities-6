@@ -47,7 +47,7 @@ const CityOffers: React.FC<CityOffersProps> = ({cards, city}) => {
             <OffersList cards={cards} offerType="cities" />
           </section>
           <div className="cities__right-section">
-            <Map city={city} cards={cards}/>
+            <Map city={city} cards={cards} style={{height: `100%`}} />
           </div>
         </div>
       ) : (

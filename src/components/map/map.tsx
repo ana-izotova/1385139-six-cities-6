@@ -3,19 +3,23 @@ import leaflet from 'leaflet';
 import "leaflet/dist/leaflet.css";
 import {mapProps} from "./map-types";
 
-const Map: React.FC<mapProps> = ({cards, city}) => {
-  const mapRef = useRef();
+const Map: React.FC<mapProps> = ({cards, city, style}) => {
+  const mapRef = useRef(null);
 
   useEffect(() => {
+    const cityZoom: number = city.location.zoom;
+    const cityCoordinates = {
+      lat: city.location.latitude,
+      lng: city.location.longitude
+    };
+
     mapRef.current = leaflet.map(`map`, {
-      center: {
-        lat: city.location.latitude,
-        lng: city.location.longitude
-      },
-      zoom: 12,
-      zoomControl: false,
-      // marker: true
+      center: cityCoordinates,
+      zoom: cityZoom,
+      zoomControl: false
     });
+
+    mapRef.current.setView(cityCoordinates, cityZoom);
 
     leaflet
       .tileLayer(`https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png`, {
@@ -43,10 +47,10 @@ const Map: React.FC<mapProps> = ({cards, city}) => {
         mapRef.current.remove();
       };
     });
-  }, []);
+  }, [city]);
 
   return (
-    <section className="property__map map" id="map" ref={mapRef}></section>
+    <section className="property__map map" id="map" ref={mapRef} style={style}></section>
   );
 };
 
