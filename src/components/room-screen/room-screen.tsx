@@ -5,6 +5,7 @@ import {convertRatingToPercents, capitalize} from "../../utils";
 import CommentItem from "../comment-item/comment-item";
 import NewCommentForm from "../new-comment-form/new-comment-form";
 import PlaceCard from "../place-card/place-card";
+import Map from "../map/map";
 
 const IMAGES_PER_PAGE = 6;
 
@@ -194,7 +195,7 @@ const RoomScreen: React.FC<OfferCardsWithMatchingId> = ({cards, id}) => {
               </section>
             </div>
           </div>
-          <section className="property__map map"></section>
+          <Map cards={cards.slice(0, 3)} city={card.city} />
         </section>
         <div className="container">
           <section className="near-places places">

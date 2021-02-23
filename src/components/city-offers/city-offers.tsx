@@ -1,6 +1,7 @@
 import React from "react";
 import OffersList from "../offers-list/offers-list";
 import SortingList from "../sorting-list/sorting-list";
+import Map from "../map/map";
 import {CityOffersProps, NoCityOffersProps} from "./city-offers-types";
 
 const NoCityOffers: React.FC<NoCityOffersProps> = ({city}) => {
@@ -10,7 +11,7 @@ const NoCityOffers: React.FC<NoCityOffersProps> = ({city}) => {
         <div className="cities__status-wrapper tabs__content">
           <b className="cities__status">No places to stay available</b>
           <p className="cities__status-description">
-            We could not find any property available at the moment in {city}
+            We could not find any property available at the moment in {city.name}
           </p>
         </div>
       </section>
@@ -28,7 +29,7 @@ const CityOffers: React.FC<CityOffersProps> = ({cards, city}) => {
           <section className="cities__places places">
             <h2 className="visually-hidden">Places</h2>
             <b className="places__found">
-              {cards.length} places to stay in {city}
+              {cards.length} places to stay in {city.name}
             </b>
             <form className="places__sorting" action="#" method="get">
               <span className="places__sorting-caption">Sort by</span>
@@ -46,7 +47,7 @@ const CityOffers: React.FC<CityOffersProps> = ({cards, city}) => {
             <OffersList cards={cards} offerType="cities" />
           </section>
           <div className="cities__right-section">
-            <section className="cities__map map"></section>
+            <Map city={city} cards={cards} style={{height: `100%`}} />
           </div>
         </div>
       ) : (

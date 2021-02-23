@@ -17,7 +17,9 @@ const getDataFromServer = async () => {
   const cards = await fetch(`https://6.react.pages.academy/six-cities/hotels`)
     .then((response) => response.json())
     .then((response: Array<unknown>) => {
-      return response.slice(0, CARDS_PER_PAGE);
+      return response
+        .filter((card) => card.city.name === `Amsterdam`)
+        .slice(0, CARDS_PER_PAGE);
     });
 
   await Promise.all(

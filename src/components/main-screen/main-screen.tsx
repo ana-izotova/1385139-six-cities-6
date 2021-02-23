@@ -1,7 +1,16 @@
 import React from "react";
 import {Link} from "react-router-dom";
-import {OfferCards} from "../../types";
+import {City, OfferCards} from "../../types";
 import CityOffers from "../city-offers/city-offers";
+
+const city: City = {
+  "location": {
+    "latitude": 52.370216,
+    "longitude": 4.895168,
+    "zoom": 10
+  },
+  "name": `Amsterdam`
+};
 
 const MainScreen: React.FC<OfferCards> = (props) => {
   const {cards} = props;
@@ -78,7 +87,7 @@ const MainScreen: React.FC<OfferCards> = (props) => {
             </ul>
           </section>
         </div>
-        <CityOffers cards={cards} city={`Amsterdam`} />
+        <CityOffers cards={cards} city={city} />
       </main>
     </div>
   );
