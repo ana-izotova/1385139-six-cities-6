@@ -6,6 +6,8 @@ import CommentItem from "../comment-item/comment-item";
 import NewCommentForm from "../new-comment-form/new-comment-form";
 import PlaceCard from "../place-card/place-card";
 import Map from "../map/map";
+import {StateTypes} from "../../store/store-types";
+import {connect} from "react-redux";
 
 const IMAGES_PER_PAGE = 6;
 
@@ -195,7 +197,7 @@ const RoomScreen: React.FC<OfferCardsWithMatchingId> = ({cards, id}) => {
               </section>
             </div>
           </div>
-          <Map cards={cards.slice(0, 3)} city={card.city} />
+          <Map />
         </section>
         <div className="container">
           <section className="near-places places">
@@ -214,4 +216,9 @@ const RoomScreen: React.FC<OfferCardsWithMatchingId> = ({cards, id}) => {
   );
 };
 
-export default RoomScreen;
+const mapStateToProps = (state: StateTypes) => ({
+  cards: state.offers,
+});
+
+export {RoomScreen};
+export default connect(mapStateToProps)(RoomScreen);

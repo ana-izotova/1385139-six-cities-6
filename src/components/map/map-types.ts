@@ -1,9 +1,9 @@
-import {OfferCard, City} from "../../types";
+import {OfferCard} from "../../types";
 
 export interface mapProps {
-  city: City;
+  currentCity: string;
   cards: Array<OfferCard>;
-  style: {
+  style?: {
     height: string;
   };
 }

@@ -2,6 +2,8 @@ import React from "react";
 import {Link} from "react-router-dom";
 import PlaceCard from "../place-card/place-card";
 import {OfferCards, OfferCard} from "../../types";
+import {StateTypes} from "../../store/store-types";
+import {connect} from "react-redux";
 
 const EmptyFavorites: React.FC = () => {
   return (
@@ -49,8 +51,7 @@ const FavoriteCards: React.FC<{
   );
 };
 
-const FavoritesScreen: React.FC<OfferCards> = (props) => {
-  const {cards} = props;
+const FavoritesScreen: React.FC<OfferCards> = ({cards}) => {
 
   const favoriteCards: Array<OfferCard> = cards.filter(({isFavorite}) => isFavorite);
 
@@ -102,7 +103,7 @@ const FavoritesScreen: React.FC<OfferCards> = (props) => {
         </div>
       </main>
       <footer className="footer container">
-        <a className="footer__logo-link" href="main.html">
+        <Link className="footer__logo-link" to="/">
           <img
             className="footer__logo"
             src="img/logo.svg"
@@ -110,10 +111,15 @@ const FavoritesScreen: React.FC<OfferCards> = (props) => {
             width="64"
             height="33"
           />
-        </a>
+        </Link>
       </footer>
     </div>
   );
 };
 
-export default FavoritesScreen;
+const mapStateToProps = (state: StateTypes) => ({
+  cards: state.offers
+});
+
+export {FavoritesScreen};
+export default connect(mapStateToProps)(FavoritesScreen);

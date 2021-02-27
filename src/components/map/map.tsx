@@ -1,25 +1,23 @@
 import React, {useEffect, useRef} from 'react';
-import leaflet from 'leaflet';
+import leaflet, {LatLngExpression} from 'leaflet';
 import "leaflet/dist/leaflet.css";
 import {mapProps} from "./map-types";
+import {StateTypes} from "../../store/store-types";
+import {connect} from "react-redux";
 
-const Map: React.FC<mapProps> = ({cards, city, style}) => {
+const Map: React.FC<mapProps> = ({cards, currentCity, style}) => {
   const mapRef = useRef(null);
+  const city: LatLngExpression = [52.38333, 4.9];
+  const zoom = 12;
 
   useEffect(() => {
-    const cityZoom: number = city.location.zoom;
-    const cityCoordinates = {
-      lat: city.location.latitude,
-      lng: city.location.longitude
-    };
-
-    mapRef.current = leaflet.map(`map`, {
-      center: cityCoordinates,
-      zoom: cityZoom,
+    const map = leaflet.map(`map`, {
+      center: city,
+      zoom,
       zoomControl: false
     });
 
-    mapRef.current.setView(cityCoordinates, cityZoom);
+    map.setView(city, zoom);
 
     leaflet
       .tileLayer(`https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png`, {
@@ -40,18 +38,24 @@ const Map: React.FC<mapProps> = ({cards, city, style}) => {
       {
         icon: customIcon
       })
-        .addTo(mapRef.current)
+        .addTo(map)
         .bindPopup(card.title);
 
       return () => {
-        mapRef.current.remove();
+        map.remove();
       };
     });
-  }, [city]);
+  }, [currentCity]);
 
   return (
-    <section className="property__map map" id="map" ref={mapRef} style={style}></section>
+    <section className="property__map map" ref={mapRef} style={style}></section>
   );
 };
 
-export default Map;
+const mapStateToProps = (state: StateTypes) => ({
+  currentCity: state.currentCity,
+  cards: state.offers
+});
+
+export {Map};
+export default connect(mapStateToProps)(Map);
