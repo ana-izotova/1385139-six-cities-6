@@ -1,19 +1,6 @@
-import {OfferCard, Comment} from "./types";
+import {Comment, OfferCard} from "../types";
 
-export const convertRatingToPercents = (rating: number): string =>
-  rating * 10 * 2 + `%`;
-
-export const capitalize = (string: string): string =>
-  string[0].toUpperCase() + string.slice(1);
-
-export const formatDate = (date: string): string => {
-  const dateObj = new Date(date);
-  const month = dateObj.toLocaleString(`default`, {month: `long`});
-  const year = dateObj.getFullYear();
-  return `${month} ${year}`;
-};
-
-const adaptCommentToClient = (comment: any): Comment => {
+export const adaptCommentToClient = (comment: any): Comment => {
   const adaptedComment = {
     ...comment,
     user: {
@@ -29,9 +16,7 @@ const adaptCommentToClient = (comment: any): Comment => {
   return adaptedComment;
 };
 
-export const adaptToClient = (card: any, comments: Array<unknown>): OfferCard => {
-  const adaptedComments = comments.map((comment) => adaptCommentToClient(comment));
-
+export const adaptToClient = (card: any): OfferCard => {
   const adaptedCard = {
     ...card,
     previewImage: card.preview_image,
@@ -43,7 +28,6 @@ export const adaptToClient = (card: any, comments: Array<unknown>): OfferCard =>
       avatarUrl: card.host.avatar_url,
       isPro: card.host.is_pro,
     },
-    comments: adaptedComments
   };
 
   delete adaptedCard.preview_image;

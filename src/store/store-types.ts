@@ -1,8 +1,13 @@
-import {OfferCard} from "../types";
+import {OfferCard, Comment, City} from "../types";
 
 export interface StateTypes {
-  currentCity: string,
-  offers: Array<OfferCard> | [],
-  isLogged: boolean,
-  sort: string
+  currentCity: City,
+  offers: Array<OfferCard>,
+  loggedIn: boolean,
+  currentSort: string,
+  authorizationStatus: string,
+  isDataLoaded: boolean,
+  currentOfferComments: Array<Comment>,
+  currentOffersNearby: Array<OfferCard>,
+  activeCard: OfferCard
 }

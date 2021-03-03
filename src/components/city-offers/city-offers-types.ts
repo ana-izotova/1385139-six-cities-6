@@ -1,10 +1,11 @@
-import {OfferCard} from "../../types";
+import {OfferCard, City} from "../../types";
 
 export interface CityOffersProps {
   cards: Array<OfferCard>;
-  currentCity: string;
+  currentCity: City;
+  currentSort: string;
 }
 
 export interface NoCityOffersProps {
-  city: string;
+  city: City;
 }

@@ -4,14 +4,15 @@ import {ActionCreator} from "../../store/action";
 import {StateTypes} from "../../store/store-types";
 import {Dispatch} from "redux";
 import {connect} from "react-redux";
+import {City} from "../../types";
 
 const CityTab: React.FC<CityTabProps> = ({currentCity, onUserClick, city}) => {
-  const isCurrentCity: boolean = city === currentCity;
+  const isCurrentCity: boolean = city.name === currentCity.name;
 
   return (
     <li className="locations__item">
       <a className={`locations__item-link tabs__item ${isCurrentCity ? `tabs__item--active` : ``}`} onClick={() => onUserClick(city)}>
-        <span>{city}</span>
+        <span>{city.name}</span>
       </a>
     </li>
   );
@@ -22,7 +23,7 @@ const mapStateToProps = (state: StateTypes) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  onUserClick(city: string) {
+  onUserClick(city: City) {
     dispatch(ActionCreator.changeCity(city));
   },
 });

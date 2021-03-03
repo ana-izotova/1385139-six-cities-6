@@ -7,7 +7,7 @@ const CitiesList: React.FC = () => {
     <div className="tabs">
       <section className="locations container">
         <ul className="locations__list tabs__list">
-          {Cities.map((city) => <CityTab city={city} key={city}/>)}
+          {Cities.map((city) => <CityTab city={city} key={city.name}/>)}
         </ul>
       </section>
     </div>

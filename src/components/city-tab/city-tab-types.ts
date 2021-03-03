@@ -1,5 +1,7 @@
+import {City} from "../../types";
+
 export interface CityTabProps {
-  currentCity: string,
-  city: string,
-  onUserClick: (currentCity: string) => void
+  currentCity: City,
+  city: City,
+  onUserClick: (currentCity: City) => void
 }

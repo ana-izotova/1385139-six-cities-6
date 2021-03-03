@@ -1,7 +1,7 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import {ClassNames, PlaceCardProps} from "./place-card-types";
-import {convertRatingToPercents, capitalize} from "../../utils";
+import {convertRatingToPercents, capitalize} from "../../utils/common";
 
 const getClassNames = (type: string): ClassNames => {
   let articleClassNames = `${type}__card place-card`;
@@ -19,7 +19,7 @@ const getClassNames = (type: string): ClassNames => {
 const PlaceCard: React.FC<PlaceCardProps> = ({
   card,
   offerType,
-  changeStateHandler,
+  activeCardChangeStateHandler,
 }) => {
   const {previewImage, isPremium, price, title, type, rating, id} = card;
   const ratingInPercents = convertRatingToPercents(rating);
@@ -29,17 +29,18 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
     cardInfoClassNames,
   } = getClassNames(offerType);
 
-  const handleCursorHover = () => {
-    changeStateHandler(id);
+  const handleMouseHover = () => {
+    activeCardChangeStateHandler(card);
   };
-  const handleCursorLeave = () => {
-    changeStateHandler(null);
+
+  const handleMouseLeave = () => {
+    activeCardChangeStateHandler(null);
   };
 
   return (
     <article
-      onMouseEnter={type === `cities` ? handleCursorHover : null}
-      onMouseLeave={type === `cities` ? handleCursorLeave : null}
+      onMouseEnter={offerType === `cities` ? handleMouseHover : null}
+      onMouseLeave={offerType === `cities` ? handleMouseLeave : null}
       className={articleClassNames}
     >
       {isPremium && (

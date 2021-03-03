@@ -1,12 +1,28 @@
 import React from "react";
 import ReactDom from "react-dom";
-import {createStore} from "redux";
+import {createStore, applyMiddleware} from "redux";
+import thunk from "redux-thunk";
+import {createAPI} from "./services/api";
 import {Provider} from "react-redux";
 import {composeWithDevTools} from "redux-devtools-extension";
 import App from "./components/app/app";
 import {reducer} from "./store/reducer";
+import {ActionCreator} from "./store/action";
+import {checkAuth, fetchOffersData} from "./store/api-actions";
+import {AuthorizationStatus} from "./const";
 
-const store = createStore(reducer, composeWithDevTools());
+const api = createAPI(
+    () => store.dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.NO_AUTH))
+);
+
+const store = createStore(
+    reducer,
+    composeWithDevTools(
+        applyMiddleware(thunk.withExtraArgument(api))
+    ));
+
+// store.dispatch(checkAuth());
+store.dispatch(fetchOffersData());
 
 ReactDom.render(
     <Provider store={store}>

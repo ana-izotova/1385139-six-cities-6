@@ -1,10 +1,11 @@
 import React from "react";
 import OffersList from "../offers-list/offers-list";
-import SortingList from "../sorting-list/sorting-list";
+import Sorting from "../sorting/sorting";
 import Map from "../map/map";
 import {CityOffersProps, NoCityOffersProps} from "./city-offers-types";
 import {StateTypes} from "../../store/store-types";
 import {connect} from "react-redux";
+import {sortCards} from "../../utils/sorting";
 
 const NoCityOffers: React.FC<NoCityOffersProps> = ({city}) => {
   return (
@@ -13,7 +14,7 @@ const NoCityOffers: React.FC<NoCityOffersProps> = ({city}) => {
         <div className="cities__status-wrapper tabs__content">
           <b className="cities__status">No places to stay available</b>
           <p className="cities__status-description">
-            We could not find any property available at the moment in {city}
+            We could not find any property available at the moment in {city.name}
           </p>
         </div>
       </section>
@@ -22,8 +23,11 @@ const NoCityOffers: React.FC<NoCityOffersProps> = ({city}) => {
   );
 };
 
-const CityOffers: React.FC<CityOffersProps> = ({cards, currentCity}) => {
-  const offersAmount = cards.length;
+const CityOffers: React.FC<CityOffersProps> = ({cards, currentCity, currentSort}) => {
+  const filteredCards = cards.filter((card) => card.city.name === currentCity.name);
+  const sortedCards = sortCards(filteredCards, currentSort);
+  const offersAmount = filteredCards.length;
+
   return (
     <div className="cities">
       {offersAmount ? (
@@ -31,25 +35,13 @@ const CityOffers: React.FC<CityOffersProps> = ({cards, currentCity}) => {
           <section className="cities__places places">
             <h2 className="visually-hidden">Places</h2>
             <b className="places__found">
-              {cards.length} places to stay in {currentCity}
+              {offersAmount} places to stay in {currentCity.name}
             </b>
-            <form className="places__sorting" action="#" method="get">
-              <span className="places__sorting-caption">Sort by</span>
-              <span className="places__sorting-type" tabIndex={0}>
-                Popular
-                <svg
-                  className="places__sorting-arrow"
-                  style={{width: 7, height: 4}}
-                >
-                  <use xlinkHref="#icon-arrow-select"></use>
-                </svg>
-              </span>
-              <SortingList />
-            </form>
-            <OffersList cards={cards} offerType="cities" />
+            <Sorting />
+            <OffersList cards={sortedCards} offerType="cities" />
           </section>
           <div className="cities__right-section">
-            <Map style={{height: `100%`}} />
+            <Map style={{height: `100%`}} cards={filteredCards} />
           </div>
         </div>
       ) : (
@@ -59,9 +51,11 @@ const CityOffers: React.FC<CityOffersProps> = ({cards, currentCity}) => {
   );
 };
 
-const mapStateToProps = (state: StateTypes) => ({
-  currentCity: state.currentCity,
-  cards: state.offers
+const mapStateToProps = ({currentCity, offers, isDataLoaded, currentSort}: StateTypes) => ({
+  currentSort,
+  currentCity,
+  cards: offers,
+  isDataLoaded
 });
 
 export {CityOffers};
