@@ -13,6 +13,7 @@ import {RoomScreenProps} from "./room-screen-types";
 import {IMAGES_PER_PAGE} from "../../const";
 import {ActionTypes} from "../../store/action-types";
 import {ThunkDispatch} from "redux-thunk";
+import {AxiosInstance} from "axios";
 
 const RoomScreen: React.FC<RoomScreenProps> = ({
   cards,
@@ -221,7 +222,7 @@ const mapStateToProps = ({
   loggedIn
 });
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<StateTypes, any, ActionTypes>) => ({
+const mapDispatchToProps = (dispatch: ThunkDispatch<StateTypes, AxiosInstance, ActionTypes>) => ({
   getOffersNearby(cardId: number) {
     dispatch(fetchOffersNearby(cardId));
   },
