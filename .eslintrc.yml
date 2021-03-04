@@ -16,7 +16,7 @@ parserOptions:
   ecmaVersion: 6
   sourceType: module
 
-plugins: ['react', '@typescript-eslint']
+plugins: ['react', '@typescript-eslint', 'react-hooks']
 
 settings:
   react:
@@ -27,5 +27,9 @@ parser: '@typescript-eslint/parser'
 rules: {
   '@typescript-eslint/no-empty-function': 'off',
   '@typescript-eslint/explicit-function-return-type': 'off',
-  'react/prop-types': 'off'
+  'react/prop-types': 'off',
+  "react-hooks/rules-of-hooks": 'error',
+  "react-hooks/exhaustive-deps": 'warn',
+  "no-shadow": 'off',
+  "@typescript-eslint/no-shadow": [ "error" ]
 }

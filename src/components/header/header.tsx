@@ -2,10 +2,7 @@ import React from "react";
 import {Link} from "react-router-dom";
 import {StateTypes} from "../../store/store-types";
 import {connect} from "react-redux";
-
-interface HeaderProps {
-  loggedIn: boolean
-}
+import {HeaderProps} from "./header-types";
 
 const Header: React.FC<HeaderProps> = ({loggedIn}) => {
   return (
@@ -44,7 +41,7 @@ const Header: React.FC<HeaderProps> = ({loggedIn}) => {
 };
 
 const mapStateToProps = ({loggedIn}: StateTypes) => ({
-  loggedIn,
+  loggedIn
 });
 
 export {Header};

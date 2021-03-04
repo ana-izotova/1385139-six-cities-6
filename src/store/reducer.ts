@@ -1,7 +1,6 @@
-import {ActionType} from "./action";
 import {SortType, AuthorizationStatus} from "../const";
 import {StateTypes} from "./store-types";
-import {ActionTypes} from "./action-types";
+import {ActionTypes, ActionType} from "./action-types";
 import {Cities} from "../const";
 
 const initialState: StateTypes = {

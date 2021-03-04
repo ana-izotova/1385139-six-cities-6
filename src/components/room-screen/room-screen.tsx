@@ -6,12 +6,13 @@ import PlaceCard from "../place-card/place-card";
 import Map from "../map/map";
 import {StateTypes} from "../../store/store-types";
 import {connect} from "react-redux";
-import {Header} from "../header/header";
-import {Dispatch} from "redux";
+import Header from "../header/header";
 import LoaderScreensaver from "../loader-screensaver/loader-screensaver";
 import {fetchOffersNearby, fetchOfferComments} from "../../store/api-actions";
 import {RoomScreenProps} from "./room-screen-types";
 import {IMAGES_PER_PAGE} from "../../const";
+import {ActionTypes} from "../../store/action-types";
+import {ThunkDispatch} from "redux-thunk";
 
 const RoomScreen: React.FC<RoomScreenProps> = ({
   cards,
@@ -23,6 +24,29 @@ const RoomScreen: React.FC<RoomScreenProps> = ({
   getComments,
   loggedIn
 }) => {
+  useLayoutEffect(() => {
+    if (!isDataLoaded) {
+      return;
+    }
+    try {
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: `smooth`,
+      });
+    } catch (error) {
+      window.scrollTo(0, 0);
+    }
+  }, [id, isDataLoaded]);
+
+  useEffect(() => {
+    if (!isDataLoaded) {
+      return;
+    }
+    getOffersNearby(Number(id));
+    getComments(Number(id));
+  }, [id, getComments, getOffersNearby, isDataLoaded]);
+
   if (!isDataLoaded) {
     return <LoaderScreensaver />;
   }
@@ -43,23 +67,6 @@ const RoomScreen: React.FC<RoomScreenProps> = ({
   } = card;
   const {name: hostName, isPro: hostIsPro, avatarUrl: hostAvatar} = host;
   const ratingInPercents: string = convertRatingToPercents(rating);
-
-  useLayoutEffect(() => {
-    try {
-      window.scroll({
-        top: 0,
-        left: 0,
-        behavior: `smooth`,
-      });
-    } catch (error) {
-      window.scrollTo(0, 0);
-    }
-  }, [id]);
-
-  useEffect(() => {
-    getOffersNearby(Number(id));
-    getComments(Number(id));
-  }, [id]);
 
   return (
     <div className="page">
@@ -214,7 +221,7 @@ const mapStateToProps = ({
   loggedIn
 });
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
+const mapDispatchToProps = (dispatch: ThunkDispatch<StateTypes, any, ActionTypes>) => ({
   getOffersNearby(cardId: number) {
     dispatch(fetchOffersNearby(cardId));
   },

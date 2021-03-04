@@ -4,7 +4,7 @@ import PlaceCard from "../place-card/place-card";
 import {OfferCards, OfferCard} from "../../types";
 import {StateTypes} from "../../store/store-types";
 import {connect} from "react-redux";
-import {Header} from "../header/header";
+import Header from "../header/header";
 
 const EmptyFavorites: React.FC = () => {
   return (

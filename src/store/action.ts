@@ -1,16 +1,6 @@
 import {OfferCard, Comment, City} from "../types";
-import {ActionTypes} from "./action-types";
 import {adaptToClient, adaptCommentToClient} from "../utils/adapters";
-
-export const ActionType = {
-  CHANGE_CITY: `main/changeCity`,
-  LOAD_OFFERS: `data/loadOffers`,
-  REQUIRED_AUTHORIZATION: `user/requiredAuthorization`,
-  LOAD_COMMENTS: `data/loadComments`,
-  LOAD_OFFERS_NEARBY: `data/loadOffersNearby`,
-  CHANGE_ACTIVE_CARD: `main/changeActiveCard`,
-  CHANGE_SORT: `main/changeSort`
-};
+import {ActionType, ActionTypes} from "./action-types";
 
 export const ActionCreator = {
   changeCity: (city: City): ActionTypes => ({

@@ -8,4 +8,5 @@ export interface mapProps {
     height: string;
   };
   activeCard?: OfferCard;
+  isMainMap?: boolean,
 }
