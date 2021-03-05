@@ -2,6 +2,7 @@ import {City} from "./types";
 
 export const CARDS_PER_PAGE = 5;
 export const IMAGES_PER_PAGE = 6;
+export const BLUE_COLOR = `#4481c3`;
 
 export const Cities: Array<City> = [
   {
