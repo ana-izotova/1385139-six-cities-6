@@ -1,57 +1,80 @@
-import React, {useEffect, useRef} from 'react';
-import leaflet from 'leaflet';
+import React, {useEffect} from "react";
+import leaflet, {latLng} from "leaflet";
 import "leaflet/dist/leaflet.css";
 import {mapProps} from "./map-types";
+import {StateTypes} from "../../store/store-types";
+import {connect} from "react-redux";
 
-const Map: React.FC<mapProps> = ({cards, city, style}) => {
-  const mapRef = useRef(null);
+const Map: React.FC<mapProps> = ({
+  cards,
+  currentCity,
+  style,
+  activeCard,
+  offerCity,
+  isMainMap
+}) => {
+  const activeCardId = activeCard ? activeCard.id : null;
+  const city = offerCity ? offerCity : currentCity;
 
   useEffect(() => {
-    const cityZoom: number = city.location.zoom;
-    const cityCoordinates = {
-      lat: city.location.latitude,
-      lng: city.location.longitude
-    };
-
-    mapRef.current = leaflet.map(`map`, {
-      center: cityCoordinates,
-      zoom: cityZoom,
-      zoomControl: false
+    const {longitude, latitude, zoom} = city.location;
+    const cityCoords = latLng(latitude, longitude);
+    const map = leaflet.map(`map`, {
+      center: {
+        lat: latitude,
+        lng: longitude,
+      },
+      zoom,
+      zoomControl: false,
     });
 
-    mapRef.current.setView(cityCoordinates, cityZoom);
+    map.setView(cityCoords, zoom);
 
     leaflet
-      .tileLayer(`https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png`, {
-        attribution: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>`
-      })
-      .addTo(mapRef.current);
+      .tileLayer(
+          `https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png`,
+          {
+            attribution: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>`,
+          }
+      )
+      .addTo(map);
 
-    cards.forEach((card) => {
+    cards.forEach(({id, location, title}) => {
       const customIcon = leaflet.icon({
-        iconUrl: `img/pin.svg`,
-        iconSize: [30, 30]
+        iconUrl: `${
+          id === activeCardId && isMainMap ? `./img/pin-active.svg` : `./img/pin.svg`
+        }`,
+        iconSize: [30, 30],
       });
 
-      leaflet.marker({
-        lat: card.location.latitude,
-        lng: card.location.longitude
-      },
-      {
-        icon: customIcon
-      })
-        .addTo(mapRef.current)
-        .bindPopup(card.title);
-
-      return () => {
-        mapRef.current.remove();
-      };
+      leaflet
+        .marker(
+            {
+              lat: location.latitude,
+              lng: location.longitude,
+            },
+            {
+              icon: customIcon,
+            }
+        )
+        .addTo(map)
+        .bindPopup(title);
     });
-  }, [city]);
+
+    return () => {
+      map.remove();
+    };
+  }, [currentCity, activeCard, cards, activeCard, city.location, isMainMap, activeCardId]);
 
   return (
-    <section className="property__map map" id="map" ref={mapRef} style={style}></section>
+    <section className="property__map map" id="map" style={style}></section>
   );
 };
 
-export default Map;
+const mapStateToProps = (state: StateTypes) => ({
+  currentCity: state.currentCity,
+  activeCard: state.activeCard,
+});
+
+export {Map};
+export default connect(mapStateToProps)(Map);

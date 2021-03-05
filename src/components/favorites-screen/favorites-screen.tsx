@@ -2,6 +2,9 @@ import React from "react";
 import {Link} from "react-router-dom";
 import PlaceCard from "../place-card/place-card";
 import {OfferCards, OfferCard} from "../../types";
+import {StateTypes} from "../../store/store-types";
+import {connect} from "react-redux";
+import Header from "../header/header";
 
 const EmptyFavorites: React.FC = () => {
   return (
@@ -49,8 +52,7 @@ const FavoriteCards: React.FC<{
   );
 };
 
-const FavoritesScreen: React.FC<OfferCards> = (props) => {
-  const {cards} = props;
+const FavoritesScreen: React.FC<OfferCards> = ({cards}) => {
 
   const favoriteCards: Array<OfferCard> = cards.filter(({isFavorite}) => isFavorite);
 
@@ -60,38 +62,7 @@ const FavoritesScreen: React.FC<OfferCards> = (props) => {
 
   return (
     <div className="page">
-      <header className="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <div className="header__left">
-              <Link className="header__logo-link" to="/">
-                <img
-                  className="header__logo"
-                  src="img/logo.svg"
-                  alt="6 cities logo"
-                  width="81"
-                  height="41"
-                />
-              </Link>
-            </div>
-            <nav className="header__nav">
-              <ul className="header__nav-list">
-                <li className="header__nav-item user">
-                  <a
-                    className="header__nav-link header__nav-link--profile"
-                    href="#"
-                  >
-                    <div className="header__avatar-wrapper user__avatar-wrapper"></div>
-                    <span className="header__user-name user__name">
-                      Oliver.conner@gmail.com
-                    </span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <Header />
       <main className="page__main page__main--favorites">
         <div className="page__favorites-container container">
           {favoriteCards.length ? (
@@ -102,7 +73,7 @@ const FavoritesScreen: React.FC<OfferCards> = (props) => {
         </div>
       </main>
       <footer className="footer container">
-        <a className="footer__logo-link" href="main.html">
+        <Link className="footer__logo-link" to="/">
           <img
             className="footer__logo"
             src="img/logo.svg"
@@ -110,10 +81,15 @@ const FavoritesScreen: React.FC<OfferCards> = (props) => {
             width="64"
             height="33"
           />
-        </a>
+        </Link>
       </footer>
     </div>
   );
 };
 
-export default FavoritesScreen;
+const mapStateToProps = (state: StateTypes) => ({
+  cards: state.offers
+});
+
+export {FavoritesScreen};
+export default connect(mapStateToProps)(FavoritesScreen);

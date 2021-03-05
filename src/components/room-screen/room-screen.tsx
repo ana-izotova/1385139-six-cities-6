@@ -1,20 +1,56 @@
-import React, {useLayoutEffect} from "react";
-import {OfferCard} from "../../types";
-import {Link} from "react-router-dom";
-import {convertRatingToPercents, capitalize} from "../../utils";
+import React, {useEffect, useLayoutEffect} from "react";
+import {convertRatingToPercents, capitalize} from "../../utils/common";
 import CommentItem from "../comment-item/comment-item";
 import NewCommentForm from "../new-comment-form/new-comment-form";
 import PlaceCard from "../place-card/place-card";
 import Map from "../map/map";
+import {StateTypes} from "../../store/store-types";
+import {connect} from "react-redux";
+import Header from "../header/header";
+import LoaderScreensaver from "../loader-screensaver/loader-screensaver";
+import {fetchOffersNearby, fetchOfferComments} from "../../store/api-actions";
+import {RoomScreenProps} from "./room-screen-types";
+import {IMAGES_PER_PAGE} from "../../const";
+import {ActionTypes} from "../../store/action-types";
+import {ThunkDispatch} from "redux-thunk";
+import {AxiosInstance} from "axios";
 
-const IMAGES_PER_PAGE = 6;
+const RoomScreen: React.FC<RoomScreenProps> = ({
+  cards,
+  id,
+  currentOffersNearby,
+  isDataLoaded,
+  getOffersNearby,
+  currentOfferComments,
+  getComments,
+  loggedIn
+}) => {
+  useLayoutEffect(() => {
+    if (!isDataLoaded) {
+      return;
+    }
+    try {
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: `smooth`,
+      });
+    } catch (error) {
+      window.scrollTo(0, 0);
+    }
+  }, [id, isDataLoaded]);
 
-interface OfferCardsWithMatchingId {
-  cards: Array<OfferCard>;
-  id: string;
-}
+  useEffect(() => {
+    if (!isDataLoaded) {
+      return;
+    }
+    getOffersNearby(Number(id));
+    getComments(Number(id));
+  }, [id, getComments, getOffersNearby, isDataLoaded]);
 
-const RoomScreen: React.FC<OfferCardsWithMatchingId> = ({cards, id}) => {
+  if (!isDataLoaded) {
+    return <LoaderScreensaver />;
+  }
   const card = cards.find((item) => item.id === Number(id));
   const {
     isPremium,
@@ -28,61 +64,14 @@ const RoomScreen: React.FC<OfferCardsWithMatchingId> = ({cards, id}) => {
     goods,
     host,
     description,
-    comments
+    city,
   } = card;
-  const {
-    name: hostName,
-    isPro: hostIsPro,
-    avatarUrl: hostAvatar,
-  } = host;
+  const {name: hostName, isPro: hostIsPro, avatarUrl: hostAvatar} = host;
   const ratingInPercents: string = convertRatingToPercents(rating);
-
-  useLayoutEffect(() => {
-    try {
-      window.scroll({
-        top: 0,
-        left: 0,
-        behavior: `smooth`,
-      });
-    } catch (error) {
-      window.scrollTo(0, 0);
-    }
-  }, [id]);
 
   return (
     <div className="page">
-      <header className="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <div className="header__left">
-              <Link className="header__logo-link" to="/">
-                <img
-                  className="header__logo"
-                  src="img/logo.svg"
-                  alt="6 cities logo"
-                  width="81"
-                  height="41"
-                />
-              </Link>
-            </div>
-            <nav className="header__nav">
-              <ul className="header__nav-list">
-                <li className="header__nav-item user">
-                  <Link
-                    className="header__nav-link header__nav-link--profile"
-                    to="/"
-                  >
-                    <div className="header__avatar-wrapper user__avatar-wrapper"></div>
-                    <span className="header__user-name user__name">
-                      Oliver.conner@gmail.com
-                    </span>
-                  </Link>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       <main className="page__main page__main--property">
         <section className="property">
@@ -178,24 +167,25 @@ const RoomScreen: React.FC<OfferCardsWithMatchingId> = ({cards, id}) => {
                 </div>
                 <div className="property__description">
                   <p className="property__text">{description}</p>
-                  {/*                  <p className="property__text">
-                    An independent House, strategically located between Rembrand Square and National Opera, but where
-                    the bustle of the city comes to rest in this alley flowery and colorful.
-                  </p>*/}
                 </div>
               </div>
               <section className="property__reviews reviews">
                 <h2 className="reviews__title">
-                  Reviews &middot; <span className="reviews__amount">{comments.length}</span>
+                  Reviews &middot;{` `}
+                  <span className="reviews__amount">
+                    {currentOfferComments.length}
+                  </span>
                 </h2>
                 <ul className="reviews__list">
-                  {comments.map((comment) => <CommentItem {...comment} key={comment.id}/>)}
+                  {currentOfferComments.map((comment) => (
+                    <CommentItem {...comment} key={comment.id} />
+                  ))}
                 </ul>
-                <NewCommentForm/>
+                {loggedIn && <NewCommentForm />}
               </section>
             </div>
           </div>
-          <Map cards={cards.slice(0, 3)} city={card.city} />
+          <Map cards={currentOffersNearby} offerCity={city} />
         </section>
         <div className="container">
           <section className="near-places places">
@@ -203,8 +193,12 @@ const RoomScreen: React.FC<OfferCardsWithMatchingId> = ({cards, id}) => {
               Other places in the neighbourhood
             </h2>
             <div className="near-places__list places__list">
-              {cards.slice(0, 3).map((item) => (
-                <PlaceCard offerType="near-places" card={item} key={item.id} />
+              {currentOffersNearby.map((offer) => (
+                <PlaceCard
+                  offerType="near-places"
+                  card={offer}
+                  key={offer.id}
+                />
               ))}
             </div>
           </section>
@@ -214,4 +208,28 @@ const RoomScreen: React.FC<OfferCardsWithMatchingId> = ({cards, id}) => {
   );
 };
 
-export default RoomScreen;
+const mapStateToProps = ({
+  offers,
+  currentOffersNearby,
+  isDataLoaded,
+  currentOfferComments,
+  loggedIn
+}: StateTypes) => ({
+  cards: offers,
+  currentOffersNearby,
+  isDataLoaded,
+  currentOfferComments,
+  loggedIn
+});
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<StateTypes, AxiosInstance, ActionTypes>) => ({
+  getOffersNearby(cardId: number) {
+    dispatch(fetchOffersNearby(cardId));
+  },
+  getComments(cardId: number) {
+    dispatch(fetchOfferComments(cardId));
+  },
+});
+
+export {RoomScreen};
+export default connect(mapStateToProps, mapDispatchToProps)(RoomScreen);

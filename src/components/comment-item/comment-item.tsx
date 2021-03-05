@@ -1,6 +1,6 @@
 import React from "react";
 import {Comment} from "../../types";
-import {convertRatingToPercents, formatDate} from "../../utils";
+import {convertRatingToPercents, formatDate} from "../../utils/common";
 
 const CommentItem: React.FC<Comment> = (comment) => {
   const {comment: commentText, date, rating, user} = comment;
