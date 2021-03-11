@@ -8,12 +8,13 @@ import {StateTypes} from "../../store/store-types";
 import {connect} from "react-redux";
 import Header from "../header/header";
 import LoaderScreensaver from "../loader-screensaver/loader-screensaver";
-import {fetchOffersNearby, fetchOfferComments} from "../../store/api-actions";
+import {fetchOffersNearby, fetchOfferComments, fetchSingleOffersData} from "../../store/api-actions";
 import {RoomScreenProps} from "./room-screen-types";
-import {IMAGES_PER_PAGE} from "../../const";
+import {AuthorizationStatus, IMAGES_PER_PAGE} from "../../const";
 import {ActionTypes} from "../../store/action-types";
 import {ThunkDispatch} from "redux-thunk";
 import {AxiosInstance} from "axios";
+import NotFoundScreen from "../not-found-screen/not-found-screen";
 
 const RoomScreen: React.FC<RoomScreenProps> = ({
   cards,
@@ -23,7 +24,7 @@ const RoomScreen: React.FC<RoomScreenProps> = ({
   getOffersNearby,
   currentOfferComments,
   getComments,
-  loggedIn
+  authorizationStatus
 }) => {
   useLayoutEffect(() => {
     if (!isDataLoaded) {
@@ -51,7 +52,12 @@ const RoomScreen: React.FC<RoomScreenProps> = ({
   if (!isDataLoaded) {
     return <LoaderScreensaver />;
   }
+
   const card = cards.find((item) => item.id === Number(id));
+
+  if (!card) {
+    return <NotFoundScreen />;
+  }
   const {
     isPremium,
     price,
@@ -68,6 +74,7 @@ const RoomScreen: React.FC<RoomScreenProps> = ({
   } = card;
   const {name: hostName, isPro: hostIsPro, avatarUrl: hostAvatar} = host;
   const ratingInPercents: string = convertRatingToPercents(rating);
+  const loggedIn: boolean = authorizationStatus === AuthorizationStatus.AUTH;
 
   return (
     <div className="page">
@@ -209,20 +216,21 @@ const RoomScreen: React.FC<RoomScreenProps> = ({
 };
 
 const mapStateToProps = ({
-  offers,
   currentOffersNearby,
-  isDataLoaded,
+  isCurrentOffersDataLoaded,
   currentOfferComments,
-  loggedIn
+  authorizationStatus
 }: StateTypes) => ({
-  cards: offers,
   currentOffersNearby,
-  isDataLoaded,
+  isCurrentOffersDataLoaded,
   currentOfferComments,
-  loggedIn
+  authorizationStatus
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<StateTypes, AxiosInstance, ActionTypes>) => ({
+  getOffersData(cardId: number) {
+    dispatch(fetchSingleOffersData(cardId));
+  },
   getOffersNearby(cardId: number) {
     dispatch(fetchOffersNearby(cardId));
   },

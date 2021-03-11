@@ -3,8 +3,11 @@ import {Link} from "react-router-dom";
 import {StateTypes} from "../../store/store-types";
 import {connect} from "react-redux";
 import {HeaderProps} from "./header-types";
+import {AuthorizationStatus} from "../../const";
 
-const Header: React.FC<HeaderProps> = ({loggedIn}) => {
+const Header: React.FC<HeaderProps> = ({authorizationStatus, userAvatar, login}) => {
+  const loggedIn: boolean = authorizationStatus === AuthorizationStatus.AUTH;
+
   return (
     <header className="header">
       <div className="container">
@@ -24,11 +27,11 @@ const Header: React.FC<HeaderProps> = ({loggedIn}) => {
               <li className="header__nav-item user">
                 <Link
                   className="header__nav-link header__nav-link--profile"
-                  to={loggedIn ? `/` : `/login`}
+                  to={loggedIn ? `/favorites` : `/login`}
                 >
                   <div className="header__avatar-wrapper user__avatar-wrapper"></div>
                   <span className="header__user-name user__name">
-                    {loggedIn ? `Oliver.conner@gmail.com` : <span className="header__login">Sign in</span>}
+                    {loggedIn ? `${login}` : <span className="header__login">Sign in</span>}
                   </span>
                 </Link>
               </li>
@@ -40,8 +43,10 @@ const Header: React.FC<HeaderProps> = ({loggedIn}) => {
   );
 };
 
-const mapStateToProps = ({loggedIn}: StateTypes) => ({
-  loggedIn
+const mapStateToProps = ({authorizationStatus, userAvatar, login}: StateTypes) => ({
+  authorizationStatus,
+  userAvatar,
+  login
 });
 
 export {Header};

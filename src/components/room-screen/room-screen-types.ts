@@ -8,5 +8,5 @@ export interface RoomScreenProps {
   getOffersNearby: (id: number) => void;
   currentOfferComments: Array<Comment>;
   getComments: (id: number) => void;
-  loggedIn: boolean
+  authorizationStatus: string
 }

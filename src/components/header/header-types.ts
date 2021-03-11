@@ -1,3 +1,5 @@
 export interface HeaderProps {
-  loggedIn: boolean;
+  authorizationStatus: string,
+  userAvatar: string,
+  login: string
 }

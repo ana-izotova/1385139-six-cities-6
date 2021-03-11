@@ -55,14 +55,28 @@ export const Cities: Array<City> = [
   }
 ];
 
-export const SortType = {
-  POPULAR: `Popular`,
-  PRICE_LOW_TO_HIGH: `Price: low to high`,
-  PRICE_HIGH_TO_LOW: `Price: high to low`,
-  TOP_RATED_FIRST: `Top rated first`
-};
+export enum AppRoute {
+  MAIN_SCREEN = `/`,
+  LOGIN_SCREEN = `/login`,
+  FAVORITES_SCREEN = `/favorites`,
+  OFFER_SCREEN = `/offer/:id`
+}
 
-export const AuthorizationStatus = {
-  AUTH: `AUTH`,
-  NO_AUTH: `NO_AUTH`,
-};
+export enum ApiRoute {
+  LOGIN = `/login`,
+  HOTELS = `/hotels`,
+  LOGOUT = `/logout`,
+  COMMENTS = `/comments`
+}
+
+export enum SortType {
+  POPULAR = `Popular`,
+  PRICE_LOW_TO_HIGH = `Price: low to high`,
+  PRICE_HIGH_TO_LOW = `Price: high to low`,
+  TOP_RATED_FIRST = `Top rated first`
+}
+
+export enum AuthorizationStatus {
+  AUTH = `AUTH`,
+  NO_AUTH = `NO_AUTH`,
+}

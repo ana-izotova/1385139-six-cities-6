@@ -6,7 +6,7 @@ import Header from "../header/header";
 const MainScreen: React.FC = () => {
   return (
     <div className="page page--gray page--main">
-      <Header/>ч
+      <Header/>
 
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
