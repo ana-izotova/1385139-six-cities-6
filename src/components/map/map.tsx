@@ -1,25 +1,27 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useRef} from "react";
 import leaflet, {latLng} from "leaflet";
 import "leaflet/dist/leaflet.css";
 import {mapProps} from "./map-types";
-import {StateTypes} from "../../store/store-types";
-import {connect} from "react-redux";
+import {useSelector} from "react-redux";
+import {RootStateType} from "../../store/root-reducer";
 
 const Map: React.FC<mapProps> = ({
   cards,
-  currentCity,
   style,
-  activeCard,
   offerCity,
-  isMainMap
+  isMainMap,
+  activeCardId,
 }) => {
-  const activeCardId = activeCard ? activeCard.id : null;
+  const {currentCity} = useSelector(
+      (state: RootStateType) => state.ALL_OFFERS
+  );
   const city = offerCity ? offerCity : currentCity;
+  const map = useRef(null);
 
   useEffect(() => {
     const {longitude, latitude, zoom} = city.location;
     const cityCoords = latLng(latitude, longitude);
-    const map = leaflet.map(`map`, {
+    map.current = leaflet.map(`map`, {
       center: {
         lat: latitude,
         lng: longitude,
@@ -28,7 +30,7 @@ const Map: React.FC<mapProps> = ({
       zoomControl: false,
     });
 
-    map.setView(cityCoords, zoom);
+    map.current.setView(cityCoords, zoom);
 
     leaflet
       .tileLayer(
@@ -37,12 +39,20 @@ const Map: React.FC<mapProps> = ({
             attribution: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>`,
           }
       )
-      .addTo(map);
+      .addTo(map.current);
 
+    return () => {
+      map.current.remove();
+    };
+  }, [city]);
+
+  useEffect(() => {
     cards.forEach(({id, location, title}) => {
       const customIcon = leaflet.icon({
         iconUrl: `${
-          id === activeCardId && isMainMap ? `./img/pin-active.svg` : `./img/pin.svg`
+          id === activeCardId && isMainMap
+            ? `./img/pin-active.svg`
+            : `./img/pin.svg`
         }`,
         iconSize: [30, 30],
       });
@@ -57,24 +67,14 @@ const Map: React.FC<mapProps> = ({
               icon: customIcon,
             }
         )
-        .addTo(map)
+        .addTo(map.current)
         .bindPopup(title);
     });
-
-    return () => {
-      map.remove();
-    };
-  }, [currentCity, activeCard, cards, activeCard, city.location, isMainMap, activeCardId]);
+  }, [activeCardId, cards, isMainMap]);
 
   return (
     <section className="property__map map" id="map" style={style}></section>
   );
 };
 
-const mapStateToProps = (state: StateTypes) => ({
-  currentCity: state.currentCity,
-  activeCard: state.activeCard,
-});
-
-export {Map};
-export default connect(mapStateToProps)(Map);
+export default Map;

@@ -1,10 +1,12 @@
-import React from "react";
-import {Link} from "react-router-dom";
+import React, {useEffect} from "react";
 import PlaceCard from "../place-card/place-card";
-import {OfferCards, OfferCard} from "../../types";
-import {StateTypes} from "../../store/store-types";
-import {connect} from "react-redux";
+import {OfferCard} from "../../types";
 import Header from "../header/header";
+import {useDispatch, useSelector} from "react-redux";
+import {RootStateType} from "../../store/root-reducer";
+import {fetchFavoriteCards} from "../../store/api-actions";
+import LoaderScreensaver from "../loader-screensaver/loader-screensaver";
+import Footer from "../footer/footer";
 
 const EmptyFavorites: React.FC = () => {
   return (
@@ -20,27 +22,34 @@ const EmptyFavorites: React.FC = () => {
   );
 };
 
-const FavoriteCards: React.FC<{
-  cities: Array<string>;
-  favoriteCards: Array<OfferCard>;
-}> = (props) => {
-  const {cities, favoriteCards} = props;
+interface FavoriteCardsProps {
+  favoriteCards: Array<OfferCard>
+}
+
+const FavoriteCards: React.FC<FavoriteCardsProps> = ({favoriteCards}) => {
+  const favoriteCardsSortedByCity = favoriteCards.reduce<Record<string, Array<OfferCard>>>((acc, card) => {
+    const key = card.city.name;
+    acc[key] = acc[key] ? [...(acc[key]), card] : [card];
+    return acc;
+  }, {});
+
   return (
     <section className="favorites">
       <h1 className="favorites__title">Saved listing</h1>
       <ul className="favorites__list">
-        {cities.map((city: string) => {
+        {Object.entries(favoriteCardsSortedByCity).map((entry) => {
+          const [cityName, cards] = entry;
           return (
-            <li className="favorites__locations-items" key={city}>
+            <li className="favorites__locations-items" key={cityName}>
               <div className="favorites__locations locations locations--current">
                 <div className="locations__item">
                   <a className="locations__item-link" href="#">
-                    <span>{city}</span>
+                    <span>{cityName}</span>
                   </a>
                 </div>
               </div>
               <div className="favorites__places">
-                {favoriteCards.map((card: OfferCard) => (
+                {cards.map((card: OfferCard) => (
                   <PlaceCard card={card} offerType="favorites" key={card.id} />
                 ))}
               </div>
@@ -52,13 +61,24 @@ const FavoriteCards: React.FC<{
   );
 };
 
-const FavoritesScreen: React.FC<OfferCards> = ({cards}) => {
+const FavoritesScreen: React.FC = () => {
+  const {areFavoriteCardsLoaded, favoriteCards, favoritesHaveBeenChanged} = useSelector((state: RootStateType) => state.ALL_OFFERS);
 
-  const favoriteCards: Array<OfferCard> = cards.filter(({isFavorite}) => isFavorite);
+  // const allOffersState = useSelector(
+  //     (state: RootStateType) => state.ALL_OFFERS
+  // );
+  // const cardsSelector = (state: AllOffersReducerStateType) => state.allOffers;
+  // const getFavoriteCards = createSelector(cardsSelector, (offerCards) => offerCards.filter(({isFavorite}) => isFavorite));
+  // const favoriteCards = getFavoriteCards(allOffersState);
+  const dispatch = useDispatch();
 
-  const cities: Array<string> = Array.from(
-      new Set(favoriteCards.map<string>((card) => card.city.name))
-  );
+  useEffect(() => {
+    dispatch(fetchFavoriteCards());
+  }, [dispatch, favoritesHaveBeenChanged]);
+
+  if (!areFavoriteCardsLoaded) {
+    return <LoaderScreensaver />;
+  }
 
   return (
     <div className="page">
@@ -66,30 +86,15 @@ const FavoritesScreen: React.FC<OfferCards> = ({cards}) => {
       <main className="page__main page__main--favorites">
         <div className="page__favorites-container container">
           {favoriteCards.length ? (
-            <FavoriteCards cities={cities} favoriteCards={favoriteCards} />
+            <FavoriteCards favoriteCards={favoriteCards} />
           ) : (
             <EmptyFavorites />
           )}
         </div>
       </main>
-      <footer className="footer container">
-        <Link className="footer__logo-link" to="/">
-          <img
-            className="footer__logo"
-            src="img/logo.svg"
-            alt="6 cities logo"
-            width="64"
-            height="33"
-          />
-        </Link>
-      </footer>
+      <Footer />
     </div>
   );
 };
 
-const mapStateToProps = (state: StateTypes) => ({
-  cards: state.offers
-});
-
-export {FavoritesScreen};
-export default connect(mapStateToProps)(FavoritesScreen);
+export default FavoritesScreen;

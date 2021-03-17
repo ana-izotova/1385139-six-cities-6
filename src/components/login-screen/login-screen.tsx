@@ -1,24 +1,19 @@
 import React, {FormEvent, useRef} from "react";
 import Header from "../header/header";
-import {loginData, LoginScreenProps} from "./login-screen-types";
-import {connect} from "react-redux";
-import {ThunkDispatch} from "redux-thunk";
-import {StateTypes} from "../../store/store-types";
-import {AxiosInstance} from "axios";
-import {ActionTypes} from "../../store/action-types";
+import {useDispatch} from "react-redux";
 import {login} from "../../store/api-actions";
 
-const LoginScreen: React.FC<LoginScreenProps> = ({onSubmit}) => {
+const LoginScreen: React.FC = () => {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
-  const handleSubmit = (evt: FormEvent): void => {
+  const dispatch = useDispatch();
+  const handleSubmit = (evt: FormEvent) => {
     evt.preventDefault();
-
-    onSubmit({
+    dispatch(login({
       login: emailRef.current.value,
       password: passwordRef.current.value,
-    });
+    }));
   };
 
   return (
@@ -78,13 +73,4 @@ const LoginScreen: React.FC<LoginScreenProps> = ({onSubmit}) => {
   );
 };
 
-const mapDispatchToProps = (
-    dispatch: ThunkDispatch<StateTypes, AxiosInstance, ActionTypes>
-) => ({
-  onSubmit(loginInfo: loginData) {
-    dispatch(login(loginInfo));
-  },
-});
-
-export {LoginScreen};
-export default connect(null, mapDispatchToProps)(LoginScreen);
+export default LoginScreen;

@@ -1,105 +1,53 @@
-import React, {useState} from "react";
+import React, {ChangeEvent, FormEvent, useCallback, useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {RootStateType} from "../../store/root-reducer";
+import {FetchStatus, COMMENT_MIN_LENGTH} from "../../const";
+import {sendComment} from "../../store/api-actions";
+import NewCommentRatingForm from "../new-comment-rating-form/new-comment-rating-form";
 
-const NewCommentForm: React.FC = () => {
+interface NewCommentFormProps {
+  offerId: number
+}
+
+const NewCommentForm: React.FC<NewCommentFormProps> = ({offerId}) => {
   const [commentText, setCommentText] = useState(``);
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState(null);
+
+  const {fetchStatus} = useSelector((state: RootStateType) => state.ALL_OFFERS);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (fetchStatus === FetchStatus.DONE) {
+      setCommentText(``);
+      setRating(null);
+    }
+  }, [fetchStatus]);
+
+  const handleNewCommentSubmit = (evt: FormEvent) => {
+    evt.preventDefault();
+    dispatch(sendComment(offerId, {comment: commentText, rating}));
+  };
+
+  const handleRatingChange = useCallback(
+      (evt) => {
+        const value = Number(evt.target.value);
+        setRating(value);
+      }, []);
 
   return (
-    <form className="reviews__form form" action="#" method="post">
+    <form
+      className="reviews__form form"
+      action="#"
+      method="post"
+      onSubmit={handleNewCommentSubmit}
+    >
       <label className="reviews__label form__label" htmlFor="review">
         Your review
       </label>
-      <div className="reviews__rating-form form__rating">
-        <input
-          className="form__rating-input visually-hidden"
-          name="rating"
-          value="5"
-          id="5-stars"
-          type="radio"
-          onChange={({target}) => setRating(Number(target.value))}
-        />
-        <label
-          htmlFor="5-stars"
-          className="reviews__rating-label form__rating-label"
-          title="perfect"
-        >
-          <svg className="form__star-image" width="37" height="33">
-            <use xlinkHref="#icon-star"></use>
-          </svg>
-        </label>
-
-        <input
-          className="form__rating-input visually-hidden"
-          name="rating"
-          value="4"
-          id="4-stars"
-          type="radio"
-          onChange={({target}) => setRating(Number(target.value))}
-        />
-        <label
-          htmlFor="4-stars"
-          className="reviews__rating-label form__rating-label"
-          title="good"
-        >
-          <svg className="form__star-image" width="37" height="33">
-            <use xlinkHref="#icon-star"></use>
-          </svg>
-        </label>
-
-        <input
-          className="form__rating-input visually-hidden"
-          name="rating"
-          value="3"
-          id="3-stars"
-          type="radio"
-          onChange={({target}) => setRating(Number(target.value))}
-        />
-        <label
-          htmlFor="3-stars"
-          className="reviews__rating-label form__rating-label"
-          title="not bad"
-        >
-          <svg className="form__star-image" width="37" height="33">
-            <use xlinkHref="#icon-star"></use>
-          </svg>
-        </label>
-
-        <input
-          className="form__rating-input visually-hidden"
-          name="rating"
-          value="2"
-          id="2-stars"
-          type="radio"
-          onChange={({target}) => setRating(Number(target.value))}
-        />
-        <label
-          htmlFor="2-stars"
-          className="reviews__rating-label form__rating-label"
-          title="badly"
-        >
-          <svg className="form__star-image" width="37" height="33">
-            <use xlinkHref="#icon-star"></use>
-          </svg>
-        </label>
-
-        <input
-          className="form__rating-input visually-hidden"
-          name="rating"
-          value="1"
-          id="1-star"
-          type="radio"
-          onChange={({target}) => setRating(Number(target.value))}
-        />
-        <label
-          htmlFor="1-star"
-          className="reviews__rating-label form__rating-label"
-          title="terribly"
-        >
-          <svg className="form__star-image" width="37" height="33">
-            <use xlinkHref="#icon-star"></use>
-          </svg>
-        </label>
-      </div>
+      <NewCommentRatingForm
+        rating={rating}
+        handleRatingChange={handleRatingChange}
+      />
       <textarea
         className="reviews__textarea form__textarea"
         id="review"
@@ -107,20 +55,29 @@ const NewCommentForm: React.FC = () => {
         placeholder="Tell how was your stay, what you like and what can be improved"
         onChange={({target}) => setCommentText(target.value)}
         value={commentText}
+        disabled={fetchStatus === FetchStatus.SENDING}
       ></textarea>
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
           To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay
-          with at least <b className="reviews__text-amount">50 characters</b>.
+          with at least <b className="reviews__text-amount">
+            {COMMENT_MIN_LENGTH} characters
+          </b>
+          .
         </p>
         <button
-          className="reviews__submit form__submit button"
+          className={`reviews__submit form__submit button ${fetchStatus === FetchStatus.ERROR ? `error-shake` : ``}`}
           type="submit"
-          disabled={commentText.length < 50 || rating === 0}
+          disabled={
+            commentText.length < COMMENT_MIN_LENGTH ||
+            rating === null ||
+            fetchStatus === FetchStatus.SENDING
+          }
         >
           Submit
         </button>
       </div>
+      {fetchStatus === FetchStatus.ERROR ? <span style={{color: `red`}}>An unexpected error has occurred. Please try again.</span> : ``}
     </form>
   );
 };

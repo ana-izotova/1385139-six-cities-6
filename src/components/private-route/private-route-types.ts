@@ -1,6 +1,6 @@
+import {ReactElement} from "react";
+
 export interface PrivateRouteProps {
-  renderComponent: () => Element,
-  redirect: () => void,
-  isDataLoaded: boolean,
-  authorizationStatus: string
+  renderComponent: () => ReactElement,
+  redirect: () => ReactElement
 }

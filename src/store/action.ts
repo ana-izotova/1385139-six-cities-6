@@ -1,51 +1,88 @@
-import { City, Comment, OfferCard } from "../types";
-import { adaptCommentToClient, adaptToClient } from "../utils/adapters";
-import { ActionType, ActionTypes } from "./action-types";
+import {createAction} from '@reduxjs/toolkit';
+import {City, Comment, OfferCard, UserData} from "../types";
+import {adaptCommentToClient, adaptToClient} from "../utils/adapters";
+import {ActionType} from "./action-types";
 
-export const ActionCreator = {
-  changeCity: (city: City): ActionTypes => ({
-    type: ActionType.CHANGE_CITY,
-    city,
-  }),
-  loadOffers: (offers: Array<OfferCard>): ActionTypes => ({
-    type: ActionType.LOAD_OFFERS,
-    offers: offers.map((offer) => adaptToClient(offer)),
-  }),
-  loadSingleOffer: (offer: OfferCard): ActionTypes => ({
-    type: ActionType.LOAD_SINGLE_OFFER,
-    offer
-  }),
-  requireAuthorization: (authorizationStatus: string): ActionTypes => ({
-    type: ActionType.REQUIRE_AUTHORIZATION,
-    authorizationStatus,
-  }),
-  setUserData: (login: string, userAvatar: string): ActionTypes => ({
-    type: ActionType.SET_USER_DATA,
-    login,
-    userAvatar,
-  }),
-  logout: (authorizationStatus: string): ActionTypes => ({
-    type: ActionType.LOGOUT,
-    authorizationStatus,
-  }),
-  loadComments: (comments: Array<Comment>): ActionTypes => ({
-    type: ActionType.LOAD_COMMENTS,
-    comments: comments.map((comment) => adaptCommentToClient(comment)),
-  }),
-  loadOffersNearby: (offers: Array<OfferCard>): ActionTypes => ({
-    type: ActionType.LOAD_OFFERS_NEARBY,
-    offers: offers.map((offer) => adaptToClient(offer)),
-  }),
-  changeActiveCard: (activeCard: OfferCard): ActionTypes => ({
-    type: ActionType.CHANGE_ACTIVE_CARD,
-    activeCard,
-  }),
-  changeCurrentSort: (currentSort: string): ActionTypes => ({
-    type: ActionType.CHANGE_SORT,
-    currentSort,
-  }),
-  redirectToRoute: (url: string): ActionTypes => ({
-    type: ActionType.REDIRECT_TO_ROUTE,
-    url,
-  }),
-};
+export const changeCity = createAction(ActionType.CHANGE_CITY, (city: City) => {
+  return {
+    payload: city
+  };
+});
+
+export const loadAllOffers = createAction(ActionType.LOAD_ALL_OFFERS, (offers: Array<OfferCard>) => {
+  return {
+    payload: offers.map((offer) => adaptToClient(offer))
+  };
+});
+
+export const loadSingleOffer = createAction(ActionType.LOAD_SINGLE_OFFER, (offer: OfferCard) => {
+  return {
+    payload: adaptToClient(offer)
+  };
+});
+
+export const requireAuthorization = createAction(ActionType.REQUIRE_AUTHORIZATION, (authorizationStatus: string) => {
+  return {
+    payload: authorizationStatus
+  };
+});
+
+export const setUserData = createAction(ActionType.SET_USER_DATA, (userData: UserData) => {
+  return {
+    payload: userData
+  };
+});
+
+export const logout = createAction(ActionType.LOGOUT, (authorizationStatus: string) => {
+  return {
+    payload: authorizationStatus
+  };
+});
+
+export const loadComments = createAction(ActionType.LOAD_COMMENTS, (comments: Array<Comment>) => {
+  return {
+    payload: comments.map((comment) => adaptCommentToClient(comment))
+  };
+});
+
+export const loadOffersNearby = createAction(ActionType.LOAD_OFFERS_NEARBY, (offers: Array<OfferCard>) => {
+  return {
+    payload: offers.map((offer) => adaptToClient(offer))
+  };
+});
+
+export const clearSingleOffersData = createAction(ActionType.CLEAR_SINGLE_OFFER_DATA, () => {
+  return {
+    payload: {offer: null, offersNearby: [], comments: [], isOfferLoaded: false}
+  };
+});
+
+export const changeCurrentSort = createAction(ActionType.CHANGE_SORT, (currentSort: string) => {
+  return {
+    payload: currentSort
+  };
+});
+
+export const redirectToRoute = createAction(ActionType.REDIRECT_TO_ROUTE, (url: string) => {
+  return {
+    payload: url
+  };
+});
+
+export const loadFavoriteCards = createAction(ActionType.LOAD_FAVORITES, (offers: Array<OfferCard>) => {
+  return {
+    payload: offers.map((offer) => adaptToClient(offer))
+  };
+});
+
+export const changeFavoriteStatus = createAction(ActionType.CHANGE_FAVORITE_STATUS, (changedOfferCard: OfferCard) => {
+  return {
+    payload: adaptToClient(changedOfferCard)
+  };
+});
+
+export const changeFetchStatus = createAction(ActionType.CHANGE_FETCH_STATUS, (status: string) => {
+  return {
+    payload: status
+  };
+});

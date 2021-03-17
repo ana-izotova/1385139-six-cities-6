@@ -32,7 +32,7 @@ const App: React.FC = () => {
         <Route
           exact
           path={AppRoute.OFFER_SCREEN}
-          render={({match}: Props) => <RoomScreen id={match.params.id} />}
+          render={({match}: Props) => <RoomScreen cardId={Number(match.params.id)} />}
         />
         <Route>
           <NotFoundScreen />

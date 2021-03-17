@@ -3,6 +3,7 @@ import {City} from "./types";
 export const CARDS_PER_PAGE = 5;
 export const IMAGES_PER_PAGE = 6;
 export const BLUE_COLOR = `#4481c3`;
+export const COMMENT_MIN_LENGTH = 50;
 
 export const Cities: Array<City> = [
   {
@@ -66,7 +67,8 @@ export enum ApiRoute {
   LOGIN = `/login`,
   HOTELS = `/hotels`,
   LOGOUT = `/logout`,
-  COMMENTS = `/comments`
+  COMMENTS = `/comments`,
+  FAVORITES = `/favorite`
 }
 
 export enum SortType {
@@ -80,3 +82,23 @@ export enum AuthorizationStatus {
   AUTH = `AUTH`,
   NO_AUTH = `NO_AUTH`,
 }
+
+export enum FavoriteStatus {
+  FAVORITE = `1`,
+  UNFAVORED = `0`
+}
+
+export enum FetchStatus {
+  PENDING = `PENDING`,
+  SENDING = `SENDING`,
+  DONE = `DONE`,
+  ERROR = `ERROR`
+}
+
+export const RatingTitles: Array<string> = [
+  `perfect`,
+  `good`,
+  `not bad`,
+  `badly`,
+  `terribly`,
+];
