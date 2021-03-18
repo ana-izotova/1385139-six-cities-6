@@ -1,6 +1,6 @@
 import {createReducer} from "@reduxjs/toolkit";
 import {SingleOfferInitialStateTypes} from "./single-offer-types";
-import {loadComments, loadOffersNearby, loadSingleOffer, clearSingleOffersData} from "../action";
+import {loadComments, loadOffersNearby, loadSingleOffer, clearSingleOffersData} from "../actions";
 
 const initialState: SingleOfferInitialStateTypes = {
   offer: null,

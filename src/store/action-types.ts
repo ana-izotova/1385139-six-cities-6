@@ -11,7 +11,6 @@ export enum ActionType {
   LOAD_OFFERS_NEARBY = `data/loadOffersNearby`,
   CHANGE_SORT = `screen/changeSort`,
   REDIRECT_TO_ROUTE = `screen/redirect`,
-  SET_FILTERED_CARDS = `data/setFilteredCards`,
   CLEAR_SINGLE_OFFER_DATA = `data/clearSingleOfferData`,
   LOAD_FAVORITES = `data/loadFavorites`,
   CHANGE_FAVORITE_STATUS = `data/changeFavoriteStatus`,
@@ -63,11 +62,6 @@ interface ChangeCurrentSortAction {
   payload: string
 }
 
-interface SetFilteredCardsAction {
-  type: ActionType.SET_FILTERED_CARDS,
-  payload: Array<OfferCard>
-}
-
 interface RedirectAction {
   type: ActionType.REDIRECT_TO_ROUTE,
   payload: string
@@ -103,7 +97,6 @@ export type ActionTypes =
   | LoadCommentsAction
   | LoadOffersNearbyAction
   | ChangeCurrentSortAction
-  | SetFilteredCardsAction
   | RedirectAction
   | LoadFavoriteOffersAction
   | ChangeFavoriteStatusAction

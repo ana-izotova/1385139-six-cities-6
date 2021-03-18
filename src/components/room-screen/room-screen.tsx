@@ -18,7 +18,7 @@ import {
   fetchOffersNearby,
   fetchSingleOffersData
 } from "../../store/api-actions";
-import {changeFetchStatus, clearSingleOffersData} from "../../store/action";
+import {changeFetchStatus, clearSingleOffersData} from "../../store/actions";
 import browserHistory from "../../browser-history";
 
 const RoomScreen: React.FC<RoomScreenProps> = ({cardId}) => {

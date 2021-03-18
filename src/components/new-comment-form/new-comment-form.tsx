@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootStateType} from "../../store/root-reducer";
 import {FetchStatus, COMMENT_MIN_LENGTH} from "../../const";
 import {sendComment} from "../../store/api-actions";
-import NewCommentRatingForm from "../new-comment-rating-form/new-comment-rating-form";
+import NewCommentRatingForm from "../new-comment-rating-inputs/new-comment-rating-input";
 
 interface NewCommentFormProps {
   offerId: number
@@ -37,8 +37,6 @@ const NewCommentForm: React.FC<NewCommentFormProps> = ({offerId}) => {
   return (
     <form
       className="reviews__form form"
-      action="#"
-      method="post"
       onSubmit={handleNewCommentSubmit}
     >
       <label className="reviews__label form__label" htmlFor="review">

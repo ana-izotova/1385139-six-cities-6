@@ -13,7 +13,7 @@ import {
   loadComments,
   loadOffersNearby,
   loadSingleOffer, loadFavoriteCards, changeFavoriteStatus, changeFetchStatus,
-} from "./action";
+} from "./actions";
 
 export type AppThunk<ReturnType = void> = ThunkAction<
   Promise<ReturnType>,

@@ -1,5 +1,5 @@
 import React, {useRef} from "react";
-import {changeCurrentSort} from "../../store/action";
+import {changeCurrentSort} from "../../store/actions";
 import {SortType} from "../../const";
 import {useDispatch, useSelector} from "react-redux";
 import {RootStateType} from "../../store/root-reducer";

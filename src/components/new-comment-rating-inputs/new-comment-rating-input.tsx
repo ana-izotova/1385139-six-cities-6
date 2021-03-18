@@ -1,8 +1,8 @@
 import React from "react";
-import {NewCommentRatingFormProps} from "./new-comment-rating-form-types";
+import {NewCommentRatingFormProps} from "./new-comment-rating-input-types";
 import {RatingTitles} from "../../const";
 
-const NewCommentRatingForm: React.FC<NewCommentRatingFormProps> = ({handleRatingChange, rating}) => {
+const NewCommentRatingInput: React.FC<NewCommentRatingFormProps> = ({handleRatingChange, rating}) => {
   return (
     <div className="reviews__rating-form form__rating">
       {RatingTitles.map((ratingTitle, i) => {
@@ -34,4 +34,4 @@ const NewCommentRatingForm: React.FC<NewCommentRatingFormProps> = ({handleRating
   );
 };
 
-export default React.memo(NewCommentRatingForm);
+export default React.memo(NewCommentRatingInput);

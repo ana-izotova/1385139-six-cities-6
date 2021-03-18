@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 import {ClassNames, PlaceCardProps} from "./place-card-types";
 import {capitalize, convertRatingToPercents} from "../../utils/common";
 import {useDispatch, useSelector} from "react-redux";
-import {changeFetchStatus} from "../../store/action";
+import {changeFetchStatus} from "../../store/actions";
 import {AppRoute, AuthorizationStatus, FavoriteStatus, FetchStatus} from "../../const";
 import {changeCardFavoriteStatus, fetchFavoriteCards, fetchOffersNearby} from "../../store/api-actions";
 import {RootStateType} from "../../store/root-reducer";

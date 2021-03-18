@@ -2,7 +2,7 @@ import React from "react";
 import {CityTabProps} from "./city-tab-types";
 import {useDispatch, useSelector} from "react-redux";
 import {RootStateType} from "../../store/root-reducer";
-import {changeCity} from "../../store/action";
+import {changeCity} from "../../store/actions";
 
 const CityTab: React.FC<CityTabProps> = ({city}) => {
   const {currentCity} = useSelector(

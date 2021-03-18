@@ -8,7 +8,7 @@ import {
   changeFetchStatus,
   loadAllOffers,
   loadFavoriteCards
-} from "../action";
+} from "../actions";
 import {OfferCard} from "../../types";
 
 const initialState: allOffersInitialStateTypes = {
@@ -16,7 +16,6 @@ const initialState: allOffersInitialStateTypes = {
   allOffers: [],
   currentSort: SortType.POPULAR,
   isDataLoaded: false,
-  filteredCards: [],
   favoriteCards: [],
   areFavoriteCardsLoaded: false,
   fetchStatus: FetchStatus.PENDING,
