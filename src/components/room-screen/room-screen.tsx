@@ -25,7 +25,7 @@ const RoomScreen: React.FC<RoomScreenProps> = ({cardId}) => {
   const {isOfferLoaded, offer, offersNearby, comments} = useSelector((state: RootStateType) => state.SINGLE_OFFER);
   const {authorizationStatus} = useSelector((state: RootStateType) => state.USER);
   const {favoritesHaveBeenChanged, allOffers, fetchStatus: changeFavoriteFetchStatus} = useSelector((state: RootStateType) => state.ALL_OFFERS);
-  const dispatch = useDispatch();¬
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchSingleOffersData(cardId));
