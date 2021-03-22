@@ -81,8 +81,8 @@ export const changeFavoriteStatus = createAction(ActionType.CHANGE_FAVORITE_STAT
   };
 });
 
-export const changeFetchStatus = createAction(ActionType.CHANGE_FETCH_STATUS, (status: string) => {
+export const changeFetchStatus = createAction(ActionType.CHANGE_FETCH_STATUS, (status: string, reducerName: string) => {
   return {
-    payload: status
+    payload: {status, reducerName}
   };
 });

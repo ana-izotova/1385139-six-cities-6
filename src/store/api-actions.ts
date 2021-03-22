@@ -14,6 +14,7 @@ import {
   loadOffersNearby,
   loadSingleOffer, loadFavoriteCards, changeFavoriteStatus, changeFetchStatus,
 } from "./actions";
+import {NameSpace} from "./root-reducer";
 
 export type AppThunk<ReturnType = void> = ThunkAction<
   Promise<ReturnType>,
@@ -100,8 +101,8 @@ export const fetchFavoriteCards = (): AppThunk<ActionTypes> => (dispatch, _getSt
 export const changeCardFavoriteStatus = (offerId: number, status: string): AppThunk<ActionTypes> => (dispatch, _getState, api) =>
   api.post(`${ApiRoute.FAVORITES}/${offerId}/${status}`)
     .then(({data}) => dispatch(changeFavoriteStatus(data)))
-    .then(() => dispatch(changeFetchStatus(FetchStatus.DONE)))
-    .catch(() => dispatch(changeFetchStatus(FetchStatus.ERROR)));
+    .then(() => dispatch(changeFetchStatus(FetchStatus.DONE, NameSpace.ALL_OFFERS)))
+    .catch(() => dispatch(changeFetchStatus(FetchStatus.ERROR, NameSpace.ALL_OFFERS)));
 
 export const changeFavoriteOfferScreenStatus = (offerId: number, status: string): AppThunk<ActionTypes> => (dispatch, _state, api) => (
   api.post(`${ApiRoute.FAVORITES}/${offerId}/${status}`)
@@ -109,12 +110,12 @@ export const changeFavoriteOfferScreenStatus = (offerId: number, status: string)
       dispatch(changeFavoriteStatus(data));
       dispatch(loadSingleOffer(data));
     })
-    .then(() => dispatch(changeFetchStatus(FetchStatus.DONE)))
-    .catch(() => dispatch(changeFetchStatus(FetchStatus.ERROR))));
+    .then(() => dispatch(changeFetchStatus(FetchStatus.DONE, NameSpace.ALL_OFFERS)))
+    .catch(() => dispatch(changeFetchStatus(FetchStatus.ERROR, NameSpace.ALL_OFFERS))));
 
 export const sendComment = (offerId: number, commentData: CommentToPost): AppThunk<ActionTypes> => (dispatch, _getState, api) =>
   api.post(`${ApiRoute.COMMENTS}/${offerId}`, commentData)
     .then(({data}) => dispatch(loadComments(data)))
-    .then(() => dispatch(changeFetchStatus(FetchStatus.DONE)))
-    .catch(() => dispatch(changeFetchStatus(FetchStatus.ERROR)))
-    .finally(() => setTimeout(() => (dispatch(changeFetchStatus(FetchStatus.PENDING))), 3000));
+    .then(() => dispatch(changeFetchStatus(FetchStatus.DONE, NameSpace.SINGLE_OFFER)))
+    .catch(() => dispatch(changeFetchStatus(FetchStatus.ERROR, NameSpace.SINGLE_OFFER)))
+    .finally(() => setTimeout(() => (dispatch(changeFetchStatus(FetchStatus.PENDING, NameSpace.SINGLE_OFFER))), 3000));

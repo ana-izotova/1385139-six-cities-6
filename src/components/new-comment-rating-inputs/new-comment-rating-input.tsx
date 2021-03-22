@@ -1,8 +1,8 @@
 import React from "react";
 import {NewCommentRatingFormProps} from "./new-comment-rating-input-types";
-import {RatingTitles} from "../../const";
+import {FetchStatus, RatingTitles} from "../../const";
 
-const NewCommentRatingInput: React.FC<NewCommentRatingFormProps> = ({handleRatingChange, rating}) => {
+const NewCommentRatingInput: React.FC<NewCommentRatingFormProps> = ({handleRatingChange, rating, fetchStatus}) => {
   return (
     <div className="reviews__rating-form form__rating">
       {RatingTitles.map((ratingTitle, i) => {
@@ -17,6 +17,7 @@ const NewCommentRatingInput: React.FC<NewCommentRatingFormProps> = ({handleRatin
               type="radio"
               checked={rating === starRating}
               onChange={handleRatingChange}
+              disabled={fetchStatus === FetchStatus.SENDING}
             />
             <label
               htmlFor={`${starRating}-stars`}

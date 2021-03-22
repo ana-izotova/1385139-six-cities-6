@@ -1,9 +1,9 @@
-import {OfferCard, Comment, CommentToPost} from "../../types";
+import {OfferCard, Comment} from "../../types";
 
 export interface SingleOfferInitialStateTypes {
   offer: OfferCard,
   isOfferLoaded: boolean,
   offersNearby: Array<OfferCard>,
-  comments: Array<Comment>,
-  commentToPost: CommentToPost
+  comments: Array<Comment>
+  fetchStatus: string
 }

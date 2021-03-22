@@ -62,14 +62,9 @@ const FavoriteCards: React.FC<FavoriteCardsProps> = ({favoriteCards}) => {
 };
 
 const FavoritesScreen: React.FC = () => {
-  const {areFavoriteCardsLoaded, favoriteCards, favoritesHaveBeenChanged} = useSelector((state: RootStateType) => state.ALL_OFFERS);
+  const {favoritesHaveBeenChanged} = useSelector((state: RootStateType) => state.ALL_OFFERS);
+  const {favoriteCards, areFavoriteCardsLoaded} = useSelector((state: RootStateType) => state.FAVORITES);
 
-  // const allOffersState = useSelector(
-  //     (state: RootStateType) => state.ALL_OFFERS
-  // );
-  // const cardsSelector = (state: AllOffersReducerStateType) => state.allOffers;
-  // const getFavoriteCards = createSelector(cardsSelector, (offerCards) => offerCards.filter(({isFavorite}) => isFavorite));
-  // const favoriteCards = getFavoriteCards(allOffersState);
   const dispatch = useDispatch();
 
   useEffect(() => {

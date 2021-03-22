@@ -84,7 +84,7 @@ interface ChangeFavoriteStatusAction {
 
 interface ChangeFetchStatusAction {
   type: ActionType.CHANGE_FETCH_STATUS,
-  payload: string
+  payload: {status: string, reducerName: string}
 }
 
 export type ActionTypes =

@@ -5,8 +5,6 @@ export interface allOffersInitialStateTypes {
   allOffers: Array<OfferCard>,
   currentSort: string,
   isDataLoaded: boolean,
-  favoriteCards: Array<OfferCard>,
-  areFavoriteCardsLoaded: boolean,
   fetchStatus: string,
   favoritesHaveBeenChanged: boolean
 }

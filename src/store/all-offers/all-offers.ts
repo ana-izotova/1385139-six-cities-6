@@ -10,14 +10,13 @@ import {
   loadFavoriteCards
 } from "../actions";
 import {OfferCard} from "../../types";
+import {NameSpace} from "../root-reducer";
 
 const initialState: allOffersInitialStateTypes = {
   currentCity: Cities[0],
   allOffers: [],
   currentSort: SortType.POPULAR,
   isDataLoaded: false,
-  favoriteCards: [],
-  areFavoriteCardsLoaded: false,
   fetchStatus: FetchStatus.PENDING,
   favoritesHaveBeenChanged: false
 };
@@ -43,17 +42,17 @@ export const allOffers = createReducer(initialState, (builder) => {
   builder.addCase(changeCurrentSort, (state, action) => {
     state.currentSort = action.payload;
   });
-  builder.addCase(loadFavoriteCards, (state, action) => {
-    state.favoriteCards = action.payload;
-    state.areFavoriteCardsLoaded = true;
-    state.favoritesHaveBeenChanged = false;
-  });
   builder.addCase(changeFavoriteStatus, (state, action) => {
     state.allOffers = changeOffersList(state.allOffers, action.payload);
     state.favoritesHaveBeenChanged = true;
   });
   builder.addCase(changeFetchStatus, (state, action) => {
-    state.fetchStatus = action.payload;
+    if (action.payload.reducerName === NameSpace.ALL_OFFERS) {
+      state.fetchStatus = action.payload.status;
+    }
+    if (action.payload.status === FetchStatus.DONE) {
+      state.favoritesHaveBeenChanged = false;
+    }
   });
 });
 

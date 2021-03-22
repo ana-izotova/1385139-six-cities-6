@@ -13,15 +13,15 @@ const NewCommentForm: React.FC<NewCommentFormProps> = ({offerId}) => {
   const [commentText, setCommentText] = useState(``);
   const [rating, setRating] = useState(null);
 
-  const {fetchStatus} = useSelector((state: RootStateType) => state.ALL_OFFERS);
+  const {fetchStatus: sendCommentFetchStatus} = useSelector((state: RootStateType) => state.SINGLE_OFFER);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (fetchStatus === FetchStatus.DONE) {
+    if (sendCommentFetchStatus === FetchStatus.DONE) {
       setCommentText(``);
       setRating(null);
     }
-  }, [fetchStatus]);
+  }, [sendCommentFetchStatus]);
 
   const handleNewCommentSubmit = (evt: FormEvent) => {
     evt.preventDefault();
@@ -45,6 +45,7 @@ const NewCommentForm: React.FC<NewCommentFormProps> = ({offerId}) => {
       <NewCommentRatingForm
         rating={rating}
         handleRatingChange={handleRatingChange}
+        fetchStatus={sendCommentFetchStatus}
       />
       <textarea
         className="reviews__textarea form__textarea"
@@ -53,7 +54,7 @@ const NewCommentForm: React.FC<NewCommentFormProps> = ({offerId}) => {
         placeholder="Tell how was your stay, what you like and what can be improved"
         onChange={({target}) => setCommentText(target.value)}
         value={commentText}
-        disabled={fetchStatus === FetchStatus.SENDING}
+        disabled={sendCommentFetchStatus === FetchStatus.SENDING}
       ></textarea>
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
@@ -64,18 +65,18 @@ const NewCommentForm: React.FC<NewCommentFormProps> = ({offerId}) => {
           .
         </p>
         <button
-          className={`reviews__submit form__submit button ${fetchStatus === FetchStatus.ERROR ? `error-shake` : ``}`}
+          className={`reviews__submit form__submit button ${sendCommentFetchStatus === FetchStatus.ERROR ? `error-shake` : ``}`}
           type="submit"
           disabled={
             commentText.length < COMMENT_MIN_LENGTH ||
             rating === null ||
-            fetchStatus === FetchStatus.SENDING
+            sendCommentFetchStatus === FetchStatus.SENDING
           }
         >
           Submit
         </button>
       </div>
-      {fetchStatus === FetchStatus.ERROR ? <span style={{color: `red`}}>An unexpected error has occurred. Please try again.</span> : ``}
+      {sendCommentFetchStatus === FetchStatus.ERROR ? <span style={{color: `red`}}>An unexpected error has occurred. Please try again.</span> : ``}
     </form>
   );
 };
