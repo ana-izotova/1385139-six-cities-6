@@ -1,12 +1,11 @@
 import {OfferCard, City} from "../../types";
 
 export interface mapProps {
-  currentCity: City;
-  offerCity?: City;
-  cards: Array<OfferCard>;
+  offerCity?: City,
+  cards: Array<OfferCard>,
   style?: {
-    height: string;
+    height: string
   };
-  activeCard?: OfferCard;
   isMainMap?: boolean,
+  activeCardId?: number
 }

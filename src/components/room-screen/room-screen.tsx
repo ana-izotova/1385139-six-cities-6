@@ -4,29 +4,45 @@ import CommentItem from "../comment-item/comment-item";
 import NewCommentForm from "../new-comment-form/new-comment-form";
 import PlaceCard from "../place-card/place-card";
 import Map from "../map/map";
-import {StateTypes} from "../../store/store-types";
-import {connect} from "react-redux";
 import Header from "../header/header";
 import LoaderScreensaver from "../loader-screensaver/loader-screensaver";
-import {fetchOffersNearby, fetchOfferComments} from "../../store/api-actions";
 import {RoomScreenProps} from "./room-screen-types";
-import {IMAGES_PER_PAGE} from "../../const";
-import {ActionTypes} from "../../store/action-types";
-import {ThunkDispatch} from "redux-thunk";
-import {AxiosInstance} from "axios";
+import {AuthorizationStatus, IMAGES_PER_PAGE, FetchStatus, FavoriteStatus, AppRoute} from "../../const";
+import NotFoundScreen from "../not-found-screen/not-found-screen";
+import {useDispatch, useSelector} from "react-redux";
+import {NameSpace, RootStateType} from "../../store/root-reducer";
+import {
+  changeCardFavoriteStatus,
+  changeFavoriteOfferScreenStatus,
+  fetchOfferComments,
+  fetchOffersNearby,
+  fetchSingleOffersData
+} from "../../store/api-actions";
+import {changeFetchStatus, clearSingleOffersData} from "../../store/actions";
+import browserHistory from "../../browser-history";
 
-const RoomScreen: React.FC<RoomScreenProps> = ({
-  cards,
-  id,
-  currentOffersNearby,
-  isDataLoaded,
-  getOffersNearby,
-  currentOfferComments,
-  getComments,
-  loggedIn
-}) => {
+const RoomScreen: React.FC<RoomScreenProps> = ({cardId}) => {
+  const {isOfferLoaded, offer, offersNearby, comments} = useSelector((state: RootStateType) => state.SINGLE_OFFER);
+  const {authorizationStatus} = useSelector((state: RootStateType) => state.USER);
+  const {favoritesHaveBeenChanged, allOffers, fetchStatus: changeFavoriteFetchStatus} = useSelector((state: RootStateType) => state.ALL_OFFERS);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchSingleOffersData(cardId));
+    dispatch(fetchOfferComments(cardId));
+
+    return () => {
+      dispatch(clearSingleOffersData());
+    };
+  }, [cardId, dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchOffersNearby(cardId));
+    // dispatch(fetchSingleOffersData(cardId));
+  }, [favoritesHaveBeenChanged, cardId, dispatch, allOffers]);
+
   useLayoutEffect(() => {
-    if (!isDataLoaded) {
+    if (!isOfferLoaded) {
       return;
     }
     try {
@@ -38,20 +54,16 @@ const RoomScreen: React.FC<RoomScreenProps> = ({
     } catch (error) {
       window.scrollTo(0, 0);
     }
-  }, [id, isDataLoaded]);
+  }, [cardId, isOfferLoaded]);
 
-  useEffect(() => {
-    if (!isDataLoaded) {
-      return;
-    }
-    getOffersNearby(Number(id));
-    getComments(Number(id));
-  }, [id, getComments, getOffersNearby, isDataLoaded]);
-
-  if (!isDataLoaded) {
+  if (!isOfferLoaded) {
     return <LoaderScreensaver />;
   }
-  const card = cards.find((item) => item.id === Number(id));
+
+  if (!offer) {
+    return <NotFoundScreen />;
+  }
+
   const {
     isPremium,
     price,
@@ -65,9 +77,23 @@ const RoomScreen: React.FC<RoomScreenProps> = ({
     host,
     description,
     city,
-  } = card;
+    isFavorite
+  } = offer;
   const {name: hostName, isPro: hostIsPro, avatarUrl: hostAvatar} = host;
   const ratingInPercents: string = convertRatingToPercents(rating);
+  const loggedIn: boolean = authorizationStatus === AuthorizationStatus.AUTH;
+
+  const handleFavoriteClick = () => {
+    if (authorizationStatus === AuthorizationStatus.NO_AUTH) {
+      browserHistory.push(AppRoute.LOGIN_SCREEN);
+    } else {
+      const statusToChange = isFavorite
+        ? FavoriteStatus.UNFAVORED
+        : FavoriteStatus.FAVORITE;
+      dispatch(changeCardFavoriteStatus(cardId, statusToChange));
+      dispatch(changeFetchStatus(FetchStatus.SENDING, NameSpace.ALL_OFFERS));
+    }
+  };
 
   return (
     <div className="page">
@@ -101,8 +127,10 @@ const RoomScreen: React.FC<RoomScreenProps> = ({
               <div className="property__name-wrapper">
                 <h1 className="property__name">{title}</h1>
                 <button
-                  className="property__bookmark-button button"
+                  className={`property__bookmark-button ${isFavorite ? `property__bookmark-button--active` : ``} button ${changeFavoriteFetchStatus === FetchStatus.ERROR ? `error-shake` : ``}`}
                   type="button"
+                  onClick={handleFavoriteClick}
+                  disabled={changeFavoriteFetchStatus === FetchStatus.SENDING}
                 >
                   <svg
                     className="property__bookmark-icon"
@@ -172,20 +200,18 @@ const RoomScreen: React.FC<RoomScreenProps> = ({
               <section className="property__reviews reviews">
                 <h2 className="reviews__title">
                   Reviews &middot;{` `}
-                  <span className="reviews__amount">
-                    {currentOfferComments.length}
-                  </span>
+                  <span className="reviews__amount">{comments.length}</span>
                 </h2>
                 <ul className="reviews__list">
-                  {currentOfferComments.map((comment) => (
+                  {comments.map((comment) => (
                     <CommentItem {...comment} key={comment.id} />
                   ))}
                 </ul>
-                {loggedIn && <NewCommentForm />}
+                {loggedIn && <NewCommentForm offerId={cardId}/>}
               </section>
             </div>
           </div>
-          <Map cards={currentOffersNearby} offerCity={city} />
+          <Map cards={offersNearby} offerCity={city} />
         </section>
         <div className="container">
           <section className="near-places places">
@@ -193,11 +219,11 @@ const RoomScreen: React.FC<RoomScreenProps> = ({
               Other places in the neighbourhood
             </h2>
             <div className="near-places__list places__list">
-              {currentOffersNearby.map((offer) => (
+              {offersNearby.map((offerNearby) => (
                 <PlaceCard
                   offerType="near-places"
-                  card={offer}
-                  key={offer.id}
+                  card={offerNearby}
+                  key={offerNearby.id}
                 />
               ))}
             </div>
@@ -208,28 +234,4 @@ const RoomScreen: React.FC<RoomScreenProps> = ({
   );
 };
 
-const mapStateToProps = ({
-  offers,
-  currentOffersNearby,
-  isDataLoaded,
-  currentOfferComments,
-  loggedIn
-}: StateTypes) => ({
-  cards: offers,
-  currentOffersNearby,
-  isDataLoaded,
-  currentOfferComments,
-  loggedIn
-});
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<StateTypes, AxiosInstance, ActionTypes>) => ({
-  getOffersNearby(cardId: number) {
-    dispatch(fetchOffersNearby(cardId));
-  },
-  getComments(cardId: number) {
-    dispatch(fetchOfferComments(cardId));
-  },
-});
-
-export {RoomScreen};
-export default connect(mapStateToProps, mapDispatchToProps)(RoomScreen);
+export default RoomScreen;

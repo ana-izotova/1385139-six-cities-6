@@ -1,14 +1,24 @@
-import {ActionCreator} from "./action";
-import {AuthorizationStatus} from "../const";
+import {AuthorizationStatus, ApiRoute, AppRoute, FetchStatus} from "../const";
+import {CommentToPost} from "../types";
 import {ActionType, ActionTypes} from "./action-types";
 import type {ThunkAction} from "redux-thunk";
 import type {Action} from "redux";
 import type {AxiosInstance} from "axios";
-import {StateTypes} from "./store-types";
+import {
+  loadAllOffers,
+  redirectToRoute,
+  requireAuthorization,
+  setUserData,
+  logout,
+  loadComments,
+  loadOffersNearby,
+  loadSingleOffer, loadFavoriteCards, changeFavoriteStatus, changeFetchStatus,
+} from "./actions";
+import {NameSpace} from "./root-reducer";
 
 export type AppThunk<ReturnType = void> = ThunkAction<
   Promise<ReturnType>,
-  StateTypes,
+  any,
   AxiosInstance,
   Action<ActionType>
 >;
@@ -17,10 +27,7 @@ export const fetchOffersData = (): AppThunk<ActionTypes> => (
     dispatch,
     _getState,
     api
-) =>
-  api
-    .get(`/hotels`)
-    .then(({data}) => dispatch(ActionCreator.loadOffers(data)));
+) => api.get(ApiRoute.HOTELS).then(({data}) => dispatch(loadAllOffers(data)));
 
 export const checkAuth = (): AppThunk<ActionTypes> => (
     dispatch,
@@ -28,20 +35,39 @@ export const checkAuth = (): AppThunk<ActionTypes> => (
     api
 ) =>
   api
-    .get(`/login`)
-    .then(() =>
-      dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.AUTH))
-    );
+    .get(ApiRoute.LOGIN)
+    .then((response) => {
+      dispatch(setUserData({login: response.data.email, userAvatar: response.data. avatar_url}));
+      return response;
+    })
+    .then(() => dispatch(requireAuthorization(AuthorizationStatus.AUTH)))
+    .catch(() => dispatch(requireAuthorization(AuthorizationStatus.NO_AUTH)));
 
-export const login = (
-    email: string,
-    password: string
-): AppThunk<ActionTypes> => (dispatch, _getState, api) =>
+interface loginData {
+  login: string;
+  password: string;
+}
+
+export const login = ({
+  login: email,
+  password,
+}: loginData): AppThunk<ActionTypes> => (dispatch, _getState, api) =>
   api
-    .post(`/login`, {email, password})
-    .then(() =>
-      dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.AUTH))
-    );
+    .post(ApiRoute.LOGIN, {email, password})
+    .then((response) => dispatch(setUserData({login: response.data.email, userAvatar: response.data.avatar_url})))
+    .then(() => dispatch(requireAuthorization(AuthorizationStatus.AUTH)))
+    .then(() => dispatch(redirectToRoute(AppRoute.MAIN_SCREEN)))
+    .catch(() => dispatch(requireAuthorization(AuthorizationStatus.NO_AUTH)));
+
+export const logoutFromSite = (): AppThunk<ActionTypes> => (
+    dispatch,
+    _getState,
+    api
+) =>
+  api
+    .get(`/logout`)
+    .then(() => dispatch(logout(AuthorizationStatus.NO_AUTH)))
+    .then(() => dispatch(setUserData({login: ``, userAvatar: ``})));
 
 export const fetchOfferComments = (cardId: number): AppThunk<ActionTypes> => (
     dispatch,
@@ -49,14 +75,47 @@ export const fetchOfferComments = (cardId: number): AppThunk<ActionTypes> => (
     api
 ) =>
   api
-    .get(`/comments/${cardId}`)
-    .then(({data}) => dispatch(ActionCreator.loadComments(data)));
+    .get(`${ApiRoute.COMMENTS}/${cardId}`)
+    .then(({data}) => dispatch(loadComments(data)));
 
-export const fetchOffersNearby = (cardId: number): AppThunk<ActionTypes> => (
+export const fetchOffersNearby = (offerId: number): AppThunk<ActionTypes> => (
     dispatch,
     _getState,
     api
 ) =>
   api
-    .get(`/hotels/${cardId}/nearby`)
-    .then(({data}) => dispatch(ActionCreator.loadOffersNearby(data)));
+    .get(`${ApiRoute.HOTELS}/${offerId}/nearby`)
+    .then(({data}) => dispatch(loadOffersNearby(data)));
+
+export const fetchSingleOffersData = (
+    offerId: number
+): AppThunk<ActionTypes> => (dispatch, _getState, api) =>
+  api
+    .get(`${ApiRoute.HOTELS}/${offerId}`)
+    .then(({data}) => dispatch(loadSingleOffer(data)));
+
+export const fetchFavoriteCards = (): AppThunk<ActionTypes> => (dispatch, _getState, api) =>
+  api.get(`${ApiRoute.FAVORITES}`)
+    .then(({data}) => dispatch(loadFavoriteCards(data)));
+
+export const changeCardFavoriteStatus = (offerId: number, status: string): AppThunk<ActionTypes> => (dispatch, _getState, api) =>
+  api.post(`${ApiRoute.FAVORITES}/${offerId}/${status}`)
+    .then(({data}) => dispatch(changeFavoriteStatus(data)))
+    .then(() => dispatch(changeFetchStatus(FetchStatus.DONE, NameSpace.ALL_OFFERS)))
+    .catch(() => dispatch(changeFetchStatus(FetchStatus.ERROR, NameSpace.ALL_OFFERS)));
+
+export const changeFavoriteOfferScreenStatus = (offerId: number, status: string): AppThunk<ActionTypes> => (dispatch, _state, api) => (
+  api.post(`${ApiRoute.FAVORITES}/${offerId}/${status}`)
+    .then(({data}) => {
+      dispatch(changeFavoriteStatus(data));
+      dispatch(loadSingleOffer(data));
+    })
+    .then(() => dispatch(changeFetchStatus(FetchStatus.DONE, NameSpace.ALL_OFFERS)))
+    .catch(() => dispatch(changeFetchStatus(FetchStatus.ERROR, NameSpace.ALL_OFFERS))));
+
+export const sendComment = (offerId: number, commentData: CommentToPost): AppThunk<ActionTypes> => (dispatch, _getState, api) =>
+  api.post(`${ApiRoute.COMMENTS}/${offerId}`, commentData)
+    .then(({data}) => dispatch(loadComments(data)))
+    .then(() => dispatch(changeFetchStatus(FetchStatus.DONE, NameSpace.SINGLE_OFFER)))
+    .catch(() => dispatch(changeFetchStatus(FetchStatus.ERROR, NameSpace.SINGLE_OFFER)))
+    .finally(() => setTimeout(() => (dispatch(changeFetchStatus(FetchStatus.PENDING, NameSpace.SINGLE_OFFER))), 3000));

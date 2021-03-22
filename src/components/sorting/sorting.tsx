@@ -1,16 +1,13 @@
 import React, {useRef} from "react";
-import {StateTypes} from "../../store/store-types";
-import {Dispatch} from "redux";
-import {ActionCreator} from "../../store/action";
+import {changeCurrentSort} from "../../store/actions";
 import {SortType} from "../../const";
-import {connect} from "react-redux";
-import {SortingProps} from "./sorting-types";
+import {useDispatch, useSelector} from "react-redux";
+import {RootStateType} from "../../store/root-reducer";
 
-const Sorting: React.FC<SortingProps> = ({
-  currentSort,
-  onUserClick,
-}) => {
-
+const Sorting: React.FC = () => {
+  const {currentSort} = useSelector((state: RootStateType) => state.ALL_OFFERS);
+  const dispatch = useDispatch();
+  const onUserClick = (sortType: string) => dispatch(changeCurrentSort(sortType));
   const sortList = useRef<HTMLUListElement>(null);
 
   const handleSortListClick = () => {
@@ -48,16 +45,4 @@ const Sorting: React.FC<SortingProps> = ({
   );
 };
 
-const mapStateToProps = ({currentSort}: StateTypes) => ({
-  currentSort,
-});
-
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-  onUserClick(sortType: string) {
-    dispatch(ActionCreator.changeCurrentSort(sortType));
-  },
-});
-
-export {Sorting};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Sorting);
+export default React.memo(Sorting);

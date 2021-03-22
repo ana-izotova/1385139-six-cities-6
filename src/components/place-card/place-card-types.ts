@@ -3,7 +3,7 @@ import {OfferCard} from "../../types";
 export interface PlaceCardProps {
   offerType: `favorites` | `cities` | `near-places`;
   card: OfferCard;
-  activeCardChangeStateHandler?: (card: OfferCard) => void,
+  activeCardIdChangeStateHandler?: (id: number) => void,
 }
 
 export interface ClassNames {

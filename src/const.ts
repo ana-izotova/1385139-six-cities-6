@@ -2,6 +2,8 @@ import {City} from "./types";
 
 export const CARDS_PER_PAGE = 5;
 export const IMAGES_PER_PAGE = 6;
+export const BLUE_COLOR = `#4481c3`;
+export const COMMENT_MIN_LENGTH = 50;
 
 export const Cities: Array<City> = [
   {
@@ -54,14 +56,49 @@ export const Cities: Array<City> = [
   }
 ];
 
-export const SortType = {
-  POPULAR: `Popular`,
-  PRICE_LOW_TO_HIGH: `Price: low to high`,
-  PRICE_HIGH_TO_LOW: `Price: high to low`,
-  TOP_RATED_FIRST: `Top rated first`
-};
+export enum AppRoute {
+  MAIN_SCREEN = `/`,
+  LOGIN_SCREEN = `/login`,
+  FAVORITES_SCREEN = `/favorites`,
+  OFFER_SCREEN = `/offer/:id`
+}
 
-export const AuthorizationStatus = {
-  AUTH: `AUTH`,
-  NO_AUTH: `NO_AUTH`,
-};
+export enum ApiRoute {
+  LOGIN = `/login`,
+  HOTELS = `/hotels`,
+  LOGOUT = `/logout`,
+  COMMENTS = `/comments`,
+  FAVORITES = `/favorite`
+}
+
+export enum SortType {
+  POPULAR = `Popular`,
+  PRICE_LOW_TO_HIGH = `Price: low to high`,
+  PRICE_HIGH_TO_LOW = `Price: high to low`,
+  TOP_RATED_FIRST = `Top rated first`
+}
+
+export enum AuthorizationStatus {
+  AUTH = `AUTH`,
+  NO_AUTH = `NO_AUTH`,
+}
+
+export enum FavoriteStatus {
+  FAVORITE = `1`,
+  UNFAVORED = `0`
+}
+
+export enum FetchStatus {
+  PENDING = `PENDING`,
+  SENDING = `SENDING`,
+  DONE = `DONE`,
+  ERROR = `ERROR`
+}
+
+export const RatingTitles: Array<string> = [
+  `perfect`,
+  `good`,
+  `not bad`,
+  `badly`,
+  `terribly`,
+];

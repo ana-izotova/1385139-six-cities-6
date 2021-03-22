@@ -31,6 +31,16 @@ export interface Comment {
   user: CommentAuthor
 }
 
+export interface CommentToPost {
+  comment: string,
+  rating: number
+}
+
+export interface UserData {
+  login: string,
+  userAvatar: string
+}
+
 export type Comments = Array<Comment>;
 
 export interface OfferCard {
