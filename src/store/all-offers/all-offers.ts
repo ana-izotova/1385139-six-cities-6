@@ -49,9 +49,9 @@ export const allOffers = createReducer(initialState, (builder) => {
   builder.addCase(changeFetchStatus, (state, action) => {
     if (action.payload.reducerName === NameSpace.ALL_OFFERS) {
       state.fetchStatus = action.payload.status;
-    }
-    if (action.payload.status === FetchStatus.DONE) {
-      state.favoritesHaveBeenChanged = false;
+      if (action.payload.status === FetchStatus.DONE) {
+        state.favoritesHaveBeenChanged = false;
+      }
     }
   });
 });
