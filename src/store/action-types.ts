@@ -14,32 +14,32 @@ export enum ActionType {
   CLEAR_SINGLE_OFFER_DATA = `data/clearSingleOfferData`,
   LOAD_FAVORITES = `data/loadFavorites`,
   CHANGE_FAVORITE_STATUS = `data/changeFavoriteStatus`,
-  CHANGE_FETCH_STATUS = `data/changeFetchStatus`
+  CHANGE_FETCH_STATUS = `data/changeFetchStatus`,
 }
 
 interface ChangeCityAction {
-  type: ActionType.CHANGE_CITY,
+  type: ActionType.CHANGE_CITY;
   payload: City;
 }
 
 interface LoadAllOffersAction {
-  type: ActionType.LOAD_ALL_OFFERS,
-  payload: Array<OfferCard>
+  type: ActionType.LOAD_ALL_OFFERS;
+  payload: Array<OfferCard>;
 }
 
 interface LoadSingleOfferAction {
-  type: ActionType.LOAD_SINGLE_OFFER,
-  payload: OfferCard
+  type: ActionType.LOAD_SINGLE_OFFER;
+  payload: OfferCard;
 }
 
 interface CheckAuthorization {
-  type: ActionType.REQUIRE_AUTHORIZATION,
-  payload: string
+  type: ActionType.REQUIRE_AUTHORIZATION;
+  payload: string;
 }
 
 interface AuthorizationAction {
-  type: ActionType.SET_USER_DATA,
-  payload: UserData
+  type: ActionType.SET_USER_DATA;
+  payload: UserData;
 }
 
 interface LogoutAction {
@@ -48,43 +48,48 @@ interface LogoutAction {
 }
 
 interface LoadCommentsAction {
-  type: ActionType.LOAD_COMMENTS,
-  payload: Array<Comment>
+  type: ActionType.LOAD_COMMENTS;
+  payload: Array<Comment>;
 }
 
 interface LoadOffersNearbyAction {
-  type: ActionType.LOAD_OFFERS_NEARBY,
-  payload: Array<OfferCard>
+  type: ActionType.LOAD_OFFERS_NEARBY;
+  payload: Array<OfferCard>;
 }
 
 interface ChangeCurrentSortAction {
-  type: ActionType.CHANGE_SORT,
-  payload: string
+  type: ActionType.CHANGE_SORT;
+  payload: string;
 }
 
 interface RedirectAction {
-  type: ActionType.REDIRECT_TO_ROUTE,
-  payload: string
+  type: ActionType.REDIRECT_TO_ROUTE;
+  payload: string;
 }
 
 interface ClearSingleOfferDataAction {
-  type: ActionType.CLEAR_SINGLE_OFFER_DATA,
-  payload: string
+  type: ActionType.CLEAR_SINGLE_OFFER_DATA;
+  payload: {
+    offer: OfferCard;
+    offersNearby: Array<OfferCard>;
+    comments: Array<Comment>;
+    isOfferLoaded: boolean;
+  };
 }
 
 interface LoadFavoriteOffersAction {
-  type: ActionType.LOAD_FAVORITES,
-  payload: Array<OfferCard>
+  type: ActionType.LOAD_FAVORITES;
+  payload: Array<OfferCard>;
 }
 
 interface ChangeFavoriteStatusAction {
-  type: ActionType.CHANGE_FAVORITE_STATUS,
-  payload: OfferCard
+  type: ActionType.CHANGE_FAVORITE_STATUS;
+  payload: OfferCard;
 }
 
 interface ChangeFetchStatusAction {
-  type: ActionType.CHANGE_FETCH_STATUS,
-  payload: {status: string, reducerName: string}
+  type: ActionType.CHANGE_FETCH_STATUS;
+  payload: { status: string; reducerName: string };
 }
 
 export type ActionTypes =
@@ -100,4 +105,5 @@ export type ActionTypes =
   | RedirectAction
   | LoadFavoriteOffersAction
   | ChangeFavoriteStatusAction
-  | ChangeFetchStatusAction;
+  | ChangeFetchStatusAction
+  | ClearSingleOfferDataAction;
