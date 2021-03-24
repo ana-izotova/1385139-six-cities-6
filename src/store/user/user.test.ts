@@ -1,19 +1,26 @@
+import MockAdapter from "axios-mock-adapter";
+import {createAPI} from "../../services/api";
 import {user} from "./user";
 import {ActionType} from "../action-types";
+import {checkAuth, login, logoutFromSite} from "../api-actions";
+import {ApiRoute, AppRoute, AuthorizationStatus, FetchStatus} from "../../const";
+import {NameSpace} from "../root-reducer";
+
+const api = createAPI(() => {});
 
 describe(`User's reducers should work correctly`, () => {
   it(`Reducer should change authorization status correctly`, () => {
     const initialState = {
-      authorizationStatus: `NO_AUTH`
+      authorizationStatus: AuthorizationStatus.NO_AUTH
     };
 
     const getRequireAuthorizationAction = {
       type: ActionType.REQUIRE_AUTHORIZATION,
-      payload: `AUTH`
+      payload: AuthorizationStatus.AUTH
     };
 
     const expectedState = {
-      authorizationStatus: `AUTH`
+      authorizationStatus: AuthorizationStatus.AUTH
     };
 
     expect(user(initialState, getRequireAuthorizationAction)).toEqual(expectedState);
@@ -43,18 +50,137 @@ describe(`User's reducers should work correctly`, () => {
 
   it(`Reducer should change authorization status correctly to unauthorized`, () => {
     const initialState = {
-      authorizationStatus: `AUTH`
+      authorizationStatus: AuthorizationStatus.AUTH
     };
 
     const getLogoutAction = {
       type: ActionType.LOGOUT,
-      payload: `NO_AUTH`
+      payload: AuthorizationStatus.NO_AUTH
     };
 
     const expectedState = {
-      authorizationStatus: `NO_AUTH`
+      authorizationStatus: AuthorizationStatus.NO_AUTH
     };
 
     expect(user(initialState, getLogoutAction)).toEqual(expectedState);
-  })
+  });
+
+  it(`Reducer should change fetch status`, () => {
+    const initialState = {
+      fetchStatus: FetchStatus.PENDING
+    };
+
+    const getChangeFetchStatusAction = {
+      type: ActionType.CHANGE_FETCH_STATUS,
+      payload: {reducerName: NameSpace.USER, status: FetchStatus.SENDING}
+    };
+
+    const expectedState = {
+      fetchStatus: FetchStatus.SENDING
+    };
+
+    expect(user(initialState, getChangeFetchStatusAction)).toEqual(expectedState);
+  });
+
+  it(`Reducer shouldn't change fetch status`, () => {
+    const initialState = {
+      fetchStatus: FetchStatus.PENDING
+    };
+
+    const getChangeFetchStatusAction = {
+      type: ActionType.CHANGE_FETCH_STATUS,
+      payload: {reducerName: NameSpace.ALL_OFFERS, status: FetchStatus.SENDING}
+    };
+
+    const expectedState = {
+      fetchStatus: FetchStatus.PENDING
+    };
+
+    expect(user(initialState, getChangeFetchStatusAction)).toEqual(expectedState);
+  });
+});
+
+describe(`Async operations work correctly`, () => {
+  it(`Should make a correct call to /login`, () => {
+    const apiMock = new MockAdapter(api);
+    const dispatch = jest.fn();
+    const checkAuthLoader = checkAuth();
+
+    apiMock
+      .onGet(ApiRoute.LOGIN)
+      .reply(200, {
+        "email": `jondoe@mail.com`,
+        "avatar_url": `avatar.jpg`
+      });
+
+    return checkAuthLoader(dispatch, () => {}, api)
+      .then(() => {
+        expect(dispatch).toHaveBeenCalledTimes(2);
+        expect(dispatch).toHaveBeenNthCalledWith(1, {
+          type: ActionType.SET_USER_DATA,
+          payload: {login: `jondoe@mail.com`, userAvatar: `avatar.jpg`}
+        });
+        expect(dispatch).toHaveBeenNthCalledWith(2, {
+          type: ActionType.REQUIRE_AUTHORIZATION,
+          payload: AuthorizationStatus.AUTH
+        });
+      });
+  });
+
+  it(`Should make a correct call to /login and get login data`, () => {
+    const apiMock = new MockAdapter(api);
+    const dispatch = jest.fn();
+    const loginLoader = login({login: `jondoe@mail.com`, password: `12345`});
+
+    apiMock
+      .onPost(ApiRoute.LOGIN)
+      .reply(200, {
+        "email": `jondoe@mail.com`,
+        "avatar_url": `avatar.jpg`
+      });
+
+    return loginLoader(dispatch, () => {}, api)
+      .then(() => {
+        expect(dispatch).toHaveBeenCalledTimes(4);
+        expect(dispatch).toHaveBeenNthCalledWith(1, {
+          type: ActionType.SET_USER_DATA,
+          payload: {login: `jondoe@mail.com`, userAvatar: `avatar.jpg`}
+        });
+        expect(dispatch).toHaveBeenNthCalledWith(2, {
+          type: ActionType.REQUIRE_AUTHORIZATION,
+          payload: AuthorizationStatus.AUTH
+        });
+        expect(dispatch).toHaveBeenNthCalledWith(3, {
+          type: ActionType.CHANGE_FETCH_STATUS,
+          payload: {status: FetchStatus.DONE, reducerName: NameSpace.USER}
+        });
+        expect(dispatch).toHaveBeenNthCalledWith(4, {
+          type: ActionType.REDIRECT_TO_ROUTE,
+          payload: AppRoute.MAIN_SCREEN
+        });
+      });
+  });
+
+  it(`Should make a correct call to /logout`, () => {
+    const apiMock = new MockAdapter(api);
+    const dispatch = jest.fn();
+    const logoutLoader = logoutFromSite();
+
+    apiMock
+      .onGet(ApiRoute.LOGOUT)
+      .reply(200, []);
+
+    return logoutLoader(dispatch, () => {}, api)
+      .then(() => {
+        expect(dispatch).toHaveBeenCalledTimes(2);
+        expect(dispatch).toHaveBeenNthCalledWith(1, {
+          type: ActionType.LOGOUT,
+          payload: AuthorizationStatus.NO_AUTH
+        });
+        expect(dispatch).toHaveBeenNthCalledWith(2, {
+          type: ActionType.SET_USER_DATA,
+          payload: {login: ``, userAvatar: ``}
+        });
+      });
+  });
 });
