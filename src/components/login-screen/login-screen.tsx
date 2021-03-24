@@ -1,9 +1,14 @@
 import React, {FormEvent, useRef} from "react";
 import Header from "../header/header";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {login} from "../../store/api-actions";
+import {NameSpace, RootStateType} from "../../store/root-reducer";
+import {changeFetchStatus} from "../../store/actions";
+import {FetchStatus} from "../../const";
 
 const LoginScreen: React.FC = () => {
+  const {fetchStatus: userFetchStatus} = useSelector((state: RootStateType) => state.USER);
+
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
@@ -14,6 +19,7 @@ const LoginScreen: React.FC = () => {
       login: emailRef.current.value,
       password: passwordRef.current.value,
     }));
+    dispatch(changeFetchStatus(FetchStatus.SENDING, NameSpace.USER));
   };
 
   return (
@@ -55,9 +61,11 @@ const LoginScreen: React.FC = () => {
               <button
                 className="login__submit form__submit button"
                 type="submit"
+                disabled={userFetchStatus === FetchStatus.SENDING}
               >
                 Sign in
               </button>
+              {userFetchStatus === FetchStatus.ERROR ? <span style={{color: `red`}}>An error has occurred. Please try again.</span> : ``}
             </form>
           </section>
           <section className="locations locations--login locations--current">

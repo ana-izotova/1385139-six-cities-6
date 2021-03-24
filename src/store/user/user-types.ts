@@ -1,5 +1,6 @@
 export interface userInitialStateTypes {
   authorizationStatus: string,
   login: string,
-  userAvatar: string
+  userAvatar: string,
+  fetchStatus: string
 }
