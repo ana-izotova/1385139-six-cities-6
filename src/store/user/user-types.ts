@@ -1,4 +1,4 @@
-export interface userInitialStateTypes {
+export interface UserInitialStateTypes {
   authorizationStatus: string,
   login: string,
   userAvatar: string,

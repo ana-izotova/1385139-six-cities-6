@@ -5,13 +5,17 @@ import {ActionType} from "../action-types";
 import {checkAuth, login, logoutFromSite} from "../api-actions";
 import {ApiRoute, AppRoute, AuthorizationStatus, FetchStatus} from "../../const";
 import {NameSpace} from "../root-reducer";
+import {UserInitialStateTypes} from "./user-types";
 
 const api = createAPI(() => {});
 
 describe(`User's reducers should work correctly`, () => {
   it(`Reducer should change authorization status correctly`, () => {
-    const initialState = {
-      authorizationStatus: AuthorizationStatus.NO_AUTH
+    const initialState: UserInitialStateTypes = {
+      authorizationStatus: AuthorizationStatus.NO_AUTH,
+      login: ``,
+      userAvatar: ``,
+      fetchStatus: FetchStatus.PENDING
     };
 
     const getRequireAuthorizationAction = {
@@ -19,17 +23,22 @@ describe(`User's reducers should work correctly`, () => {
       payload: AuthorizationStatus.AUTH
     };
 
-    const expectedState = {
-      authorizationStatus: AuthorizationStatus.AUTH
+    const expectedState: UserInitialStateTypes = {
+      authorizationStatus: AuthorizationStatus.AUTH,
+      login: ``,
+      userAvatar: ``,
+      fetchStatus: FetchStatus.PENDING
     };
 
     expect(user(initialState, getRequireAuthorizationAction)).toEqual(expectedState);
   });
 
   it(`Reducer should set user's data correctly`, () => {
-    const initialState = {
+    const initialState: UserInitialStateTypes = {
+      authorizationStatus: AuthorizationStatus.AUTH,
       login: ``,
-      userAvatar: ``
+      userAvatar: ``,
+      fetchStatus: FetchStatus.PENDING
     };
 
     const getSetUserDataAction = {
@@ -40,17 +49,22 @@ describe(`User's reducers should work correctly`, () => {
       }
     };
 
-    const expectedState = {
+    const expectedState: UserInitialStateTypes = {
+      authorizationStatus: AuthorizationStatus.AUTH,
       login: `johndoe@mail.com`,
-      userAvatar: `johndoe.jpg`
+      userAvatar: `johndoe.jpg`,
+      fetchStatus: FetchStatus.PENDING
     };
 
     expect(user(initialState, getSetUserDataAction)).toEqual(expectedState);
   });
 
   it(`Reducer should change authorization status correctly to unauthorized`, () => {
-    const initialState = {
-      authorizationStatus: AuthorizationStatus.AUTH
+    const initialState: UserInitialStateTypes = {
+      authorizationStatus: AuthorizationStatus.AUTH,
+      login: `johndoe@mail.com`,
+      userAvatar: `johndoe.jpg`,
+      fetchStatus: FetchStatus.PENDING
     };
 
     const getLogoutAction = {
@@ -58,15 +72,21 @@ describe(`User's reducers should work correctly`, () => {
       payload: AuthorizationStatus.NO_AUTH
     };
 
-    const expectedState = {
-      authorizationStatus: AuthorizationStatus.NO_AUTH
+    const expectedState: UserInitialStateTypes = {
+      authorizationStatus: AuthorizationStatus.NO_AUTH,
+      login: `johndoe@mail.com`,
+      userAvatar: `johndoe.jpg`,
+      fetchStatus: FetchStatus.PENDING
     };
 
     expect(user(initialState, getLogoutAction)).toEqual(expectedState);
   });
 
   it(`Reducer should change fetch status`, () => {
-    const initialState = {
+    const initialState: UserInitialStateTypes = {
+      authorizationStatus: AuthorizationStatus.AUTH,
+      login: ``,
+      userAvatar: ``,
       fetchStatus: FetchStatus.PENDING
     };
 
@@ -75,7 +95,10 @@ describe(`User's reducers should work correctly`, () => {
       payload: {reducerName: NameSpace.USER, status: FetchStatus.SENDING}
     };
 
-    const expectedState = {
+    const expectedState: UserInitialStateTypes = {
+      authorizationStatus: AuthorizationStatus.AUTH,
+      login: ``,
+      userAvatar: ``,
       fetchStatus: FetchStatus.SENDING
     };
 
@@ -83,7 +106,10 @@ describe(`User's reducers should work correctly`, () => {
   });
 
   it(`Reducer shouldn't change fetch status`, () => {
-    const initialState = {
+    const initialState: UserInitialStateTypes = {
+      authorizationStatus: AuthorizationStatus.AUTH,
+      login: ``,
+      userAvatar: ``,
       fetchStatus: FetchStatus.PENDING
     };
 
@@ -92,7 +118,10 @@ describe(`User's reducers should work correctly`, () => {
       payload: {reducerName: NameSpace.ALL_OFFERS, status: FetchStatus.SENDING}
     };
 
-    const expectedState = {
+    const expectedState: UserInitialStateTypes = {
+      authorizationStatus: AuthorizationStatus.AUTH,
+      login: ``,
+      userAvatar: ``,
       fetchStatus: FetchStatus.PENDING
     };
 
