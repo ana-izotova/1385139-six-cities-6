@@ -1,18 +1,17 @@
 import {createReducer} from "@reduxjs/toolkit";
 import {Cities, SortType, FetchStatus} from "../../const";
-import {allOffersInitialStateTypes} from "./all-offers-types";
+import {AllOffersInitialStateTypes} from "./all-offers-types";
 import {
   changeCity,
   changeCurrentSort,
   changeFavoriteStatus,
   changeFetchStatus,
-  loadAllOffers,
-  loadFavoriteCards
+  loadAllOffers
 } from "../actions";
 import {OfferCard} from "../../types";
 import {NameSpace} from "../root-reducer";
 
-const initialState: allOffersInitialStateTypes = {
+const initialState: AllOffersInitialStateTypes = {
   currentCity: Cities[0],
   allOffers: [],
   currentSort: SortType.POPULAR,
