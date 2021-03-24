@@ -1,6 +1,6 @@
 import {City, OfferCard} from "../../types";
 
-export interface allOffersInitialStateTypes {
+export interface AllOffersInitialStateTypes {
   currentCity: City,
   allOffers: Array<OfferCard>,
   currentSort: string,

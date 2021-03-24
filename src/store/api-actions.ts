@@ -37,7 +37,7 @@ export const checkAuth = (): AppThunk<ActionTypes> => (
   api
     .get(ApiRoute.LOGIN)
     .then((response) => {
-      dispatch(setUserData({login: response.data.email, userAvatar: response.data. avatar_url}));
+      dispatch(setUserData({login: response.data.email, userAvatar: response.data.avatar_url}));
       return response;
     })
     .then(() => dispatch(requireAuthorization(AuthorizationStatus.AUTH)))
@@ -51,13 +51,21 @@ interface loginData {
 export const login = ({
   login: email,
   password,
-}: loginData): AppThunk<ActionTypes> => (dispatch, _getState, api) =>
+}: loginData): AppThunk => (dispatch, _getState, api) =>
   api
     .post(ApiRoute.LOGIN, {email, password})
     .then((response) => dispatch(setUserData({login: response.data.email, userAvatar: response.data.avatar_url})))
-    .then(() => dispatch(requireAuthorization(AuthorizationStatus.AUTH)))
-    .then(() => dispatch(redirectToRoute(AppRoute.MAIN_SCREEN)))
-    .catch(() => dispatch(requireAuthorization(AuthorizationStatus.NO_AUTH)));
+    .then(() => {
+      dispatch(requireAuthorization(AuthorizationStatus.AUTH));
+      dispatch(changeFetchStatus(FetchStatus.DONE, NameSpace.USER));
+      dispatch(redirectToRoute(AppRoute.MAIN_SCREEN));
+    })
+    .catch(() => {
+      dispatch(requireAuthorization(AuthorizationStatus.NO_AUTH));
+      dispatch(changeFetchStatus(FetchStatus.ERROR, NameSpace.USER));
+    })
+    .finally(() => setTimeout(() => (dispatch(changeFetchStatus(FetchStatus.PENDING, NameSpace.USER))), 3000));
+
 
 export const logoutFromSite = (): AppThunk<ActionTypes> => (
     dispatch,

@@ -1,9 +1,9 @@
-import React, {ChangeEvent, FormEvent, useCallback, useEffect, useState} from "react";
+import React, {FormEvent, useCallback, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {RootStateType} from "../../store/root-reducer";
 import {FetchStatus, COMMENT_MIN_LENGTH} from "../../const";
 import {sendComment} from "../../store/api-actions";
-import NewCommentRatingForm from "../new-comment-rating-inputs/new-comment-rating-input";
+import NewCommentRatingInput from "../new-comment-rating-inputs/new-comment-rating-input";
 
 interface NewCommentFormProps {
   offerId: number
@@ -42,7 +42,7 @@ const NewCommentForm: React.FC<NewCommentFormProps> = ({offerId}) => {
       <label className="reviews__label form__label" htmlFor="review">
         Your review
       </label>
-      <NewCommentRatingForm
+      <NewCommentRatingInput
         rating={rating}
         handleRatingChange={handleRatingChange}
         fetchStatus={sendCommentFetchStatus}

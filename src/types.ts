@@ -59,8 +59,7 @@ export interface OfferCard {
   goods: Array<string>,
   location: Location,
   host: Host,
-  city: City,
-  comments: Comments
+  city: City
 }
 
 export type OfferCards = { cards: Array<OfferCard> };

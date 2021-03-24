@@ -1,18 +1,17 @@
 import {createReducer} from "@reduxjs/toolkit";
 import {Cities, SortType, FetchStatus} from "../../const";
-import {allOffersInitialStateTypes} from "./all-offers-types";
+import {AllOffersInitialStateTypes} from "./all-offers-types";
 import {
   changeCity,
   changeCurrentSort,
   changeFavoriteStatus,
   changeFetchStatus,
-  loadAllOffers,
-  loadFavoriteCards
+  loadAllOffers
 } from "../actions";
 import {OfferCard} from "../../types";
 import {NameSpace} from "../root-reducer";
 
-const initialState: allOffersInitialStateTypes = {
+const initialState: AllOffersInitialStateTypes = {
   currentCity: Cities[0],
   allOffers: [],
   currentSort: SortType.POPULAR,
@@ -49,9 +48,9 @@ export const allOffers = createReducer(initialState, (builder) => {
   builder.addCase(changeFetchStatus, (state, action) => {
     if (action.payload.reducerName === NameSpace.ALL_OFFERS) {
       state.fetchStatus = action.payload.status;
-    }
-    if (action.payload.status === FetchStatus.DONE) {
-      state.favoritesHaveBeenChanged = false;
+      if (action.payload.status === FetchStatus.DONE) {
+        state.favoritesHaveBeenChanged = false;
+      }
     }
   });
 });
