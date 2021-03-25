@@ -11,7 +11,7 @@ import {
 import {OfferCard} from "../../types";
 import {NameSpace} from "../../const";
 
-const initialState: AllOffersInitialStateTypes = {
+export const initialState: AllOffersInitialStateTypes = {
   currentCity: Cities[0],
   allOffers: [],
   currentSort: SortType.POPULAR,

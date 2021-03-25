@@ -1,15 +1,14 @@
 import React from 'react';
 import {render} from '@testing-library/react';
 import {TestMock} from "../../test-mocks/test-mock";
-import Footer from "./footer";
+import LoaderScreensaver from "./loader-screensaver";
 
-test(`Footer component should render correctly`, () => {
+test(`Favorite screen should render correctly`, () => {
   const {container} = render(
       <TestMock>
-        <Footer />
+        <LoaderScreensaver />
       </TestMock>
   );
 
   expect(container).toMatchSnapshot();
 });
-

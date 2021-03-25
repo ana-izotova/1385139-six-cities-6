@@ -1,15 +1,15 @@
 import React from 'react';
 import {render} from '@testing-library/react';
 import {TestMock} from "../../test-mocks/test-mock";
-import Footer from "./footer";
+import CommentItem from "./comment-item";
+import {adaptedTestComment} from "../../test-mocks/adapted-data-mock";
 
-test(`Footer component should render correctly`, () => {
+test(`Comment item component should render correctly`, () => {
   const {container} = render(
       <TestMock>
-        <Footer />
+        <CommentItem {...adaptedTestComment} />
       </TestMock>
   );
 
   expect(container).toMatchSnapshot();
 });
-

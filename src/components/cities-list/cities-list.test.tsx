@@ -1,15 +1,14 @@
 import React from 'react';
 import {render} from '@testing-library/react';
 import {TestMock} from "../../test-mocks/test-mock";
-import Footer from "./footer";
+import CitiesList from "./cities-list";
 
-test(`Footer component should render correctly`, () => {
+test(`Cities list should render correctly`, () => {
   const {container} = render(
       <TestMock>
-        <Footer />
+        <CitiesList />
       </TestMock>
   );
 
   expect(container).toMatchSnapshot();
 });
-

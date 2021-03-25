@@ -4,7 +4,7 @@ import {AuthorizationStatus, FetchStatus} from "../../const";
 import {UserInitialStateTypes} from "./user-types";
 import {NameSpace} from "../../const";
 
-const initialState: UserInitialStateTypes = {
+export const initialState: UserInitialStateTypes = {
   authorizationStatus: AuthorizationStatus.NO_AUTH,
   login: ``,
   userAvatar: ``,

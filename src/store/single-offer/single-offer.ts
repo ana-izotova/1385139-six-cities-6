@@ -4,7 +4,7 @@ import {loadComments, loadOffersNearby, loadSingleOffer, clearSingleOffersData, 
 import {FetchStatus, NameSpace} from "../../const";
 import {sortByDate} from "../../utils/sorting";
 
-const initialState: SingleOfferInitialStateTypes = {
+export const initialState: SingleOfferInitialStateTypes = {
   offer: null,
   offersNearby: [],
   comments: [],
