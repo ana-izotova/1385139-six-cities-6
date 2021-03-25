@@ -1,16 +1,30 @@
 import {ActionType} from "./action-types";
 import {
-  changeCity, changeCurrentSort, changeFavoriteStatus, changeFetchStatus, clearSingleOffersData,
+  changeCity,
+  changeCurrentSort,
+  changeFavoriteStatus,
+  changeFetchStatus,
+  clearSingleOffersData,
   loadAllOffers,
-  loadComments, loadFavoriteCards,
+  loadComments,
+  loadFavoriteCards,
   loadOffersNearby,
   loadSingleOffer,
-  logout, redirectToRoute,
+  logout,
+  redirectToRoute,
   requireAuthorization,
   setUserData,
 } from "./actions";
 import {UserData} from "../types";
 import {adaptCommentToClient, adaptToClient} from "../utils/adapters";
+import {
+  testComment,
+  testOffer,
+  testOffer2,
+  testOffer2Favorited,
+  testOfferFavorited,
+} from "../test-mocks/server-data-mock";
+import {AppRoute, FetchStatus, NameSpace, SortType} from "../const";
 
 describe(`Action creators work correctly`, () => {
   it(`Action creator for changing city returns correct city`, () => {
@@ -31,137 +45,24 @@ describe(`Action creators work correctly`, () => {
   });
 
   it(`Action creator for loading all offers works correctly`, () => {
-    const emptyOffersArray = [];
+    const emptyOffers: any = [];
+    const offers = [testOffer, testOffer2];
+
     const expectedActionForEmptyOffers = {
       type: ActionType.LOAD_ALL_OFFERS,
-      payload: emptyOffersArray,
+      payload: emptyOffers,
     };
-    const offersArray = [
-      {
-        city: {
-          name: `Paris`,
-          location: {
-            latitude: 48.85661,
-            longitude: 2.351499,
-            zoom: 13,
-          },
-        },
-        preview_image: `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/16.jpg`,
-        images: [
-          `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/7.jpg`,
-          `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/8.jpg`,
-        ],
-        title: `The house among olive `,
-        is_favorite: false,
-        is_premium: true,
-        rating: 4,
-        type: `room`,
-        bedrooms: 2,
-        max_adults: 2,
-        price: 500,
-        goods: [`Breakfast`, `Air conditioning`],
-        host: {
-          id: 25,
-          name: `Madelina`,
-          is_pro: true,
-          avatar_url: `img/avatar-madelina.jpg`,
-        },
-        description: `Relax, rejuvenate and unplug in this ultimate rustic getaway experience in the country.`,
-        location: {
-          latitude: 48.83861,
-          longitude: 2.350499,
-          zoom: 16,
-        },
-        id: 1,
-      },
-      {
-        city: {
-          name: `Brussels`,
-          location: {
-            latitude: 50.846557,
-            longitude: 4.351697,
-            zoom: 13,
-          },
-        },
-        preview_image: `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/18.jpg`,
-        images: [
-          `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/8.jpg`,
-          `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/20.jpg`,
-        ],
-        title: `Waterfront with extraordinary view`,
-        is_favorite: false,
-        is_premium: false,
-        rating: 4.8,
-        type: `apartment`,
-        bedrooms: 5,
-        max_adults: 6,
-        price: 310,
-        goods: [`Dishwasher`, `Towels`, `Washer`],
-        host: {
-          id: 25,
-          name: `Angelina`,
-          is_pro: true,
-          avatar_url: `img/avatar-angelina.jpg`,
-        },
-        description: `Relax, rejuvenate and unplug in this ultimate rustic getaway experience in the country.`,
-        location: {
-          latitude: 50.844556999999995,
-          longitude: 4.346697,
-          zoom: 16,
-        },
-        id: 2,
-      },
-    ];
 
-    const expectedActionForNonEmptyArray = {
+    const expectedActionForNonEmptyOffers = {
       type: ActionType.LOAD_ALL_OFFERS,
-      payload: offersArray.map((offer) => adaptToClient(offer)),
+      payload: offers.map((offer) => adaptToClient(offer)),
     };
 
-    expect(loadAllOffers(emptyOffersArray)).toEqual(
-        expectedActionForEmptyOffers
-    );
-    expect(loadAllOffers(offersArray)).toEqual(expectedActionForNonEmptyArray);
+    expect(loadAllOffers(emptyOffers)).toEqual(expectedActionForEmptyOffers);
+    expect(loadAllOffers(offers)).toEqual(expectedActionForNonEmptyOffers);
   });
 
   it(`Action creator for loading a single offer works correctly`, () => {
-    const testOffer = {
-      city: {
-        name: `Paris`,
-        location: {
-          latitude: 48.85661,
-          longitude: 2.351499,
-          zoom: 13,
-        },
-      },
-      preview_image: `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/16.jpg`,
-      images: [
-        `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/7.jpg`,
-        `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/8.jpg`,
-      ],
-      title: `The house among olive `,
-      is_favorite: false,
-      is_premium: true,
-      rating: 4,
-      type: `room`,
-      bedrooms: 2,
-      max_adults: 2,
-      price: 500,
-      goods: [`Breakfast`, `Air conditioning`],
-      host: {
-        id: 25,
-        name: `Madelina`,
-        is_pro: true,
-        avatar_url: `img/avatar-madelina.jpg`,
-      },
-      description: `Relax, rejuvenate and unplug in this ultimate rustic getaway experience in the country.`,
-      location: {
-        latitude: 48.83861,
-        longitude: 2.350499,
-        zoom: 16,
-      },
-      id: 1,
-    };
     const expectedAction = {
       type: ActionType.LOAD_SINGLE_OFFER,
       payload: adaptToClient(testOffer),
@@ -204,334 +105,96 @@ describe(`Action creators work correctly`, () => {
   });
 
   it(`Action creator for loading comments works correctly`, () => {
-    const emptyCommentsArray = [];
-    const testCommentsArray = [
-      {
-        id: 1,
-        user: {
-          id: 15,
-          is_pro: false,
-          name: `Kendall`,
-          avatarUrl: `https://assets.htmlacademy.ru/intensives/javascript-3/avatar/6.jpg`,
-        },
-        rating: 3,
-        comment: `We loved it so much, the house, the veiw, the location just great.. Highly reccomend :)`,
-        date: `2021-02-12T08:04:28.647Z`,
-      },
-      {
-        id: 2,
-        user: {
-          id: 14,
-          is_pro: true,
-          name: `Corey`,
-          avatarUrl: `https://assets.htmlacademy.ru/intensives/javascript-3/avatar/5.jpg`,
-        },
-        rating: 4,
-        comment: `The deluxe room was a quite comfortable one with all the adequate facilities.`,
-        date: `2021-02-12T08:04:28.647Z`,
-      },
-      {
-        id: 3,
-        user: {
-          id: 18,
-          is_pro: true,
-          name: `Sophie`,
-          avatarUrl: `https://assets.htmlacademy.ru/intensives/javascript-3/avatar/9.jpg`,
-        },
-        rating: 2,
-        comment: `I stayed here for one night and it was an unpleasant experience.`,
-        date: `2021-02-12T08:04:28.647Z`,
-      },
-    ];
+    const emptyComments: any = [];
+    const comments = [testComment, testComment];
 
     const expectedActionForEmptyCommentsArray = {
       type: ActionType.LOAD_COMMENTS,
-      payload: emptyCommentsArray,
+      payload: emptyComments,
     };
     const expectedActionForCommentsArray = {
       type: ActionType.LOAD_COMMENTS,
-      payload: testCommentsArray.map((comment) =>
-        adaptCommentToClient(comment)
-      ),
+      payload: comments.map((comment) => adaptCommentToClient(comment)),
     };
 
-    expect(loadComments(emptyCommentsArray)).toEqual(
+    expect(loadComments(emptyComments)).toEqual(
         expectedActionForEmptyCommentsArray
     );
-    expect(loadComments(testCommentsArray)).toEqual(
-        expectedActionForCommentsArray
-    );
+    expect(loadComments(comments)).toEqual(expectedActionForCommentsArray);
   });
 
   it(`Action creator for loading offers nearby works correctly`, () => {
-    const emptyOffersArray = [];
-    const offersArray = [
-      {
-        city: {
-          name: `Paris`,
-          location: {
-            latitude: 48.85661,
-            longitude: 2.351499,
-            zoom: 13,
-          },
-        },
-        preview_image: `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/16.jpg`,
-        images: [
-          `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/7.jpg`,
-          `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/8.jpg`,
-        ],
-        title: `The house among olive `,
-        is_favorite: false,
-        is_premium: true,
-        rating: 4,
-        type: `room`,
-        bedrooms: 2,
-        max_adults: 2,
-        price: 500,
-        goods: [`Breakfast`, `Air conditioning`],
-        host: {
-          id: 25,
-          name: `Madelina`,
-          is_pro: true,
-          avatar_url: `img/avatar-madelina.jpg`,
-        },
-        description: `Relax, rejuvenate and unplug in this ultimate rustic getaway experience in the country.`,
-        location: {
-          latitude: 48.83861,
-          longitude: 2.350499,
-          zoom: 16,
-        },
-        id: 1,
-      },
-      {
-        city: {
-          name: `Brussels`,
-          location: {
-            latitude: 50.846557,
-            longitude: 4.351697,
-            zoom: 13,
-          },
-        },
-        preview_image: `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/18.jpg`,
-        images: [
-          `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/8.jpg`,
-          `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/20.jpg`,
-        ],
-        title: `Waterfront with extraordinary view`,
-        is_favorite: false,
-        is_premium: false,
-        rating: 4.8,
-        type: `apartment`,
-        bedrooms: 5,
-        max_adults: 6,
-        price: 310,
-        goods: [`Dishwasher`, `Towels`, `Washer`],
-        host: {
-          id: 25,
-          name: `Angelina`,
-          is_pro: true,
-          avatar_url: `img/avatar-angelina.jpg`,
-        },
-        description: `Relax, rejuvenate and unplug in this ultimate rustic getaway experience in the country.`,
-        location: {
-          latitude: 50.844556999999995,
-          longitude: 4.346697,
-          zoom: 16,
-        },
-        id: 2,
-      },
-    ];
+    const emptyOffers: any = [];
+    const offers = [testOffer, testOffer2];
 
     const expectedActionForEmptyOffers = {
       type: ActionType.LOAD_OFFERS_NEARBY,
-      payload: emptyOffersArray,
+      payload: emptyOffers,
     };
     const expectedActionForNonEmptyArray = {
       type: ActionType.LOAD_OFFERS_NEARBY,
-      payload: offersArray.map((offer) => adaptToClient(offer)),
+      payload: offers.map((offer) => adaptToClient(offer)),
     };
 
-    expect(loadOffersNearby(emptyOffersArray)).toEqual(
-        expectedActionForEmptyOffers
-    );
-    expect(loadOffersNearby(offersArray)).toEqual(
-        expectedActionForNonEmptyArray
-    );
+    expect(loadOffersNearby(emptyOffers)).toEqual(expectedActionForEmptyOffers);
+    expect(loadOffersNearby(offers)).toEqual(expectedActionForNonEmptyArray);
   });
 
   it(`Action creator for clearing single offer's data works correctly`, () => {
     const expectedAction = {
       type: ActionType.CLEAR_SINGLE_OFFER_DATA,
-      payload: {
-        offer: null,
-        offersNearby: [],
-        comments: [],
-        isOfferLoaded: false,
-      }
     };
 
     expect(clearSingleOffersData()).toEqual(expectedAction);
   });
 
   it(`Action creator for changing current sort type works correctly`, () => {
-    const sortType = `popular`;
+    const sortType = SortType.POPULAR;
     const expectedAction = {
       type: ActionType.CHANGE_SORT,
-      payload: sortType
+      payload: sortType,
     };
 
     expect(changeCurrentSort(sortType)).toEqual(expectedAction);
   });
 
   it(`Action creator for redirection to route works correctly`, () => {
-    const testUrl = `/mainPage`;
+    const testUrl = AppRoute.MAIN_SCREEN;
     const expectedAction = {
       type: ActionType.REDIRECT_TO_ROUTE,
-      payload: testUrl
+      payload: testUrl,
     };
 
     expect(redirectToRoute(testUrl)).toEqual(expectedAction);
   });
 
   it(`Action creator for loading favorite cards works correctly`, () => {
-    const favoriteOffersArray = [
-      {
-        city: {
-          name: `Paris`,
-          location: {
-            latitude: 48.85661,
-            longitude: 2.351499,
-            zoom: 13,
-          },
-        },
-        preview_image: `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/16.jpg`,
-        images: [
-          `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/7.jpg`,
-          `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/8.jpg`,
-        ],
-        title: `The house among olive `,
-        is_favorite: true,
-        is_premium: true,
-        rating: 4,
-        type: `room`,
-        bedrooms: 2,
-        max_adults: 2,
-        price: 500,
-        goods: [`Breakfast`, `Air conditioning`],
-        host: {
-          id: 25,
-          name: `Madelina`,
-          is_pro: true,
-          avatar_url: `img/avatar-madelina.jpg`,
-        },
-        description: `Relax, rejuvenate and unplug in this ultimate rustic getaway experience in the country.`,
-        location: {
-          latitude: 48.83861,
-          longitude: 2.350499,
-          zoom: 16,
-        },
-        id: 1,
-      },
-      {
-        city: {
-          name: `Brussels`,
-          location: {
-            latitude: 50.846557,
-            longitude: 4.351697,
-            zoom: 13,
-          },
-        },
-        preview_image: `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/18.jpg`,
-        images: [
-          `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/8.jpg`,
-          `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/20.jpg`,
-        ],
-        title: `Waterfront with extraordinary view`,
-        is_favorite: true,
-        is_premium: false,
-        rating: 4.8,
-        type: `apartment`,
-        bedrooms: 5,
-        max_adults: 6,
-        price: 310,
-        goods: [`Dishwasher`, `Towels`, `Washer`],
-        host: {
-          id: 25,
-          name: `Angelina`,
-          is_pro: true,
-          avatar_url: `img/avatar-angelina.jpg`,
-        },
-        description: `Relax, rejuvenate and unplug in this ultimate rustic getaway experience in the country.`,
-        location: {
-          latitude: 50.844556999999995,
-          longitude: 4.346697,
-          zoom: 16,
-        },
-        id: 2,
-      },
-    ];
+    const favoriteOffers = [testOfferFavorited, testOffer2Favorited];
 
     const expectedAction = {
       type: ActionType.LOAD_FAVORITES,
-      payload: favoriteOffersArray.map((offer) => adaptToClient(offer))
+      payload: favoriteOffers.map((offer) => adaptToClient(offer)),
     };
 
-    expect(loadFavoriteCards(favoriteOffersArray)).toEqual(expectedAction);
+    expect(loadFavoriteCards(favoriteOffers)).toEqual(expectedAction);
   });
 
   it(`Action creator for changing favorite status works correctly`, () => {
-    const testCard = {
-      city: {
-        name: `Paris`,
-        location: {
-          latitude: 48.85661,
-          longitude: 2.351499,
-          zoom: 13,
-        },
-      },
-      preview_image: `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/16.jpg`,
-      images: [
-        `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/7.jpg`,
-        `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/8.jpg`,
-      ],
-      title: `The house among olive `,
-      is_favorite: true,
-      is_premium: true,
-      rating: 4,
-      type: `room`,
-      bedrooms: 2,
-      max_adults: 2,
-      price: 500,
-      goods: [`Breakfast`, `Air conditioning`],
-      host: {
-        id: 25,
-        name: `Madelina`,
-        is_pro: true,
-        avatar_url: `img/avatar-madelina.jpg`,
-      },
-      description: `Relax, rejuvenate and unplug in this ultimate rustic getaway experience in the country.`,
-      location: {
-        latitude: 48.83861,
-        longitude: 2.350499,
-        zoom: 16,
-      },
-      id: 1,
-    };
     const expectedAction = {
       type: ActionType.CHANGE_FAVORITE_STATUS,
-      payload: adaptToClient(testCard)
+      payload: adaptToClient(testOfferFavorited),
     };
 
-    expect(changeFavoriteStatus(testCard)).toEqual(expectedAction);
+    expect(changeFavoriteStatus(testOfferFavorited)).toEqual(expectedAction);
   });
 
   it(`Action creator for changing fetch status works correctly`, () => {
-    const status = `done`;
-    const reducerName = `data`;
+    const status = FetchStatus.DONE;
+    const reducerName = NameSpace.USER;
 
     const expectedAction = {
       type: ActionType.CHANGE_FETCH_STATUS,
-      payload: {status, reducerName}
+      payload: {status, reducerName},
     };
 
     expect(changeFetchStatus(status, reducerName)).toEqual(expectedAction);

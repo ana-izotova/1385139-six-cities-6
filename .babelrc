@@ -1,11 +1,4 @@
 {
-"presets": [
-  "@babel/preset-typescript",
-  ["@babel/preset-env", {
-    "targets": {
-      "node": "current"
-    }
-  }]
-],
+  "presets": [["react-app", { "flow": false, "typescript": true }]],
   "plugins": ["@babel/plugin-transform-runtime"]
 }

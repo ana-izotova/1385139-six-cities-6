@@ -2,8 +2,7 @@ import React, {FormEvent, useRef} from "react";
 import Header from "../header/header";
 import {useDispatch, useSelector} from "react-redux";
 import {login} from "../../store/api-actions";
-import {NameSpace, RootStateType} from "../../store/root-reducer";
-import {changeFetchStatus} from "../../store/actions";
+import {RootStateType} from "../../store/root-reducer";
 import {FetchStatus} from "../../const";
 
 const LoginScreen: React.FC = () => {
@@ -19,7 +18,6 @@ const LoginScreen: React.FC = () => {
       login: emailRef.current.value,
       password: passwordRef.current.value,
     }));
-    dispatch(changeFetchStatus(FetchStatus.SENDING, NameSpace.USER));
   };
 
   return (
@@ -61,7 +59,7 @@ const LoginScreen: React.FC = () => {
               <button
                 className="login__submit form__submit button"
                 type="submit"
-                disabled={userFetchStatus === FetchStatus.SENDING}
+                disabled={userFetchStatus === FetchStatus.PENDING}
               >
                 Sign in
               </button>

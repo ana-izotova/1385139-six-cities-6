@@ -69,12 +69,6 @@ interface RedirectAction {
 
 interface ClearSingleOfferDataAction {
   type: ActionType.CLEAR_SINGLE_OFFER_DATA;
-  payload: {
-    offer: OfferCard;
-    offersNearby: Array<OfferCard>;
-    comments: Array<Comment>;
-    isOfferLoaded: boolean;
-  };
 }
 
 interface LoadFavoriteOffersAction {

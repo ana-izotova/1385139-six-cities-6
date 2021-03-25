@@ -1,15 +1,15 @@
 import {createReducer} from "@reduxjs/toolkit";
 import {SingleOfferInitialStateTypes} from "./single-offer-types";
 import {loadComments, loadOffersNearby, loadSingleOffer, clearSingleOffersData, changeFetchStatus} from "../actions";
-import {FetchStatus} from "../../const";
-import {NameSpace} from "../root-reducer";
+import {FetchStatus, NameSpace} from "../../const";
+import {sortByDate} from "../../utils/sorting";
 
 const initialState: SingleOfferInitialStateTypes = {
   offer: null,
   offersNearby: [],
   comments: [],
   isOfferLoaded: false,
-  fetchStatus: FetchStatus.PENDING
+  fetchStatus: FetchStatus.INIT
 };
 
 export const singleOffer = createReducer(initialState, (builder) => {
@@ -21,13 +21,14 @@ export const singleOffer = createReducer(initialState, (builder) => {
     state.offersNearby = action.payload;
   });
   builder.addCase(loadComments, (state, action) => {
-    state.comments = action.payload;
+    state.comments = action.payload.sort(sortByDate);
   });
-  builder.addCase(clearSingleOffersData, (state, action) => {
-    state.offer = action.payload.offer;
-    state.offersNearby = action.payload.offersNearby;
-    state.comments = action.payload.comments;
-    state.isOfferLoaded = action.payload.isOfferLoaded;
+  builder.addCase(clearSingleOffersData, (state) => {
+    state.offer = null;
+    state.offersNearby = [];
+    state.comments = [];
+    state.isOfferLoaded = false;
+    state.fetchStatus = FetchStatus.INIT;
   });
   builder.addCase(changeFetchStatus, (state, action) => {
     if (action.payload.reducerName === NameSpace.SINGLE_OFFER) {

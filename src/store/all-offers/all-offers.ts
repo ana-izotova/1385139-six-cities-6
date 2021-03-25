@@ -9,14 +9,14 @@ import {
   loadAllOffers
 } from "../actions";
 import {OfferCard} from "../../types";
-import {NameSpace} from "../root-reducer";
+import {NameSpace} from "../../const";
 
 const initialState: AllOffersInitialStateTypes = {
   currentCity: Cities[0],
   allOffers: [],
   currentSort: SortType.POPULAR,
   isDataLoaded: false,
-  fetchStatus: FetchStatus.PENDING,
+  fetchStatus: FetchStatus.INIT,
   favoritesHaveBeenChanged: false
 };
 
