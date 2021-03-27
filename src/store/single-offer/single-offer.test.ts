@@ -9,7 +9,7 @@ import {
   sendComment,
   fetchOfferComments,
 } from "../api-actions";
-import {ApiRoute, FavoriteStatus, FetchStatus} from "../../const";
+import {ApiRoute, FavoriteStatus, FetchStatus, HttpCode} from "../../const";
 import {NameSpace} from "../../const";
 import {SingleOfferInitialStateTypes} from "./single-offer-types";
 import {
@@ -33,6 +33,7 @@ describe(`Single offer's reducers should work correctly`, () => {
       comments: [],
       isOfferLoaded: false,
       fetchStatus: FetchStatus.INIT,
+      error: null
     };
 
     const getLoadSingleOfferAction = {
@@ -46,6 +47,7 @@ describe(`Single offer's reducers should work correctly`, () => {
       comments: [],
       isOfferLoaded: true,
       fetchStatus: FetchStatus.INIT,
+      error: null
     };
 
     expect(singleOffer(initialState, getLoadSingleOfferAction)).toEqual(
@@ -60,6 +62,7 @@ describe(`Single offer's reducers should work correctly`, () => {
       comments: [],
       isOfferLoaded: true,
       fetchStatus: FetchStatus.INIT,
+      error: null
     };
 
     const getLoadOffersNearbyAction = {
@@ -73,6 +76,7 @@ describe(`Single offer's reducers should work correctly`, () => {
       comments: [],
       isOfferLoaded: true,
       fetchStatus: FetchStatus.INIT,
+      error: null
     };
 
     expect(singleOffer(initialState, getLoadOffersNearbyAction)).toEqual(
@@ -87,6 +91,7 @@ describe(`Single offer's reducers should work correctly`, () => {
       comments: [],
       isOfferLoaded: true,
       fetchStatus: FetchStatus.INIT,
+      error: null
     };
 
     const getLoadCommentsAction = {
@@ -100,6 +105,7 @@ describe(`Single offer's reducers should work correctly`, () => {
       comments: [adaptedTestComment],
       isOfferLoaded: true,
       fetchStatus: FetchStatus.INIT,
+      error: null
     };
 
     expect(singleOffer(initialState, getLoadCommentsAction)).toEqual(
@@ -114,6 +120,7 @@ describe(`Single offer's reducers should work correctly`, () => {
       comments: [adaptedTestComment],
       isOfferLoaded: true,
       fetchStatus: FetchStatus.INIT,
+      error: null
     };
 
     const getClearSingleOfferDataAction = {
@@ -126,6 +133,7 @@ describe(`Single offer's reducers should work correctly`, () => {
       comments: [],
       isOfferLoaded: false,
       fetchStatus: FetchStatus.INIT,
+      error: null
     };
 
     expect(singleOffer(initialState, getClearSingleOfferDataAction)).toEqual(
@@ -140,6 +148,7 @@ describe(`Single offer's reducers should work correctly`, () => {
       comments: [],
       isOfferLoaded: true,
       fetchStatus: FetchStatus.INIT,
+      error: null
     };
 
     const getChangeFetchStatusAction = {
@@ -156,6 +165,7 @@ describe(`Single offer's reducers should work correctly`, () => {
       comments: [],
       isOfferLoaded: true,
       fetchStatus: FetchStatus.PENDING,
+      error: null
     };
 
     expect(singleOffer(initialState, getChangeFetchStatusAction)).toEqual(
@@ -170,6 +180,7 @@ describe(`Single offer's reducers should work correctly`, () => {
       comments: [],
       isOfferLoaded: true,
       fetchStatus: FetchStatus.INIT,
+      error: null
     };
 
     const getChangeFetchStatusAction = {
@@ -186,9 +197,74 @@ describe(`Single offer's reducers should work correctly`, () => {
       comments: [],
       isOfferLoaded: true,
       fetchStatus: FetchStatus.INIT,
+      error: null
     };
 
     expect(singleOffer(initialState, getChangeFetchStatusAction)).toEqual(
+        expectedState
+    );
+  });
+
+  it(`Reducer should change error status`, () => {
+    const initialState: SingleOfferInitialStateTypes = {
+      offer: adaptedTestOffer,
+      offersNearby: [],
+      comments: [],
+      isOfferLoaded: true,
+      fetchStatus: FetchStatus.INIT,
+      error: null
+    };
+
+    const getChangeErrorStatusAction = {
+      type: ActionType.CHANGE_ERROR_STATUS,
+      payload: {
+        reducerName: NameSpace.SINGLE_OFFER,
+        errorCode: HttpCode.NOT_FOUND,
+      },
+    };
+
+    const expectedState: SingleOfferInitialStateTypes = {
+      offer: adaptedTestOffer,
+      offersNearby: [],
+      comments: [],
+      isOfferLoaded: true,
+      fetchStatus: FetchStatus.INIT,
+      error: HttpCode.NOT_FOUND
+    };
+
+    expect(singleOffer(initialState, getChangeErrorStatusAction)).toEqual(
+        expectedState
+    );
+  });
+
+  it(`Reducer shouldn't change error status`, () => {
+    const initialState: SingleOfferInitialStateTypes = {
+      offer: adaptedTestOffer,
+      offersNearby: [],
+      comments: [],
+      isOfferLoaded: true,
+      fetchStatus: FetchStatus.INIT,
+      error: null
+    };
+
+    const getChangeErrorStatusAction = {
+      type: ActionType.CHANGE_FETCH_STATUS,
+      payload: {
+        reducerName: NameSpace.ALL_OFFERS,
+        error: HttpCode.NOT_FOUND,
+      },
+    };
+
+    const expectedState: SingleOfferInitialStateTypes = {
+      offer: adaptedTestOffer,
+      offersNearby: [],
+      comments: [],
+      isOfferLoaded: true,
+      fetchStatus: FetchStatus.INIT,
+      error: null
+    };
+
+    expect(singleOffer(initialState, getChangeErrorStatusAction)).toEqual(
         expectedState
     );
   });
@@ -205,10 +281,24 @@ describe(`Async operations work correctly`, () => {
     apiMock.onGet(`${ApiRoute.HOTELS}/${testOfferId}`).reply(200, testOffer);
 
     return fetchSingleOffersDataLoader(dispatch, () => {}, api).then(() => {
-      expect(dispatch).toHaveBeenCalledTimes(1);
+      expect(dispatch).toHaveBeenCalledTimes(3);
       expect(dispatch).toHaveBeenNthCalledWith(1, {
+        type: ActionType.CHANGE_FETCH_STATUS,
+        payload: {
+          status: FetchStatus.PENDING,
+          reducerName: NameSpace.SINGLE_OFFER,
+        }
+      });
+      expect(dispatch).toHaveBeenNthCalledWith(2, {
         type: ActionType.LOAD_SINGLE_OFFER,
         payload: adaptedTestOffer,
+      });
+      expect(dispatch).toHaveBeenNthCalledWith(3, {
+        type: ActionType.CHANGE_FETCH_STATUS,
+        payload: {
+          status: FetchStatus.DONE,
+          reducerName: NameSpace.SINGLE_OFFER,
+        }
       });
     });
   });

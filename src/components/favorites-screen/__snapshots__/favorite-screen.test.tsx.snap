@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Favorite screen should render correctly 1`] = `
+exports[`Favorite screen should render correctly Should render empty favorites list when no favorites 1`] = `
 <div>
   <div
-    class="page page--gray page--main"
+    class="page"
   >
     <header
       class="header"
@@ -64,7 +64,588 @@ exports[`Favorite screen should render correctly 1`] = `
                   <span
                     class="header__user-name user__name"
                   >
-                    Выход
+                    Exit
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+    <main
+      class="page__main page__main--favorites"
+    >
+      <div
+        class="page__favorites-container container"
+      >
+        <section
+          class="favorites favorites--empty"
+        >
+          <h1
+            class="visually-hidden"
+          >
+            Favorites (empty)
+          </h1>
+          <div
+            class="favorites__status-wrapper"
+          >
+            <b
+              class="favorites__status"
+            >
+              Nothing yet saved.
+            </b>
+            <p
+              class="favorites__status-description"
+            >
+              Save properties to narrow down search or plan your future trips.
+            </p>
+          </div>
+        </section>
+      </div>
+    </main>
+    <footer
+      class="footer container"
+    >
+      <a
+        class="footer__logo-link"
+        href="/"
+      >
+        <img
+          alt="6 cities logo"
+          class="footer__logo"
+          height="33"
+          src="img/logo.svg"
+          width="64"
+        />
+      </a>
+    </footer>
+  </div>
+</div>
+`;
+
+exports[`Favorite screen should render correctly Should render favorites list correctly 1`] = `
+<div>
+  <div
+    class="page"
+  >
+    <header
+      class="header"
+    >
+      <div
+        class="container"
+      >
+        <div
+          class="header__wrapper"
+        >
+          <div
+            class="header__left"
+          >
+            <a
+              class="header__logo-link "
+              href="/"
+            >
+              <img
+                alt="6 cities logo"
+                class="header__logo"
+                src="img/logo.svg"
+                style="width: 81px; height: 41px;"
+              />
+            </a>
+          </div>
+          <nav
+            class="header__nav"
+          >
+            <ul
+              class="header__nav-list"
+            >
+              <li
+                class="header__nav-item user"
+              >
+                <a
+                  class="header__nav-link header__nav-link--profile"
+                  href="/favorites"
+                >
+                  <div
+                    class="header__avatar-wrapper user__avatar-wrapper"
+                    style="background-image: url(avatar.jpg); border-radius: 50%;"
+                  />
+                  <span
+                    class="header__user-name user__name"
+                  >
+                    jondoe@mail.com
+                  </span>
+                </a>
+              </li>
+              <li
+                class="header__nav-item user"
+              >
+                <a
+                  class="header__nav-link header__nav-link--profile"
+                  href="/"
+                  style="margin-left: 10px;"
+                >
+                  <span
+                    class="header__user-name user__name"
+                  >
+                    Exit
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+    <main
+      class="page__main page__main--favorites"
+    >
+      <div
+        class="page__favorites-container container"
+      >
+        <section
+          class="favorites"
+        >
+          <h1
+            class="favorites__title"
+          >
+            Saved listing
+          </h1>
+          <ul
+            class="favorites__list"
+          >
+            <li
+              class="favorites__locations-items"
+            >
+              <div
+                class="favorites__locations locations locations--current"
+              >
+                <div
+                  class="locations__item"
+                >
+                  <a
+                    class="locations__item-link"
+                    href="#"
+                  >
+                    <span>
+                      Paris
+                    </span>
+                  </a>
+                </div>
+              </div>
+              <div
+                class="favorites__places"
+              >
+                <article
+                  class="favorites__card place-card"
+                >
+                  <div
+                    class="place-card__mark"
+                  >
+                    <span>
+                      Premium
+                    </span>
+                  </div>
+                  <div
+                    class="favorites__image-wrapper place-card__image-wrapper"
+                  >
+                    <a
+                      href="/offer/1"
+                    >
+                      <img
+                        alt="Place image"
+                        class="place-card__image"
+                        height="110"
+                        src="https://assets.htmlacademy.ru/intensives/javascript-3/hotel/16.jpg"
+                        width="150"
+                      />
+                    </a>
+                  </div>
+                  <div
+                    class="favorites__card-info place-card__info"
+                  >
+                    <div
+                      class="place-card__price-wrapper"
+                    >
+                      <div
+                        class="place-card__price"
+                      >
+                        <b
+                          class="place-card__price-value"
+                        >
+                          €
+                          169
+                        </b>
+                        <span
+                          class="place-card__price-text"
+                        >
+                          / night
+                        </span>
+                      </div>
+                      <button
+                        class="place-card__bookmark-button place-card__bookmark-button--active button"
+                        type="button"
+                      >
+                        <svg
+                          class="place-card__bookmark-icon"
+                          height="19"
+                          width="18"
+                        >
+                          <use
+                            xlink:href="#icon-bookmark"
+                          />
+                        </svg>
+                        <span
+                          class="visually-hidden"
+                        >
+                          To bookmarks
+                        </span>
+                      </button>
+                    </div>
+                    <div
+                      class="place-card__rating rating"
+                    >
+                      <div
+                        class="place-card__stars rating__stars"
+                      >
+                        <span
+                          style="width: 60%;"
+                        />
+                        <span
+                          class="visually-hidden"
+                        >
+                          Rating
+                        </span>
+                      </div>
+                    </div>
+                    <h2
+                      class="place-card__name"
+                    >
+                      <a
+                        href="/offer/1"
+                      >
+                        The house among olive 
+                      </a>
+                    </h2>
+                    <p
+                      class="place-card__type"
+                    >
+                      Room
+                    </p>
+                  </div>
+                </article>
+              </div>
+            </li>
+            <li
+              class="favorites__locations-items"
+            >
+              <div
+                class="favorites__locations locations locations--current"
+              >
+                <div
+                  class="locations__item"
+                >
+                  <a
+                    class="locations__item-link"
+                    href="#"
+                  >
+                    <span>
+                      Brussels
+                    </span>
+                  </a>
+                </div>
+              </div>
+              <div
+                class="favorites__places"
+              >
+                <article
+                  class="favorites__card place-card"
+                >
+                  <div
+                    class="favorites__image-wrapper place-card__image-wrapper"
+                  >
+                    <a
+                      href="/offer/2"
+                    >
+                      <img
+                        alt="Place image"
+                        class="place-card__image"
+                        height="110"
+                        src="https://assets.htmlacademy.ru/intensives/javascript-3/hotel/18.jpg"
+                        width="150"
+                      />
+                    </a>
+                  </div>
+                  <div
+                    class="favorites__card-info place-card__info"
+                  >
+                    <div
+                      class="place-card__price-wrapper"
+                    >
+                      <div
+                        class="place-card__price"
+                      >
+                        <b
+                          class="place-card__price-value"
+                        >
+                          €
+                          310
+                        </b>
+                        <span
+                          class="place-card__price-text"
+                        >
+                          / night
+                        </span>
+                      </div>
+                      <button
+                        class="place-card__bookmark-button place-card__bookmark-button--active button"
+                        type="button"
+                      >
+                        <svg
+                          class="place-card__bookmark-icon"
+                          height="19"
+                          width="18"
+                        >
+                          <use
+                            xlink:href="#icon-bookmark"
+                          />
+                        </svg>
+                        <span
+                          class="visually-hidden"
+                        >
+                          To bookmarks
+                        </span>
+                      </button>
+                    </div>
+                    <div
+                      class="place-card__rating rating"
+                    >
+                      <div
+                        class="place-card__stars rating__stars"
+                      >
+                        <span
+                          style="width: 96%;"
+                        />
+                        <span
+                          class="visually-hidden"
+                        >
+                          Rating
+                        </span>
+                      </div>
+                    </div>
+                    <h2
+                      class="place-card__name"
+                    >
+                      <a
+                        href="/offer/2"
+                      >
+                        Waterfront with extraordinary view
+                      </a>
+                    </h2>
+                    <p
+                      class="place-card__type"
+                    >
+                      Apartment
+                    </p>
+                  </div>
+                </article>
+              </div>
+            </li>
+            <li
+              class="favorites__locations-items"
+            >
+              <div
+                class="favorites__locations locations locations--current"
+              >
+                <div
+                  class="locations__item"
+                >
+                  <a
+                    class="locations__item-link"
+                    href="#"
+                  >
+                    <span>
+                      Cologne
+                    </span>
+                  </a>
+                </div>
+              </div>
+              <div
+                class="favorites__places"
+              >
+                <article
+                  class="favorites__card place-card"
+                >
+                  <div
+                    class="place-card__mark"
+                  >
+                    <span>
+                      Premium
+                    </span>
+                  </div>
+                  <div
+                    class="favorites__image-wrapper place-card__image-wrapper"
+                  >
+                    <a
+                      href="/offer/3"
+                    >
+                      <img
+                        alt="Place image"
+                        class="place-card__image"
+                        height="110"
+                        src="https://assets.htmlacademy.ru/intensives/javascript-3/hotel/14.jpg"
+                        width="150"
+                      />
+                    </a>
+                  </div>
+                  <div
+                    class="favorites__card-info place-card__info"
+                  >
+                    <div
+                      class="place-card__price-wrapper"
+                    >
+                      <div
+                        class="place-card__price"
+                      >
+                        <b
+                          class="place-card__price-value"
+                        >
+                          €
+                          182
+                        </b>
+                        <span
+                          class="place-card__price-text"
+                        >
+                          / night
+                        </span>
+                      </div>
+                      <button
+                        class="place-card__bookmark-button place-card__bookmark-button--active button"
+                        type="button"
+                      >
+                        <svg
+                          class="place-card__bookmark-icon"
+                          height="19"
+                          width="18"
+                        >
+                          <use
+                            xlink:href="#icon-bookmark"
+                          />
+                        </svg>
+                        <span
+                          class="visually-hidden"
+                        >
+                          To bookmarks
+                        </span>
+                      </button>
+                    </div>
+                    <div
+                      class="place-card__rating rating"
+                    >
+                      <div
+                        class="place-card__stars rating__stars"
+                      >
+                        <span
+                          style="width: 84%;"
+                        />
+                        <span
+                          class="visually-hidden"
+                        >
+                          Rating
+                        </span>
+                      </div>
+                    </div>
+                    <h2
+                      class="place-card__name"
+                    >
+                      <a
+                        href="/offer/3"
+                      >
+                        Penthouse, 4-5 rooms + 5 balconies
+                      </a>
+                    </h2>
+                    <p
+                      class="place-card__type"
+                    >
+                      Hotel
+                    </p>
+                  </div>
+                </article>
+              </div>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </main>
+    <footer
+      class="footer container"
+    >
+      <a
+        class="footer__logo-link"
+        href="/"
+      >
+        <img
+          alt="6 cities logo"
+          class="footer__logo"
+          height="33"
+          src="img/logo.svg"
+          width="64"
+        />
+      </a>
+    </footer>
+  </div>
+</div>
+`;
+
+exports[`Favorite screen should render correctly Should show loader screensaver component if favorite cards are not loaded 1`] = `
+<div>
+  <div
+    class="page page--gray page--main"
+  >
+    <header
+      class="header"
+    >
+      <div
+        class="container"
+      >
+        <div
+          class="header__wrapper"
+        >
+          <div
+            class="header__left"
+          >
+            <a
+              class="header__logo-link "
+              href="/"
+            >
+              <img
+                alt="6 cities logo"
+                class="header__logo"
+                src="img/logo.svg"
+                style="width: 81px; height: 41px;"
+              />
+            </a>
+          </div>
+          <nav
+            class="header__nav"
+          >
+            <ul
+              class="header__nav-list"
+            >
+              <li
+                class="header__nav-item user"
+              >
+                <a
+                  class="header__nav-link header__nav-link--profile"
+                  href="/login"
+                >
+                  <div
+                    class="header__avatar-wrapper user__avatar-wrapper"
+                  />
+                  <span
+                    class="header__user-name user__name"
+                  >
+                    Sign in
                   </span>
                 </a>
               </li>

@@ -1,14 +1,21 @@
 import {AuthorizationStatus, Cities, FetchStatus, NameSpace, SortType} from "../const";
 import {UserInitialStateTypes} from "../store/user/user-types";
 import {SingleOfferInitialStateTypes} from "../store/single-offer/single-offer-types";
-import {currentOffer, offersNearby, comments, allOffers} from "./adapted-data-mock";
+import {currentOffer, offersNearby, comments, allOffers, favoriteOffers} from "./adapted-data-mock";
 import {AllOffersInitialStateTypes} from "../store/all-offers/all-offers-types";
 import {FavoritesInitialStateTypes} from "../store/favorites/favorites-types";
 
-const userStore: UserInitialStateTypes = {
+const userStoreAuthorized: UserInitialStateTypes = {
   authorizationStatus: AuthorizationStatus.AUTH,
   login: `jondoe@mail.com`,
   userAvatar: `avatar.jpg`,
+  fetchStatus: FetchStatus.DONE
+};
+
+const userStoreUnauthorized: UserInitialStateTypes = {
+  authorizationStatus: AuthorizationStatus.NO_AUTH,
+  login: ``,
+  userAvatar: ``,
   fetchStatus: FetchStatus.DONE
 };
 
@@ -17,7 +24,8 @@ const singleOfferStore: SingleOfferInitialStateTypes = {
   offersNearby,
   comments,
   isOfferLoaded: true,
-  fetchStatus: FetchStatus.DONE
+  fetchStatus: FetchStatus.DONE,
+  error: null
 };
 
 const allOffersStore: AllOffersInitialStateTypes = {
@@ -26,18 +34,26 @@ const allOffersStore: AllOffersInitialStateTypes = {
   currentSort: SortType.POPULAR,
   isDataLoaded: true,
   fetchStatus: FetchStatus.DONE,
-  favoritesHaveBeenChanged: true
+  favoritesHaveBeenChanged: true,
+  error: null
 };
 
 const favoritesStore: FavoritesInitialStateTypes = {
-  favoriteCards: [],
-  areFavoriteCardsLoaded: false
+  favoriteCards: favoriteOffers,
+  areFavoriteCardsLoaded: true
 };
 
-export const nonEmptyMockStore = {
+export const nonEmptyMockStoreUnauthorized = {
   [NameSpace.ALL_OFFERS]: allOffersStore,
   [NameSpace.SINGLE_OFFER]: singleOfferStore,
-  [NameSpace.USER]: userStore,
+  [NameSpace.USER]: userStoreUnauthorized,
+  [NameSpace.FAVORITES]: favoritesStore
+};
+
+export const nonEmptyMockStoreAuthorized = {
+  [NameSpace.ALL_OFFERS]: allOffersStore,
+  [NameSpace.SINGLE_OFFER]: singleOfferStore,
+  [NameSpace.USER]: userStoreAuthorized,
   [NameSpace.FAVORITES]: favoritesStore
 };
 

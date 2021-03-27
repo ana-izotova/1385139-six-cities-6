@@ -112,3 +112,8 @@ export enum NameSpace {
   SINGLE_OFFER = `SINGLE_OFFER`,
   FAVORITES = `FAVORITES`
 }
+
+export enum HttpCode {
+  UNAUTHORIZED = 401,
+  NOT_FOUND = 404
+}

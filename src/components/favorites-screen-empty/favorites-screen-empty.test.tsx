@@ -5,7 +5,7 @@ import FavoritesScreenEmpty from "./favorites-screen-empty";
 
 test(`Favorites' empty screen should render correctly`, () => {
   const {container} = render(
-      <TestMock emptyStore={true}>
+      <TestMock emptyStore={true} authorized={true}>
         <FavoritesScreenEmpty />
       </TestMock>
   );

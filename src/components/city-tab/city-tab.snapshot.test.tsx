@@ -7,7 +7,7 @@ import {Cities} from "../../const";
 describe(`City tabs should render correctly`, () => {
   it(`City tab should render correctly for current city`, () => {
     const {container} = render(
-        <TestMock>
+        <TestMock authorized={true} emptyStore={false}>
           <CityTab city={Cities[0]}/>
         </TestMock>
     );
@@ -17,7 +17,7 @@ describe(`City tabs should render correctly`, () => {
 
   it(`City tab should render correctly for non-current city`, () => {
     const {container} = render(
-        <TestMock>
+        <TestMock emptyStore={true} authorized={false}>
           <CityTab city={Cities[1]}/>
         </TestMock>
     );

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Favorite screen should render correctly 1`] = `
+exports[`Favorites' empty screen should render correctly 1`] = `
 <div>
   <section
     class="favorites favorites--empty"

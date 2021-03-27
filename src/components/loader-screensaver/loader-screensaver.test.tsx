@@ -5,7 +5,7 @@ import LoaderScreensaver from "./loader-screensaver";
 
 test(`Favorite screen should render correctly`, () => {
   const {container} = render(
-      <TestMock>
+      <TestMock authorized={true} emptyStore={false}>
         <LoaderScreensaver />
       </TestMock>
   );

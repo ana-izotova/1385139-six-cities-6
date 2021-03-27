@@ -41,7 +41,7 @@ const HeaderNav: React.FC = () => {
               <Link className="header__nav-link header__nav-link--profile" style={{
                 marginLeft: `10px`
               }} href="#" to="/" onClick={handleLogout}>
-                <span className="header__user-name user__name">Выход</span>
+                <span className="header__user-name user__name">Exit</span>
               </Link>
             </li>
           </>

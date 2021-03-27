@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Cities list should render correctly 1`] = `
+exports[`Comment item component should render correctly 1`] = `
 <div>
   <li
     class="reviews__item"

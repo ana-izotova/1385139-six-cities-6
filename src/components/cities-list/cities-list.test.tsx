@@ -5,7 +5,7 @@ import CitiesList from "./cities-list";
 
 test(`Cities list should render correctly`, () => {
   const {container} = render(
-      <TestMock>
+      <TestMock emptyStore={false} authorized={false}>
         <CitiesList />
       </TestMock>
   );

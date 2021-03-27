@@ -1,26 +1,35 @@
 import React from 'react';
 import configureStore from 'redux-mock-store';
-import {nonEmptyMockStore} from "./non-empty-mock-store";
 import * as redux from 'react-redux';
 import {Router} from 'react-router-dom';
 import {createMemoryHistory} from 'history';
 import thunk, {ThunkDispatch} from 'redux-thunk';
 import {RootStateType} from "../store/root-reducer";
 import {ActionTypes} from "../store/action-types";
-import {redirect} from "../middlewares/redirect";
-import {emptyMockStore} from "./empty-mock-store";
+import {redirect} from "../store/middlewares/redirect";
+import {emptyMockStoreAuthorized, emptyMockStoreUnauthorized} from "./empty-mock-store";
+import {nonEmptyMockStoreUnauthorized, nonEmptyMockStoreAuthorized} from "./non-empty-mock-store";
 
 interface TestProps {
   children?: any,
   pushUrl?: string,
-  emptyStore?: boolean
+  emptyStore: boolean,
+  authorized: boolean
 }
 
-export const TestMock: React.FC<TestProps> = ({children, pushUrl, emptyStore = false}) => {
+export const TestMock: React.FC<TestProps> = ({children, pushUrl, emptyStore, authorized}) => {
   jest.spyOn(redux, `useDispatch`);
   jest.spyOn(redux, `useSelector`);
   const mockStore = configureStore<RootStateType, ThunkDispatch<RootStateType, any, ActionTypes>>([thunk, redirect]);
-  const store = emptyStore ? mockStore(emptyMockStore) : mockStore(nonEmptyMockStore);
+  let mock;
+  if (emptyStore) {
+    mock = authorized ? emptyMockStoreAuthorized : emptyMockStoreUnauthorized;
+  } else {
+    mock = authorized ? nonEmptyMockStoreAuthorized : nonEmptyMockStoreUnauthorized;
+  }
+
+  const store = mockStore(mock);
+
   const history = createMemoryHistory();
 
   if (pushUrl) {

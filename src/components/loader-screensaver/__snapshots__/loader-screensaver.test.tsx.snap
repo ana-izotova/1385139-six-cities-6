@@ -64,7 +64,7 @@ exports[`Favorite screen should render correctly 1`] = `
                   <span
                     class="header__user-name user__name"
                   >
-                    Выход
+                    Exit
                   </span>
                 </a>
               </li>

@@ -5,7 +5,7 @@ import Sorting from "./sorting";
 
 test(`Sorting should render correctly`, () => {
   const {container} = render(
-      <TestMock>
+      <TestMock authorized={true} emptyStore={false}>
         <Sorting />
       </TestMock>
   );

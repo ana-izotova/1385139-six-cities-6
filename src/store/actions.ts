@@ -91,3 +91,10 @@ export const changeFetchStatus = createAction(ActionType.CHANGE_FETCH_STATUS, (s
     payload: {status, reducerName}
   };
 });
+
+export const changeErrorStatus = createAction(ActionType.CHANGE_ERROR_STATUS, (errorCode: number, reducerName: string) => {
+  return {
+    payload: {errorCode, reducerName}
+  };
+});
+

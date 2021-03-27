@@ -53,11 +53,11 @@ export const testOffer2 = {
   "title": `The house among olive `,
   "is_favorite": false,
   "is_premium": true,
-  "rating": 4,
+  "rating": 5,
   "type": `room`,
   "bedrooms": 2,
   "max_adults": 2,
-  "price": 500,
+  "price": 200,
   "goods": [`Breakfast`, `Air conditioning`],
   "host": {
     "id": 25,

@@ -1,7 +1,7 @@
 import {ActionType} from "./action-types";
 import {
   changeCity,
-  changeCurrentSort,
+  changeCurrentSort, changeErrorStatus,
   changeFavoriteStatus,
   changeFetchStatus,
   clearSingleOffersData,
@@ -24,7 +24,7 @@ import {
   testOffer2Favorited,
   testOfferFavorited,
 } from "../test-mocks/server-data-mock";
-import {AppRoute, FetchStatus, NameSpace, SortType} from "../const";
+import {AppRoute, FetchStatus, HttpCode, NameSpace, SortType} from "../const";
 
 describe(`Action creators work correctly`, () => {
   it(`Action creator for changing city returns correct city`, () => {
@@ -198,5 +198,17 @@ describe(`Action creators work correctly`, () => {
     };
 
     expect(changeFetchStatus(status, reducerName)).toEqual(expectedAction);
+  });
+
+  it(`Action creator for changing error status works correctly`, () => {
+    const errorCode = HttpCode.NOT_FOUND;
+    const reducerName = NameSpace.SINGLE_OFFER;
+
+    const expectedAction = {
+      type: ActionType.CHANGE_ERROR_STATUS,
+      payload: {errorCode, reducerName},
+    };
+
+    expect(changeErrorStatus(errorCode, reducerName)).toEqual(expectedAction);
   });
 });

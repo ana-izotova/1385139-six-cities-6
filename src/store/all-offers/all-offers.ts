@@ -3,7 +3,7 @@ import {Cities, SortType, FetchStatus} from "../../const";
 import {AllOffersInitialStateTypes} from "./all-offers-types";
 import {
   changeCity,
-  changeCurrentSort,
+  changeCurrentSort, changeErrorStatus,
   changeFavoriteStatus,
   changeFetchStatus,
   loadAllOffers
@@ -17,7 +17,8 @@ export const initialState: AllOffersInitialStateTypes = {
   currentSort: SortType.POPULAR,
   isDataLoaded: false,
   fetchStatus: FetchStatus.INIT,
-  favoritesHaveBeenChanged: false
+  favoritesHaveBeenChanged: false,
+  error: null
 };
 
 const changeOffersList = (stateOffers: Array<OfferCard>, changedCard: OfferCard): Array<OfferCard> => {
@@ -51,6 +52,11 @@ export const allOffers = createReducer(initialState, (builder) => {
       if (action.payload.status === FetchStatus.DONE) {
         state.favoritesHaveBeenChanged = false;
       }
+    }
+  });
+  builder.addCase(changeErrorStatus, (state, action) => {
+    if (action.payload.reducerName === NameSpace.ALL_OFFERS) {
+      state.error = action.payload.errorCode;
     }
   });
 });

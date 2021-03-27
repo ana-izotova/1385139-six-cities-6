@@ -6,7 +6,7 @@ import {
   FavoriteStatus,
   FetchStatus,
   SortType,
-  NameSpace,
+  NameSpace, HttpCode,
 } from "../../const";
 import {AllOffersInitialStateTypes} from "./all-offers-types";
 import {createAPI} from "../../services/api";
@@ -35,6 +35,7 @@ describe(`All offers' reducers work correctly`, () => {
       isDataLoaded: false,
       fetchStatus: FetchStatus.PENDING,
       favoritesHaveBeenChanged: false,
+      error: null
     };
 
     const getLoadAllOffersAction = {
@@ -49,6 +50,7 @@ describe(`All offers' reducers work correctly`, () => {
       isDataLoaded: true,
       fetchStatus: FetchStatus.PENDING,
       favoritesHaveBeenChanged: false,
+      error: null
     };
 
     expect(allOffers(initialState, getLoadAllOffersAction)).toEqual(
@@ -64,6 +66,7 @@ describe(`All offers' reducers work correctly`, () => {
       isDataLoaded: true,
       fetchStatus: FetchStatus.PENDING,
       favoritesHaveBeenChanged: false,
+      error: null
     };
 
     const getChangeCurrentCityAction = {
@@ -78,6 +81,7 @@ describe(`All offers' reducers work correctly`, () => {
       isDataLoaded: true,
       fetchStatus: FetchStatus.PENDING,
       favoritesHaveBeenChanged: false,
+      error: null
     };
 
     expect(allOffers(initialState, getChangeCurrentCityAction)).toEqual(
@@ -93,6 +97,7 @@ describe(`All offers' reducers work correctly`, () => {
       isDataLoaded: true,
       fetchStatus: FetchStatus.PENDING,
       favoritesHaveBeenChanged: false,
+      error: null
     };
 
     const getChangeSortAction = {
@@ -107,6 +112,7 @@ describe(`All offers' reducers work correctly`, () => {
       isDataLoaded: true,
       fetchStatus: FetchStatus.PENDING,
       favoritesHaveBeenChanged: false,
+      error: null
     };
 
     expect(allOffers(initialState, getChangeSortAction)).toEqual(expectedState);
@@ -120,6 +126,7 @@ describe(`All offers' reducers work correctly`, () => {
       isDataLoaded: true,
       fetchStatus: FetchStatus.PENDING,
       favoritesHaveBeenChanged: false,
+      error: null
     };
 
     const getChangeFavoriteStatusAction = {
@@ -134,6 +141,38 @@ describe(`All offers' reducers work correctly`, () => {
       isDataLoaded: true,
       fetchStatus: FetchStatus.PENDING,
       favoritesHaveBeenChanged: true,
+      error: null
+    };
+
+    expect(allOffers(initialState, getChangeFavoriteStatusAction)).toEqual(
+        expectedState
+    );
+  });
+
+  it(`Reducer should return default offers`, () => {
+    const initialState: AllOffersInitialStateTypes = {
+      currentCity: Cities[0],
+      allOffers: [adaptedTestOffer1],
+      currentSort: SortType.POPULAR,
+      isDataLoaded: true,
+      fetchStatus: FetchStatus.PENDING,
+      favoritesHaveBeenChanged: false,
+      error: null
+    };
+
+    const getChangeFavoriteStatusAction = {
+      type: ActionType.CHANGE_FAVORITE_STATUS,
+      payload: adaptedTestOffer2Favorited,
+    };
+
+    const expectedState: AllOffersInitialStateTypes = {
+      currentCity: Cities[0],
+      allOffers: [adaptedTestOffer1],
+      currentSort: SortType.POPULAR,
+      isDataLoaded: true,
+      fetchStatus: FetchStatus.PENDING,
+      favoritesHaveBeenChanged: true,
+      error: null
     };
 
     expect(allOffers(initialState, getChangeFavoriteStatusAction)).toEqual(
@@ -149,6 +188,7 @@ describe(`All offers' reducers work correctly`, () => {
       isDataLoaded: true,
       fetchStatus: FetchStatus.PENDING,
       favoritesHaveBeenChanged: true,
+      error: null
     };
 
     const getChangeFetchStatusAction = {
@@ -163,6 +203,7 @@ describe(`All offers' reducers work correctly`, () => {
       isDataLoaded: true,
       fetchStatus: FetchStatus.DONE,
       favoritesHaveBeenChanged: false,
+      error: null
     };
 
     expect(allOffers(initialState, getChangeFetchStatusAction)).toEqual(
@@ -178,6 +219,7 @@ describe(`All offers' reducers work correctly`, () => {
       isDataLoaded: true,
       fetchStatus: FetchStatus.INIT,
       favoritesHaveBeenChanged: true,
+      error: null
     };
 
     const getChangeFetchStatusAction = {
@@ -195,6 +237,7 @@ describe(`All offers' reducers work correctly`, () => {
       isDataLoaded: true,
       fetchStatus: FetchStatus.PENDING,
       favoritesHaveBeenChanged: true,
+      error: null
     };
 
     expect(allOffers(initialState, getChangeFetchStatusAction)).toEqual(
@@ -210,6 +253,7 @@ describe(`All offers' reducers work correctly`, () => {
       isDataLoaded: true,
       fetchStatus: FetchStatus.INIT,
       favoritesHaveBeenChanged: true,
+      error: null
     };
 
     const getChangeFetchStatusAction = {
@@ -227,9 +271,78 @@ describe(`All offers' reducers work correctly`, () => {
       isDataLoaded: true,
       fetchStatus: FetchStatus.INIT,
       favoritesHaveBeenChanged: true,
+      error: null
     };
 
     expect(allOffers(initialState, getChangeFetchStatusAction)).toEqual(
+        expectedState
+    );
+  });
+
+  it(`Reducer should change error status`, () => {
+    const initialState: AllOffersInitialStateTypes = {
+      currentCity: Cities[0],
+      allOffers: [adaptedTestOffer1, adaptedTestOffer2],
+      currentSort: SortType.POPULAR,
+      isDataLoaded: true,
+      fetchStatus: FetchStatus.INIT,
+      favoritesHaveBeenChanged: true,
+      error: null
+    };
+
+    const getChangeErrorStatusAction = {
+      type: ActionType.CHANGE_ERROR_STATUS,
+      payload: {
+        reducerName: NameSpace.ALL_OFFERS,
+        errorCode: HttpCode.NOT_FOUND
+      },
+    };
+
+    const expectedState: AllOffersInitialStateTypes = {
+      currentCity: Cities[0],
+      allOffers: [adaptedTestOffer1, adaptedTestOffer2],
+      currentSort: SortType.POPULAR,
+      isDataLoaded: true,
+      fetchStatus: FetchStatus.INIT,
+      favoritesHaveBeenChanged: true,
+      error: HttpCode.NOT_FOUND
+    };
+
+    expect(allOffers(initialState, getChangeErrorStatusAction)).toEqual(
+        expectedState
+    );
+  });
+
+  it(`Reducer shouldn't change error status`, () => {
+    const initialState: AllOffersInitialStateTypes = {
+      currentCity: Cities[0],
+      allOffers: [adaptedTestOffer1, adaptedTestOffer2],
+      currentSort: SortType.POPULAR,
+      isDataLoaded: true,
+      fetchStatus: FetchStatus.INIT,
+      favoritesHaveBeenChanged: true,
+      error: null
+    };
+
+    const getChangeErrorStatusAction = {
+      type: ActionType.CHANGE_ERROR_STATUS,
+      payload: {
+        reducerName: NameSpace.SINGLE_OFFER,
+        errorCode: HttpCode.NOT_FOUND
+      },
+    };
+
+    const expectedState: AllOffersInitialStateTypes = {
+      currentCity: Cities[0],
+      allOffers: [adaptedTestOffer1, adaptedTestOffer2],
+      currentSort: SortType.POPULAR,
+      isDataLoaded: true,
+      fetchStatus: FetchStatus.INIT,
+      favoritesHaveBeenChanged: true,
+      error: null
+    };
+
+    expect(allOffers(initialState, getChangeErrorStatusAction)).toEqual(
         expectedState
     );
   });
@@ -244,10 +357,31 @@ describe(`Async operations should work correctly`, () => {
     apiMock.onGet(ApiRoute.HOTELS).reply(200, [testOffer1, testOffer2]);
 
     return fetchOffersDataLoader(dispatch, () => {}, api).then(() => {
-      expect(dispatch).toHaveBeenCalledTimes(1);
+      expect(dispatch).toHaveBeenCalledTimes(4);
       expect(dispatch).toHaveBeenNthCalledWith(1, {
+        type: ActionType.CHANGE_ERROR_STATUS,
+        payload: {
+          errorCode: null,
+          reducerName: NameSpace.ALL_OFFERS,
+        }
+      });
+      expect(dispatch).toHaveBeenNthCalledWith(2, {
+        type: ActionType.CHANGE_FETCH_STATUS,
+        payload: {
+          status: FetchStatus.PENDING,
+          reducerName: NameSpace.ALL_OFFERS,
+        }
+      });
+      expect(dispatch).toHaveBeenNthCalledWith(3, {
         type: ActionType.LOAD_ALL_OFFERS,
         payload: [adaptedTestOffer1, adaptedTestOffer2],
+      });
+      expect(dispatch).toHaveBeenNthCalledWith(4, {
+        type: ActionType.CHANGE_FETCH_STATUS,
+        payload: {
+          status: FetchStatus.DONE,
+          reducerName: NameSpace.ALL_OFFERS,
+        }
       });
     });
   });

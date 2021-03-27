@@ -61,7 +61,7 @@ exports[`Header should render correctly Header should render correctly with auth
                 <span
                   class="header__user-name user__name"
                 >
-                  Выход
+                  Exit
                 </span>
               </a>
             </li>

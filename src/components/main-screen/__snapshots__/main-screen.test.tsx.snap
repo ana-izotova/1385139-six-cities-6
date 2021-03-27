@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Main screen should render correctly 1`] = `
+exports[`Main screen should render correctly Main screen should render correctly with offers 1`] = `
 <div>
   <div
     class="page page--gray page--main"
@@ -64,7 +64,7 @@ exports[`Main screen should render correctly 1`] = `
                   <span
                     class="header__user-name user__name"
                   >
-                    Выход
+                    Exit
                   </span>
                 </a>
               </li>
@@ -285,7 +285,7 @@ exports[`Main screen should render correctly 1`] = `
                       </span>
                     </div>
                     <button
-                      class="place-card__bookmark-button false button"
+                      class="place-card__bookmark-button place-card__bookmark-button--active button"
                       type="button"
                     >
                       <svg
@@ -437,6 +437,200 @@ exports[`Main screen should render correctly 1`] = `
               </div>
             </section>
           </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+`;
+
+exports[`Main screen should render correctly Main screen should show no offers correctly when empty store 1`] = `
+<div>
+  <div
+    class="page page--gray page--main"
+  >
+    <header
+      class="header"
+    >
+      <div
+        class="container"
+      >
+        <div
+          class="header__wrapper"
+        >
+          <div
+            class="header__left"
+          >
+            <a
+              class="header__logo-link header__logo-link--active"
+              href="/"
+            >
+              <img
+                alt="6 cities logo"
+                class="header__logo"
+                src="img/logo.svg"
+                style="width: 81px; height: 41px;"
+              />
+            </a>
+          </div>
+          <nav
+            class="header__nav"
+          >
+            <ul
+              class="header__nav-list"
+            >
+              <li
+                class="header__nav-item user"
+              >
+                <a
+                  class="header__nav-link header__nav-link--profile"
+                  href="/favorites"
+                >
+                  <div
+                    class="header__avatar-wrapper user__avatar-wrapper"
+                    style="background-image: url(avatar.jpg); border-radius: 50%;"
+                  />
+                  <span
+                    class="header__user-name user__name"
+                  >
+                    jondoe@mail.com
+                  </span>
+                </a>
+              </li>
+              <li
+                class="header__nav-item user"
+              >
+                <a
+                  class="header__nav-link header__nav-link--profile"
+                  href="/"
+                  style="margin-left: 10px;"
+                >
+                  <span
+                    class="header__user-name user__name"
+                  >
+                    Exit
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+    <main
+      class="page__main page__main--index page__main--index-empty"
+    >
+      <h1
+        class="visually-hidden"
+      >
+        Cities
+      </h1>
+      <div
+        class="tabs"
+      >
+        <section
+          class="locations container"
+        >
+          <ul
+            class="locations__list tabs__list"
+          >
+            <li
+              class="locations__item"
+            >
+              <a
+                class="locations__item-link tabs__item tabs__item--active"
+              >
+                <span>
+                  Paris
+                </span>
+              </a>
+            </li>
+            <li
+              class="locations__item"
+            >
+              <a
+                class="locations__item-link tabs__item "
+              >
+                <span>
+                  Cologne
+                </span>
+              </a>
+            </li>
+            <li
+              class="locations__item"
+            >
+              <a
+                class="locations__item-link tabs__item "
+              >
+                <span>
+                  Brussels
+                </span>
+              </a>
+            </li>
+            <li
+              class="locations__item"
+            >
+              <a
+                class="locations__item-link tabs__item "
+              >
+                <span>
+                  Amsterdam
+                </span>
+              </a>
+            </li>
+            <li
+              class="locations__item"
+            >
+              <a
+                class="locations__item-link tabs__item "
+              >
+                <span>
+                  Hamburg
+                </span>
+              </a>
+            </li>
+            <li
+              class="locations__item"
+            >
+              <a
+                class="locations__item-link tabs__item "
+              >
+                <span>
+                  Dusseldorf
+                </span>
+              </a>
+            </li>
+          </ul>
+        </section>
+      </div>
+      <div
+        class="cities"
+      >
+        <div
+          class="cities__places-container cities__places-container--empty container"
+        >
+          <section
+            class="cities__no-places"
+          >
+            <div
+              class="cities__status-wrapper tabs__content"
+            >
+              <b
+                class="cities__status"
+              >
+                No places to stay available
+              </b>
+              <p
+                class="cities__status-description"
+              >
+                We could not find any property available at the moment in 
+                Paris
+              </p>
+            </div>
+          </section>
+          <div
+            class="cities__right-section"
+          />
         </div>
       </div>
     </main>

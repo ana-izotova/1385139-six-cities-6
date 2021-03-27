@@ -6,12 +6,13 @@ import {Provider} from "react-redux";
 import App from "./components/app/app";
 import {rootReducer} from "./store/root-reducer";
 import {AuthorizationStatus} from "./const";
-import {redirect} from "./middlewares/redirect";
+import {redirect} from "./store/middlewares/redirect";
 import {requireAuthorization} from "./store/actions";
+import {Router} from 'react-router-dom';
+import browserHistory from './browser-history';
 
 const api = createAPI(
-    () => store.dispatch(requireAuthorization(AuthorizationStatus.NO_AUTH))
-);
+    () => store.dispatch(requireAuthorization(AuthorizationStatus.NO_AUTH)));
 
 const store = configureStore({
   reducer: rootReducer,
@@ -25,7 +26,9 @@ const store = configureStore({
 
 ReactDom.render(
     <Provider store={store}>
-      <App />
+      <Router history={browserHistory}>
+        <App />
+      </Router>
     </Provider>,
     document.querySelector(`#root`)
 );

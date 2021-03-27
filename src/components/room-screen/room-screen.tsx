@@ -8,7 +8,6 @@ import Header from "../header/header";
 import LoaderScreensaver from "../loader-screensaver/loader-screensaver";
 import {RoomScreenProps} from "./room-screen-types";
 import {AuthorizationStatus, IMAGES_PER_PAGE, FetchStatus, FavoriteStatus, AppRoute, COMMENTS_PER_PAGE} from "../../const";
-import NotFoundScreen from "../not-found-screen/not-found-screen";
 import {useDispatch, useSelector} from "react-redux";
 import {RootStateType} from "../../store/root-reducer";
 import {
@@ -19,11 +18,12 @@ import {
 } from "../../store/api-actions";
 import {clearSingleOffersData} from "../../store/actions";
 import browserHistory from "../../browser-history";
+import ErrorScreen from "../error-screen/error-screen";
 
 const RoomScreen: React.FC<RoomScreenProps> = ({cardId}) => {
-  const {isOfferLoaded, offer, offersNearby, comments} = useSelector((state: RootStateType) => state.SINGLE_OFFER);
+  const {isOfferLoaded, offer, offersNearby, comments, error} = useSelector((state: RootStateType) => state.SINGLE_OFFER);
   const {authorizationStatus} = useSelector((state: RootStateType) => state.USER);
-  const {favoritesHaveBeenChanged, allOffers, fetchStatus: changeFavoriteFetchStatus} = useSelector((state: RootStateType) => state.ALL_OFFERS);
+  const {favoritesHaveBeenChanged, allOffers, fetchStatus} = useSelector((state: RootStateType) => state.ALL_OFFERS);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -49,17 +49,17 @@ const RoomScreen: React.FC<RoomScreenProps> = ({cardId}) => {
         left: 0,
         behavior: `smooth`,
       });
-    } catch (error) {
+    } catch (e) {
       window.scrollTo(0, 0);
     }
   }, [cardId, isOfferLoaded]);
 
-  if (!isOfferLoaded) {
-    return <LoaderScreensaver />;
+  if (error) {
+    return <ErrorScreen errorCode={error} />;
   }
 
-  if (!offer) {
-    return <NotFoundScreen />;
+  if (!isOfferLoaded) {
+    return <LoaderScreensaver />;
   }
 
   const {
@@ -124,10 +124,10 @@ const RoomScreen: React.FC<RoomScreenProps> = ({cardId}) => {
               <div className="property__name-wrapper">
                 <h1 className="property__name">{title}</h1>
                 <button
-                  className={`property__bookmark-button ${isFavorite ? `property__bookmark-button--active` : ``} button ${changeFavoriteFetchStatus === FetchStatus.ERROR ? `error-shake` : ``}`}
+                  className={`property__bookmark-button ${isFavorite ? `property__bookmark-button--active` : ``} button ${fetchStatus === FetchStatus.ERROR ? `error-shake` : ``}`}
                   type="button"
                   onClick={handleFavoriteClick}
-                  disabled={changeFavoriteFetchStatus === FetchStatus.PENDING}
+                  disabled={fetchStatus === FetchStatus.PENDING}
                 >
                   <svg
                     className="property__bookmark-icon"

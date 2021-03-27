@@ -5,7 +5,7 @@ import Footer from "./footer";
 
 test(`Footer component should render correctly`, () => {
   const {container} = render(
-      <TestMock>
+      <TestMock authorized={true} emptyStore={false}>
         <Footer />
       </TestMock>
   );

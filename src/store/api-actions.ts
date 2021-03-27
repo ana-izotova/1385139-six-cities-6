@@ -15,7 +15,7 @@ import {
   loadSingleOffer,
   loadFavoriteCards,
   changeFavoriteStatus,
-  changeFetchStatus,
+  changeFetchStatus, changeErrorStatus,
 } from "./actions";
 import {NameSpace} from "../const";
 
@@ -28,11 +28,22 @@ export type AppThunk<ReturnType = void> = ThunkAction<
 
 // All offers
 
-export const fetchOffersData = (): AppThunk<ActionTypes> => (
+export const fetchOffersData = (): AppThunk => (
     dispatch,
     _getState,
     api
-) => api.get(ApiRoute.HOTELS).then(({data}) => dispatch(loadAllOffers(data)));
+) => api
+  .get(ApiRoute.HOTELS)
+  .then(({data}) => {
+    dispatch(changeErrorStatus(null, NameSpace.ALL_OFFERS));
+    dispatch(changeFetchStatus(FetchStatus.PENDING, NameSpace.ALL_OFFERS));
+    dispatch(loadAllOffers(data));
+    dispatch(changeFetchStatus(FetchStatus.DONE, NameSpace.ALL_OFFERS));
+  })
+  .catch(({response}) => {
+    dispatch(changeErrorStatus(response.status, NameSpace.ALL_OFFERS));
+    dispatch(changeFetchStatus(FetchStatus.ERROR, NameSpace.ALL_OFFERS));
+  });
 
 export const changeCardFavoriteStatus = (
     offerId: number,
@@ -126,10 +137,18 @@ export const fetchFavoriteCards = (): AppThunk<ActionTypes> => (
 
 export const fetchSingleOffersData = (
     offerId: number
-): AppThunk<ActionTypes> => (dispatch, _getState, api) =>
+): AppThunk => (dispatch, _getState, api) =>
   api
     .get(`${ApiRoute.HOTELS}/${offerId}`)
-    .then(({data}) => dispatch(loadSingleOffer(data)));
+    .then(({data}) => {
+      dispatch(changeFetchStatus(FetchStatus.PENDING, NameSpace.SINGLE_OFFER));
+      dispatch(loadSingleOffer(data));
+      dispatch(changeFetchStatus(FetchStatus.DONE, NameSpace.SINGLE_OFFER));
+    })
+    .catch(({response}) => {
+      dispatch(changeFetchStatus(FetchStatus.ERROR, NameSpace.SINGLE_OFFER));
+      dispatch(changeErrorStatus(response.status, NameSpace.SINGLE_OFFER));
+    });
 
 export const fetchOffersNearby = (offerId: number): AppThunk<ActionTypes> => (
     dispatch,

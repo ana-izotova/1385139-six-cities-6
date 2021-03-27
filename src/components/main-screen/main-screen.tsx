@@ -11,6 +11,7 @@ import {sortCards} from "../../utils/sorting";
 import {AllOffersReducerStateType} from "../../store/all-offers/all-offers";
 import PlaceCard from "../place-card/place-card";
 import NoCityOffers from "../no-city-offers/no-city-offers";
+import ErrorScreen from "../error-screen/error-screen";
 
 const cardsSelector = (state: AllOffersReducerStateType) => state.allOffers;
 const currentCitySelector = (state: AllOffersReducerStateType) => state.currentCity;
@@ -23,7 +24,7 @@ const getFilteredCards = createSelector(
 );
 
 const MainScreen: React.FC = () => {
-  const {currentSort, currentCity, isDataLoaded} = useSelector(
+  const {currentSort, currentCity, isDataLoaded, error} = useSelector(
       (state: RootStateType) => state.ALL_OFFERS
   );
   const allOffersState = useSelector(
@@ -35,6 +36,14 @@ const MainScreen: React.FC = () => {
   const sortedCards = sortCards(filteredCards, currentSort);
   const offersAmount = filteredCards.length;
 
+  if (error) {
+    return <ErrorScreen errorCode={error} />;
+  }
+
+  if (!isDataLoaded) {
+    return <LoaderScreensaver />;
+  }
+
   return (
     <div className="page page--gray page--main">
       <Header isMainScreen={true} />
@@ -45,44 +54,40 @@ const MainScreen: React.FC = () => {
       >
         <h1 className="visually-hidden">Cities</h1>
         <CitiesList />
-        {isDataLoaded ? (
-          <div className="cities">
-            {offersAmount ? (
-              <div className="cities__places-container container">
-                <section className="cities__places places">
-                  <h2 className="visually-hidden">Places</h2>
-                  <b className="places__found">
-                    {offersAmount} {offersAmount > 1 ? `places` : `place`} to
+        <div className="cities">
+          {offersAmount ? (
+            <div className="cities__places-container container">
+              <section className="cities__places places">
+                <h2 className="visually-hidden">Places</h2>
+                <b className="places__found">
+                  {offersAmount} {offersAmount > 1 ? `places` : `place`} to
                     stay in {currentCity.name}
-                  </b>
-                  <Sorting />
-                  <div className="cities__places-list places__list tabs__content">
-                    {sortedCards.map((card) => (
-                      <PlaceCard
-                        card={card}
-                        offerType={`cities`}
-                        key={card[`id`]}
-                        activeCardIdChangeStateHandler={setActiveCardId}
-                      />
-                    ))}
-                  </div>
-                </section>
-                <div className="cities__right-section">
-                  <Map
-                    style={{height: `100%`}}
-                    cards={filteredCards}
-                    activeCardId={activeCardId}
-                    isMainMap={true}
-                  />
+                </b>
+                <Sorting />
+                <div className="cities__places-list places__list tabs__content">
+                  {sortedCards.map((card) => (
+                    <PlaceCard
+                      card={card}
+                      offerType={`cities`}
+                      key={card[`id`]}
+                      activeCardIdChangeStateHandler={setActiveCardId}
+                    />
+                  ))}
                 </div>
+              </section>
+              <div className="cities__right-section">
+                <Map
+                  style={{height: `100%`}}
+                  cards={filteredCards}
+                  activeCardId={activeCardId}
+                  isMainMap={true}
+                />
               </div>
-            ) : (
-              <NoCityOffers />
-            )}
-          </div>
-        ) : (
-          <LoaderScreensaver />
-        )}
+            </div>
+          ) : (
+            <NoCityOffers />
+          )}
+        </div>
       </main>
     </div>
   );

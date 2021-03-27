@@ -1,12 +1,12 @@
 import React from 'react';
 import {render} from '@testing-library/react';
+import LoginScreen from "./login-screen";
 import {TestMock} from "../../test-mocks/test-mock";
-import NoCityOffers from "./no-city-offers";
 
-test(`No city offers component should render correctly`, () => {
+test(`Login screen should render correctly`, () => {
   const {container} = render(
-      <TestMock emptyStore={true} authorized={false}>
-        <NoCityOffers />
+      <TestMock emptyStore={false} authorized={false}>
+        <LoginScreen />
       </TestMock>
   );
 

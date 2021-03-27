@@ -6,7 +6,7 @@ import {adaptedTestComment} from "../../test-mocks/adapted-data-mock";
 
 test(`Comment item component should render correctly`, () => {
   const {container} = render(
-      <TestMock>
+      <TestMock authorized={false} emptyStore={false}>
         <CommentItem {...adaptedTestComment} />
       </TestMock>
   );

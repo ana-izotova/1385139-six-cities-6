@@ -1,6 +1,13 @@
 import {createReducer} from "@reduxjs/toolkit";
 import {SingleOfferInitialStateTypes} from "./single-offer-types";
-import {loadComments, loadOffersNearby, loadSingleOffer, clearSingleOffersData, changeFetchStatus} from "../actions";
+import {
+  loadComments,
+  loadOffersNearby,
+  loadSingleOffer,
+  clearSingleOffersData,
+  changeFetchStatus,
+  changeErrorStatus
+} from "../actions";
 import {FetchStatus, NameSpace} from "../../const";
 import {sortByDate} from "../../utils/sorting";
 
@@ -9,7 +16,8 @@ export const initialState: SingleOfferInitialStateTypes = {
   offersNearby: [],
   comments: [],
   isOfferLoaded: false,
-  fetchStatus: FetchStatus.INIT
+  fetchStatus: FetchStatus.INIT,
+  error: null
 };
 
 export const singleOffer = createReducer(initialState, (builder) => {
@@ -29,10 +37,16 @@ export const singleOffer = createReducer(initialState, (builder) => {
     state.comments = [];
     state.isOfferLoaded = false;
     state.fetchStatus = FetchStatus.INIT;
+    state.error = null;
   });
   builder.addCase(changeFetchStatus, (state, action) => {
     if (action.payload.reducerName === NameSpace.SINGLE_OFFER) {
       state.fetchStatus = action.payload.status;
+    }
+  });
+  builder.addCase(changeErrorStatus, (state, action) => {
+    if (action.payload.reducerName === NameSpace.SINGLE_OFFER) {
+      state.error = action.payload.errorCode;
     }
   });
 });
