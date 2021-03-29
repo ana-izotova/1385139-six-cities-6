@@ -44,7 +44,7 @@ export const currentOffer: OfferCard = {
     `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/2.jpg`,
     `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/12.jpg`,
   ],
-  title: `The house among olive `,
+  title: `The house among olive`,
   isFavorite: false,
   isPremium: true,
   rating: 3,

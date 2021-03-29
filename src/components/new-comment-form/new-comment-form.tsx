@@ -54,6 +54,7 @@ const NewCommentForm: React.FC<NewCommentFormProps> = ({offerId}) => {
         placeholder="Tell how was your stay, what you like and what can be improved"
         onChange={({target}) => setCommentText(target.value)}
         value={commentText}
+        data-testid="review"
         disabled={sendCommentFetchStatus === FetchStatus.PENDING}
       ></textarea>
       <div className="reviews__button-wrapper">
@@ -69,7 +70,7 @@ const NewCommentForm: React.FC<NewCommentFormProps> = ({offerId}) => {
           type="submit"
           disabled={
             commentText.length < Comment.MIN_LENGTH ||
-              commentText.length > Comment.MAX_LENGTH ||
+            commentText.length > Comment.MAX_LENGTH ||
             rating === null ||
             sendCommentFetchStatus === FetchStatus.PENDING
           }

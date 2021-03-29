@@ -81,11 +81,14 @@ exports[`Login screen should render correctly 1`] = `
             >
               <label
                 class="visually-hidden"
+                for="email"
               >
                 E-mail
               </label>
               <input
                 class="login__input form__input"
+                data-testid="email"
+                id="email"
                 name="email"
                 placeholder="Email"
                 required=""
@@ -97,11 +100,14 @@ exports[`Login screen should render correctly 1`] = `
             >
               <label
                 class="visually-hidden"
+                for="password"
               >
                 Password
               </label>
               <input
                 class="login__input form__input"
+                data-testid="password"
+                id="password"
                 name="password"
                 placeholder="Password"
                 required=""

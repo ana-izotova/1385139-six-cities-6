@@ -7,6 +7,7 @@ exports[`City tabs should render correctly City tab should render correctly for 
   >
     <a
       class="locations__item-link tabs__item tabs__item--active"
+      href="#"
     >
       <span>
         Paris
@@ -23,6 +24,7 @@ exports[`City tabs should render correctly City tab should render correctly for 
   >
     <a
       class="locations__item-link tabs__item "
+      href="#"
     >
       <span>
         Cologne

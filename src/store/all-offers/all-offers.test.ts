@@ -386,6 +386,33 @@ describe(`Async operations should work correctly`, () => {
     });
   });
 
+  it(`Should catch errors correctly when call to /hotels`, () => {
+    const apiMock = new MockAdapter(api);
+    const dispatch = jest.fn();
+    const fetchOffersDataLoader = fetchOffersData();
+
+    apiMock.onGet(ApiRoute.HOTELS).reply(400);
+
+    return fetchOffersDataLoader(dispatch, () => {}, api)
+      .catch(() => {
+        expect(dispatch).toHaveBeenCalledTimes(2);
+        expect(dispatch).toHaveBeenNthCalledWith(1, {
+          type: ActionType.CHANGE_ERROR_STATUS,
+          payload: {
+            errorCode: 400,
+            reducerName: NameSpace.ALL_OFFERS,
+          }
+        });
+        expect(dispatch).toHaveBeenNthCalledWith(2, {
+          type: ActionType.CHANGE_FETCH_STATUS,
+          payload: {
+            status: FetchStatus.ERROR,
+            reducerName: NameSpace.ALL_OFFERS,
+          }
+        });
+      });
+  });
+
   it(`Should make a correct call to /favorites/id/status`, () => {
     const apiMock = new MockAdapter(api);
     const dispatch = jest.fn();
@@ -414,5 +441,32 @@ describe(`Async operations should work correctly`, () => {
         },
       });
     });
+  });
+
+  it(`Should catch errors correctly when call to /favorites/id/status`, () => {
+    const apiMock = new MockAdapter(api);
+    const dispatch = jest.fn();
+    const testOfferId = 1;
+    const favoriteStatus = FavoriteStatus.FAVORITE;
+    const changeCardFavoriteStatusLoader = changeCardFavoriteStatus(
+        testOfferId,
+        favoriteStatus
+    );
+
+    apiMock
+      .onPost(`${ApiRoute.FAVORITES}/${testOfferId}/${favoriteStatus}`)
+      .reply(400);
+
+    return changeCardFavoriteStatusLoader(dispatch, () => {}, api)
+      .catch(() => {
+        expect(dispatch).toHaveBeenCalledTimes(1);
+        expect(dispatch).toHaveBeenNthCalledWith(1, {
+          type: ActionType.CHANGE_FETCH_STATUS,
+          payload: {
+            status: FetchStatus.ERROR,
+            reducerName: NameSpace.ALL_OFFERS,
+          }
+        });
+      });
   });
 });

@@ -16,6 +16,7 @@ exports[`Cities list should render correctly 1`] = `
         >
           <a
             class="locations__item-link tabs__item tabs__item--active"
+            href="#"
           >
             <span>
               Paris
@@ -27,6 +28,7 @@ exports[`Cities list should render correctly 1`] = `
         >
           <a
             class="locations__item-link tabs__item "
+            href="#"
           >
             <span>
               Cologne
@@ -38,6 +40,7 @@ exports[`Cities list should render correctly 1`] = `
         >
           <a
             class="locations__item-link tabs__item "
+            href="#"
           >
             <span>
               Brussels
@@ -49,6 +52,7 @@ exports[`Cities list should render correctly 1`] = `
         >
           <a
             class="locations__item-link tabs__item "
+            href="#"
           >
             <span>
               Amsterdam
@@ -60,6 +64,7 @@ exports[`Cities list should render correctly 1`] = `
         >
           <a
             class="locations__item-link tabs__item "
+            href="#"
           >
             <span>
               Hamburg
@@ -71,6 +76,7 @@ exports[`Cities list should render correctly 1`] = `
         >
           <a
             class="locations__item-link tabs__item "
+            href="#"
           >
             <span>
               Dusseldorf

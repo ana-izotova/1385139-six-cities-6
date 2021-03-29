@@ -35,24 +35,28 @@ const LoginScreen: React.FC = () => {
               onSubmit={handleSubmit}
             >
               <div className="login__input-wrapper form__input-wrapper">
-                <label className="visually-hidden">E-mail</label>
+                <label className="visually-hidden" htmlFor="email">E-mail</label>
                 <input
                   ref={emailRef}
                   className="login__input form__input"
                   type="email"
                   name="email"
                   placeholder="Email"
+                  id="email"
+                  data-testid="email"
                   required
                 />
               </div>
               <div className="login__input-wrapper form__input-wrapper">
-                <label className="visually-hidden">Password</label>
+                <label className="visually-hidden" htmlFor="password">Password</label>
                 <input
                   ref={passwordRef}
                   className="login__input form__input"
                   type="password"
                   name="password"
                   placeholder="Password"
+                  id="password"
+                  data-testid="password"
                   required
                 />
               </div>

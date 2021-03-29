@@ -155,6 +155,52 @@ describe(`Async operations work correctly`, () => {
       });
   });
 
+  it(`Should catch errors correctly when call to /login`, () => {
+    const apiMock = new MockAdapter(api);
+    const dispatch = jest.fn();
+    const checkAuthLoader = checkAuth();
+
+    apiMock
+      .onGet(ApiRoute.LOGIN)
+      .reply(401);
+
+    return checkAuthLoader(dispatch, () => {}, api)
+      .catch(() => {
+        expect(dispatch).toHaveBeenCalledTimes(2);
+        expect(dispatch).toHaveBeenNthCalledWith(1, {
+          type: ActionType.REQUIRE_AUTHORIZATION,
+          payload: AuthorizationStatus.NO_AUTH
+        });
+        expect(dispatch).toHaveBeenNthCalledWith(2, {
+          type: ActionType.CHANGE_FETCH_STATUS,
+          payload: {status: FetchStatus.ERROR, reducerName: NameSpace.USER}
+        });
+      });
+  });
+
+  it(`Should catch errors correctly when call to /login with wrong data`, () => {
+    const apiMock = new MockAdapter(api);
+    const dispatch = jest.fn();
+    const loginLoader = login({login: `jondoe@mail.com`, password: `12345`});
+
+    apiMock
+      .onPost(ApiRoute.LOGIN)
+      .reply(401);
+
+    return loginLoader(dispatch, () => {}, api)
+      .catch(() => {
+        expect(dispatch).toHaveBeenCalledTimes(2);
+        expect(dispatch).toHaveBeenNthCalledWith(1, {
+          type: ActionType.REQUIRE_AUTHORIZATION,
+          payload: AuthorizationStatus.NO_AUTH
+        });
+        expect(dispatch).toHaveBeenNthCalledWith(2, {
+          type: ActionType.CHANGE_FETCH_STATUS,
+          payload: {status: FetchStatus.ERROR, reducerName: NameSpace.USER}
+        });
+      });
+  });
+
   it(`Should make a correct call to /login and get login data`, () => {
     const apiMock = new MockAdapter(api);
     const dispatch = jest.fn();

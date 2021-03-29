@@ -43,15 +43,8 @@ const RoomScreen: React.FC<RoomScreenProps> = ({cardId}) => {
     if (!isOfferLoaded) {
       return;
     }
-    try {
-      window.scroll({
-        top: 0,
-        left: 0,
-        behavior: `smooth`,
-      });
-    } catch (e) {
-      window.scrollTo(0, 0);
-    }
+
+    window.scrollTo(0, 0);
   }, [cardId, isOfferLoaded]);
 
   if (error) {

@@ -303,6 +303,33 @@ describe(`Async operations work correctly`, () => {
     });
   });
 
+  it(`Should catch errors correctly when call to /hotels/id`, () => {
+    const apiMock = new MockAdapter(api);
+    const dispatch = jest.fn();
+    const fetchSingleOffersDataLoader = fetchSingleOffersData(testOfferId);
+
+    apiMock.onGet(`${ApiRoute.HOTELS}/${testOfferId}`).reply(404);
+
+    return fetchSingleOffersDataLoader(dispatch, () => {}, api)
+      .catch(() => {
+        expect(dispatch).toHaveBeenCalledTimes(2);
+        expect(dispatch).toHaveBeenNthCalledWith(1, {
+          type: ActionType.CHANGE_FETCH_STATUS,
+          payload: {
+            status: FetchStatus.ERROR,
+            reducerName: NameSpace.SINGLE_OFFER,
+          }
+        });
+        expect(dispatch).toHaveBeenNthCalledWith(2, {
+          type: ActionType.CHANGE_ERROR_STATUS,
+          payload: {
+            status: 404,
+            reducerName: NameSpace.SINGLE_OFFER
+          },
+        });
+      });
+  });
+
   it(`Should make a correct call to /hotels/id/nearby to get nearby offers`, () => {
     const apiMock = new MockAdapter(api);
     const dispatch = jest.fn();
@@ -356,6 +383,32 @@ describe(`Async operations work correctly`, () => {
     );
   });
 
+  it(`Should catch errors correctly when call to /favorite/id/isFavorite`, () => {
+    const apiMock = new MockAdapter(api);
+    const dispatch = jest.fn();
+    const favoriteStatus = FavoriteStatus.FAVORITE;
+    const changeFavoriteOfferScreenStatusLoader = changeFavoriteOfferScreenStatus(
+        testOfferId,
+        favoriteStatus
+    );
+
+    apiMock
+      .onPost(`${ApiRoute.FAVORITES}/${testOfferId}/${favoriteStatus}`)
+      .reply(400);
+
+    return changeFavoriteOfferScreenStatusLoader(dispatch, () => {}, api)
+      .catch(() => {
+        expect(dispatch).toHaveBeenCalledTimes(1);
+        expect(dispatch).toHaveBeenNthCalledWith(1, {
+          type: ActionType.CHANGE_ERROR_STATUS,
+          payload: {
+            status: 400,
+            reducerName: NameSpace.SINGLE_OFFER
+          },
+        });
+      });
+  });
+
   it(`Should make a correct call to /comments/id to get offer's comments`, () => {
     const apiMock = new MockAdapter(api);
     const dispatch = jest.fn();
@@ -378,7 +431,7 @@ describe(`Async operations work correctly`, () => {
     const apiMock = new MockAdapter(api);
     const dispatch = jest.fn();
     const testCommentToPost = {
-      comment: `We loved it so much, the house, the veiw, the location just great.. Highly recommend :)`,
+      comment: `We loved it so much, the house, the view, the location just great.. Highly recommend :)`,
       rating: 3,
     };
     const sendCommentLoader = sendComment(testOfferId, testCommentToPost);
@@ -408,5 +461,31 @@ describe(`Async operations work correctly`, () => {
         },
       });
     });
+  });
+
+  it(`Should catch errors correctly when call to /comments/id to post a comment`, () => {
+    const apiMock = new MockAdapter(api);
+    const dispatch = jest.fn();
+    const testCommentToPost = {
+      comment: `We loved it so much, the house, the view, the location just great.. Highly recommend :)`,
+      rating: 3,
+    };
+    const sendCommentLoader = sendComment(testOfferId, testCommentToPost);
+
+    apiMock
+      .onPost(`${ApiRoute.COMMENTS}/${testOfferId}`)
+      .reply(400);
+
+    return sendCommentLoader(dispatch, () => {}, api)
+      .catch(() => {
+        expect(dispatch).toHaveBeenCalledTimes(1);
+        expect(dispatch).toHaveBeenNthCalledWith(1, {
+          type: ActionType.CHANGE_ERROR_STATUS,
+          payload: {
+            status: 400,
+            reducerName: NameSpace.SINGLE_OFFER
+          },
+        });
+      });
   });
 });

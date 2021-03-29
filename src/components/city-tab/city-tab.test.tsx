@@ -1,31 +1,27 @@
 import React from 'react';
 import {render, screen} from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import {TestMock} from "../../test-mocks/test-mock";
-import Sorting from "./sorting";
+import CityTab from "./city-tab";
+import {Cities} from "../../const";
 import * as redux from "react-redux";
-import userEvent from "@testing-library/user-event";
-import {SortType} from "../../const";
 import {ActionType} from "../../store/action-types";
 
-test(`Should change sorting type on click`, () => {
+test(`A click on city tab should fire correct action`, () => {
   const useDispatchSpy = jest.spyOn(redux, `useDispatch`);
   const mockDispatchFn = jest.fn();
   useDispatchSpy.mockReturnValue(mockDispatchFn);
 
   render(
       <TestMock authorized={true} emptyStore={false}>
-        <Sorting />
+        <CityTab city={Cities[1]}/>
       </TestMock>
   );
 
-  const sortingList = screen.getByRole(`list`);
-  const sortingTypeByRating = screen.getByText(SortType.TOP_RATED_FIRST);
-
-  userEvent.click(sortingList);
-  userEvent.click(sortingTypeByRating);
-
+  const tabButton = screen.getByRole(`link`, {name: Cities[1].name});
+  userEvent.click(tabButton);
   expect(mockDispatchFn).toBeCalledWith({
-    type: ActionType.CHANGE_SORT,
-    payload: SortType.TOP_RATED_FIRST
+    type: ActionType.CHANGE_CITY,
+    payload: Cities[1]
   });
 });
