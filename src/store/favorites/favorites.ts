@@ -2,7 +2,7 @@ import {createReducer} from "@reduxjs/toolkit";
 import {FavoritesInitialStateTypes} from "./favorites-types";
 import {loadFavoriteCards} from "../actions";
 
-const initialState: FavoritesInitialStateTypes = {
+export const initialState: FavoritesInitialStateTypes = {
   favoriteCards: [],
   areFavoriteCardsLoaded: false
 };

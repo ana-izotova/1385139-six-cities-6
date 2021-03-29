@@ -5,5 +5,6 @@ export interface SingleOfferInitialStateTypes {
   isOfferLoaded: boolean,
   offersNearby: Array<OfferCard>,
   comments: Array<Comment>
-  fetchStatus: string
+  fetchStatus: string,
+  error: number
 }

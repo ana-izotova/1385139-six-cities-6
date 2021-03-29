@@ -15,6 +15,7 @@ export enum ActionType {
   LOAD_FAVORITES = `data/loadFavorites`,
   CHANGE_FAVORITE_STATUS = `data/changeFavoriteStatus`,
   CHANGE_FETCH_STATUS = `data/changeFetchStatus`,
+  CHANGE_ERROR_STATUS = `data/changeErrorStatus`
 }
 
 interface ChangeCityAction {
@@ -69,12 +70,6 @@ interface RedirectAction {
 
 interface ClearSingleOfferDataAction {
   type: ActionType.CLEAR_SINGLE_OFFER_DATA;
-  payload: {
-    offer: OfferCard;
-    offersNearby: Array<OfferCard>;
-    comments: Array<Comment>;
-    isOfferLoaded: boolean;
-  };
 }
 
 interface LoadFavoriteOffersAction {
@@ -92,6 +87,11 @@ interface ChangeFetchStatusAction {
   payload: { status: string; reducerName: string };
 }
 
+interface ChangeErrorStatusAction {
+  type: ActionType.CHANGE_ERROR_STATUS,
+  payload: { errorCode: number; reducerName: string }
+}
+
 export type ActionTypes =
   | ChangeCityAction
   | LoadAllOffersAction
@@ -106,4 +106,5 @@ export type ActionTypes =
   | LoadFavoriteOffersAction
   | ChangeFavoriteStatusAction
   | ChangeFetchStatusAction
-  | ClearSingleOfferDataAction;
+  | ClearSingleOfferDataAction
+  | ChangeErrorStatusAction;

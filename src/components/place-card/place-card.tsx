@@ -3,10 +3,9 @@ import {Link} from "react-router-dom";
 import {ClassNames, PlaceCardProps} from "./place-card-types";
 import {capitalize, convertRatingToPercents} from "../../utils/common";
 import {useDispatch, useSelector} from "react-redux";
-import {changeFetchStatus} from "../../store/actions";
 import {AppRoute, AuthorizationStatus, FavoriteStatus, FetchStatus} from "../../const";
 import {changeCardFavoriteStatus} from "../../store/api-actions";
-import {NameSpace, RootStateType} from "../../store/root-reducer";
+import {RootStateType} from "../../store/root-reducer";
 import browserHistory from "../../browser-history";
 
 const getClassNames = (type: string): ClassNames => {
@@ -64,7 +63,6 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
         ? FavoriteStatus.UNFAVORED
         : FavoriteStatus.FAVORITE;
       dispatch(changeCardFavoriteStatus(id, statusToChange));
-      dispatch(changeFetchStatus(FetchStatus.SENDING, NameSpace.ALL_OFFERS));
     }
   };
 
@@ -102,7 +100,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
             } button`}
             type="button"
             onClick={handleFavoriteClick}
-            disabled={changeFavoriteFetchStatus === FetchStatus.SENDING}
+            disabled={changeFavoriteFetchStatus === FetchStatus.PENDING}
           >
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>

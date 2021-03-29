@@ -14,7 +14,12 @@ const CityTab: React.FC<CityTabProps> = ({city}) => {
 
   return (
     <li className="locations__item">
-      <a className={`locations__item-link tabs__item ${isCurrentCity ? `tabs__item--active` : ``}`} onClick={onUserClick}>
+      <a href="#"
+        className={`locations__item-link tabs__item ${
+          isCurrentCity ? `tabs__item--active` : ``
+        }`}
+        onClick={onUserClick}
+      >
         <span>{city.name}</span>
       </a>
     </li>

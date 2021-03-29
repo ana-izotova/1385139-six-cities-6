@@ -1,0 +1,165 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Favorite screen should render correctly 1`] = `
+<div>
+  <div
+    class="page page--gray page--main"
+  >
+    <header
+      class="header"
+    >
+      <div
+        class="container"
+      >
+        <div
+          class="header__wrapper"
+        >
+          <div
+            class="header__left"
+          >
+            <a
+              class="header__logo-link "
+              href="/"
+            >
+              <img
+                alt="6 cities logo"
+                class="header__logo"
+                src="img/logo.svg"
+                style="width: 81px; height: 41px;"
+              />
+            </a>
+          </div>
+          <nav
+            class="header__nav"
+          >
+            <ul
+              class="header__nav-list"
+            >
+              <li
+                class="header__nav-item user"
+              >
+                <a
+                  class="header__nav-link header__nav-link--profile"
+                  href="/favorites"
+                >
+                  <div
+                    class="header__avatar-wrapper user__avatar-wrapper"
+                    style="background-image: url(avatar.jpg); border-radius: 50%;"
+                  />
+                  <span
+                    class="header__user-name user__name"
+                  >
+                    jondoe@mail.com
+                  </span>
+                </a>
+              </li>
+              <li
+                class="header__nav-item user"
+              >
+                <a
+                  class="header__nav-link header__nav-link--profile"
+                  href="/"
+                  style="margin-left: 10px;"
+                >
+                  <span
+                    class="header__user-name user__name"
+                  >
+                    Exit
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+    <main
+      style="margin-left: auto; margin-right: auto; width: 20%;"
+    >
+      <h1>
+        Loading, please wait...
+      </h1>
+      <div
+        class="sc-bdfBwQ fQKiUq"
+      >
+        <div
+          aria-busy="true"
+          class=""
+        >
+          <svg
+            aria-label="audio-loading"
+            height="80"
+            viewBox="0 0 38 38"
+            width="80"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <lineargradient
+                id="a"
+                x1="8.042%"
+                x2="65.682%"
+                y1="0%"
+                y2="23.865%"
+              >
+                <stop
+                  offset="0%"
+                  stop-color="#4481c3"
+                  stop-opacity="0"
+                />
+                <stop
+                  offset="63.146%"
+                  stop-color="#4481c3"
+                  stop-opacity=".631"
+                />
+                <stop
+                  offset="100%"
+                  stop-color="#4481c3"
+                />
+              </lineargradient>
+            </defs>
+            <g
+              fill="none"
+              fill-rule="evenodd"
+            >
+              <g
+                transform="translate(1 1)"
+              >
+                <path
+                  d="M36 18c0-9.94-8.06-18-18-18"
+                  id="Oval-2"
+                  stroke="#4481c3"
+                  stroke-width="2"
+                >
+                  <animatetransform
+                    attributeName="transform"
+                    dur="0.9s"
+                    from="0 18 18"
+                    repeatCount="indefinite"
+                    to="360 18 18"
+                    type="rotate"
+                  />
+                </path>
+                <circle
+                  cx="36"
+                  cy="18"
+                  fill="#fff"
+                  r="1"
+                >
+                  <animatetransform
+                    attributeName="transform"
+                    dur="0.9s"
+                    from="0 18 18"
+                    repeatCount="indefinite"
+                    to="360 18 18"
+                    type="rotate"
+                  />
+                </circle>
+              </g>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+`;

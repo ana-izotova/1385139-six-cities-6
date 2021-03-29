@@ -17,7 +17,8 @@ const NewCommentRatingInput: React.FC<NewCommentRatingFormProps> = ({handleRatin
               type="radio"
               checked={rating === starRating}
               onChange={handleRatingChange}
-              disabled={fetchStatus === FetchStatus.SENDING}
+              disabled={fetchStatus === FetchStatus.PENDING}
+              data-testid={`${starRating}-stars`}
             />
             <label
               htmlFor={`${starRating}-stars`}

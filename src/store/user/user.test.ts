@@ -3,8 +3,7 @@ import {createAPI} from "../../services/api";
 import {user} from "./user";
 import {ActionType} from "../action-types";
 import {checkAuth, login, logoutFromSite} from "../api-actions";
-import {ApiRoute, AppRoute, AuthorizationStatus, FetchStatus} from "../../const";
-import {NameSpace} from "../root-reducer";
+import {ApiRoute, AppRoute, AuthorizationStatus, FetchStatus, NameSpace} from "../../const";
 import {UserInitialStateTypes} from "./user-types";
 
 const api = createAPI(() => {});
@@ -15,7 +14,7 @@ describe(`User's reducers should work correctly`, () => {
       authorizationStatus: AuthorizationStatus.NO_AUTH,
       login: ``,
       userAvatar: ``,
-      fetchStatus: FetchStatus.PENDING
+      fetchStatus: FetchStatus.INIT
     };
 
     const getRequireAuthorizationAction = {
@@ -27,7 +26,7 @@ describe(`User's reducers should work correctly`, () => {
       authorizationStatus: AuthorizationStatus.AUTH,
       login: ``,
       userAvatar: ``,
-      fetchStatus: FetchStatus.PENDING
+      fetchStatus: FetchStatus.INIT
     };
 
     expect(user(initialState, getRequireAuthorizationAction)).toEqual(expectedState);
@@ -38,7 +37,7 @@ describe(`User's reducers should work correctly`, () => {
       authorizationStatus: AuthorizationStatus.AUTH,
       login: ``,
       userAvatar: ``,
-      fetchStatus: FetchStatus.PENDING
+      fetchStatus: FetchStatus.INIT
     };
 
     const getSetUserDataAction = {
@@ -53,7 +52,7 @@ describe(`User's reducers should work correctly`, () => {
       authorizationStatus: AuthorizationStatus.AUTH,
       login: `johndoe@mail.com`,
       userAvatar: `johndoe.jpg`,
-      fetchStatus: FetchStatus.PENDING
+      fetchStatus: FetchStatus.INIT
     };
 
     expect(user(initialState, getSetUserDataAction)).toEqual(expectedState);
@@ -64,7 +63,7 @@ describe(`User's reducers should work correctly`, () => {
       authorizationStatus: AuthorizationStatus.AUTH,
       login: `johndoe@mail.com`,
       userAvatar: `johndoe.jpg`,
-      fetchStatus: FetchStatus.PENDING
+      fetchStatus: FetchStatus.INIT
     };
 
     const getLogoutAction = {
@@ -76,7 +75,7 @@ describe(`User's reducers should work correctly`, () => {
       authorizationStatus: AuthorizationStatus.NO_AUTH,
       login: `johndoe@mail.com`,
       userAvatar: `johndoe.jpg`,
-      fetchStatus: FetchStatus.PENDING
+      fetchStatus: FetchStatus.INIT
     };
 
     expect(user(initialState, getLogoutAction)).toEqual(expectedState);
@@ -87,19 +86,19 @@ describe(`User's reducers should work correctly`, () => {
       authorizationStatus: AuthorizationStatus.AUTH,
       login: ``,
       userAvatar: ``,
-      fetchStatus: FetchStatus.PENDING
+      fetchStatus: FetchStatus.INIT
     };
 
     const getChangeFetchStatusAction = {
       type: ActionType.CHANGE_FETCH_STATUS,
-      payload: {reducerName: NameSpace.USER, status: FetchStatus.SENDING}
+      payload: {reducerName: NameSpace.USER, status: FetchStatus.PENDING}
     };
 
     const expectedState: UserInitialStateTypes = {
       authorizationStatus: AuthorizationStatus.AUTH,
       login: ``,
       userAvatar: ``,
-      fetchStatus: FetchStatus.SENDING
+      fetchStatus: FetchStatus.PENDING
     };
 
     expect(user(initialState, getChangeFetchStatusAction)).toEqual(expectedState);
@@ -110,19 +109,19 @@ describe(`User's reducers should work correctly`, () => {
       authorizationStatus: AuthorizationStatus.AUTH,
       login: ``,
       userAvatar: ``,
-      fetchStatus: FetchStatus.PENDING
+      fetchStatus: FetchStatus.INIT
     };
 
     const getChangeFetchStatusAction = {
       type: ActionType.CHANGE_FETCH_STATUS,
-      payload: {reducerName: NameSpace.ALL_OFFERS, status: FetchStatus.SENDING}
+      payload: {reducerName: NameSpace.ALL_OFFERS, status: FetchStatus.PENDING}
     };
 
     const expectedState: UserInitialStateTypes = {
       authorizationStatus: AuthorizationStatus.AUTH,
       login: ``,
       userAvatar: ``,
-      fetchStatus: FetchStatus.PENDING
+      fetchStatus: FetchStatus.INIT
     };
 
     expect(user(initialState, getChangeFetchStatusAction)).toEqual(expectedState);
@@ -156,6 +155,52 @@ describe(`Async operations work correctly`, () => {
       });
   });
 
+  it(`Should catch errors correctly when call to /login`, () => {
+    const apiMock = new MockAdapter(api);
+    const dispatch = jest.fn();
+    const checkAuthLoader = checkAuth();
+
+    apiMock
+      .onGet(ApiRoute.LOGIN)
+      .reply(401);
+
+    return checkAuthLoader(dispatch, () => {}, api)
+      .catch(() => {
+        expect(dispatch).toHaveBeenCalledTimes(2);
+        expect(dispatch).toHaveBeenNthCalledWith(1, {
+          type: ActionType.REQUIRE_AUTHORIZATION,
+          payload: AuthorizationStatus.NO_AUTH
+        });
+        expect(dispatch).toHaveBeenNthCalledWith(2, {
+          type: ActionType.CHANGE_FETCH_STATUS,
+          payload: {status: FetchStatus.ERROR, reducerName: NameSpace.USER}
+        });
+      });
+  });
+
+  it(`Should catch errors correctly when call to /login with wrong data`, () => {
+    const apiMock = new MockAdapter(api);
+    const dispatch = jest.fn();
+    const loginLoader = login({login: `jondoe@mail.com`, password: `12345`});
+
+    apiMock
+      .onPost(ApiRoute.LOGIN)
+      .reply(401);
+
+    return loginLoader(dispatch, () => {}, api)
+      .catch(() => {
+        expect(dispatch).toHaveBeenCalledTimes(2);
+        expect(dispatch).toHaveBeenNthCalledWith(1, {
+          type: ActionType.REQUIRE_AUTHORIZATION,
+          payload: AuthorizationStatus.NO_AUTH
+        });
+        expect(dispatch).toHaveBeenNthCalledWith(2, {
+          type: ActionType.CHANGE_FETCH_STATUS,
+          payload: {status: FetchStatus.ERROR, reducerName: NameSpace.USER}
+        });
+      });
+  });
+
   it(`Should make a correct call to /login and get login data`, () => {
     const apiMock = new MockAdapter(api);
     const dispatch = jest.fn();
@@ -170,20 +215,24 @@ describe(`Async operations work correctly`, () => {
 
     return loginLoader(dispatch, () => {}, api)
       .then(() => {
-        expect(dispatch).toHaveBeenCalledTimes(4);
+        expect(dispatch).toHaveBeenCalledTimes(5);
         expect(dispatch).toHaveBeenNthCalledWith(1, {
+          type: ActionType.CHANGE_FETCH_STATUS,
+          payload: {status: FetchStatus.PENDING, reducerName: NameSpace.USER}
+        });
+        expect(dispatch).toHaveBeenNthCalledWith(2, {
           type: ActionType.SET_USER_DATA,
           payload: {login: `jondoe@mail.com`, userAvatar: `avatar.jpg`}
         });
-        expect(dispatch).toHaveBeenNthCalledWith(2, {
+        expect(dispatch).toHaveBeenNthCalledWith(3, {
           type: ActionType.REQUIRE_AUTHORIZATION,
           payload: AuthorizationStatus.AUTH
         });
-        expect(dispatch).toHaveBeenNthCalledWith(3, {
+        expect(dispatch).toHaveBeenNthCalledWith(4, {
           type: ActionType.CHANGE_FETCH_STATUS,
           payload: {status: FetchStatus.DONE, reducerName: NameSpace.USER}
         });
-        expect(dispatch).toHaveBeenNthCalledWith(4, {
+        expect(dispatch).toHaveBeenNthCalledWith(5, {
           type: ActionType.REDIRECT_TO_ROUTE,
           payload: AppRoute.MAIN_SCREEN
         });

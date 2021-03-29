@@ -1,90 +1,30 @@
 import {allOffers} from "./all-offers";
 import {ActionType} from "../action-types";
-import {ApiRoute, Cities, FavoriteStatus, FetchStatus, SortType} from "../../const";
+import {
+  ApiRoute,
+  Cities,
+  FavoriteStatus,
+  FetchStatus,
+  SortType,
+  NameSpace, HttpCode,
+} from "../../const";
 import {AllOffersInitialStateTypes} from "./all-offers-types";
 import {createAPI} from "../../services/api";
-import {adaptToClient} from "../../utils/adapters";
-import {NameSpace} from "../root-reducer";
 import {fetchOffersData, changeCardFavoriteStatus} from "../api-actions";
 import MockAdapter from "axios-mock-adapter";
+import {
+  testOffer as testOffer1,
+  testOffer2,
+  testOfferFavorited,
+} from "../../test-mocks/server-data-mock";
+import {
+  adaptedTestOffer as adaptedTestOffer1,
+  adaptedTestOffer2,
+  adaptedTestOffer2Favorited,
+  adaptedTestOfferFavorited,
+} from "../../test-mocks/adapted-data-mock";
 
 const api = createAPI(() => {});
-const testOffer1 = {
-  "city": {
-    "name": `Paris`,
-    "location": {
-      "latitude": 48.85661,
-      "longitude": 2.351499,
-      "zoom": 13,
-    },
-  },
-  "preview_image": `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/16.jpg`,
-  "images": [
-    `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/7.jpg`,
-    `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/8.jpg`,
-  ],
-  "title": `The house among olive `,
-  "is_favorite": false,
-  "is_premium": true,
-  "rating": 4,
-  "type": `room`,
-  "bedrooms": 2,
-  "max_adults": 2,
-  "price": 500,
-  "goods": [`Breakfast`, `Air conditioning`],
-  "host": {
-    "id": 25,
-    "name": `Madelina`,
-    "is_pro": true,
-    "avatar_url": `img/avatar-madelina.jpg`,
-  },
-  "description": `Relax, rejuvenate and unplug in this ultimate rustic getaway experience in the country.`,
-  "location": {
-    "latitude": 48.83861,
-    "longitude": 2.350499,
-    "zoom": 16,
-  },
-  "id": 1,
-};
-const testOffer2 = {
-  "city": {
-    "name": `Paris`,
-    "location": {
-      "latitude": 48.85661,
-      "longitude": 2.351499,
-      "zoom": 13,
-    },
-  },
-  "preview_image": `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/16.jpg`,
-  "images": [
-    `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/7.jpg`,
-    `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/8.jpg`,
-  ],
-  "title": `The house among olive `,
-  "is_favorite": false,
-  "is_premium": true,
-  "rating": 4,
-  "type": `room`,
-  "bedrooms": 2,
-  "max_adults": 2,
-  "price": 500,
-  "goods": [`Breakfast`, `Air conditioning`],
-  "host": {
-    "id": 25,
-    "name": `Madelina`,
-    "is_pro": true,
-    "avatar_url": `img/avatar-madelina.jpg`,
-  },
-  "description": `Relax, rejuvenate and unplug in this ultimate rustic getaway experience in the country.`,
-  "location": {
-    "latitude": 48.83861,
-    "longitude": 2.350499,
-    "zoom": 16,
-  },
-  "id": 2,
-};
-const adaptedTestOffer1 = adaptToClient(testOffer1);
-const adaptedTestOffer2 = adaptToClient(testOffer2);
 
 describe(`All offers' reducers work correctly`, () => {
   it(`Reducer should add offers to the state and change isDataLoaded and favoritesHaveBeenChanged flags`, () => {
@@ -94,12 +34,13 @@ describe(`All offers' reducers work correctly`, () => {
       currentSort: SortType.POPULAR,
       isDataLoaded: false,
       fetchStatus: FetchStatus.PENDING,
-      favoritesHaveBeenChanged: false
+      favoritesHaveBeenChanged: false,
+      error: null
     };
 
     const getLoadAllOffersAction = {
       type: ActionType.LOAD_ALL_OFFERS,
-      payload: [adaptedTestOffer1, adaptedTestOffer2]
+      payload: [adaptedTestOffer1, adaptedTestOffer2],
     };
 
     const expectedState: AllOffersInitialStateTypes = {
@@ -108,10 +49,13 @@ describe(`All offers' reducers work correctly`, () => {
       currentSort: SortType.POPULAR,
       isDataLoaded: true,
       fetchStatus: FetchStatus.PENDING,
-      favoritesHaveBeenChanged: false
+      favoritesHaveBeenChanged: false,
+      error: null
     };
 
-    expect(allOffers(initialState, getLoadAllOffersAction)).toEqual(expectedState);
+    expect(allOffers(initialState, getLoadAllOffersAction)).toEqual(
+        expectedState
+    );
   });
 
   it(`Reducer should change current city in the state and change sort type to default`, () => {
@@ -121,12 +65,13 @@ describe(`All offers' reducers work correctly`, () => {
       currentSort: SortType.TOP_RATED_FIRST,
       isDataLoaded: true,
       fetchStatus: FetchStatus.PENDING,
-      favoritesHaveBeenChanged: false
+      favoritesHaveBeenChanged: false,
+      error: null
     };
 
     const getChangeCurrentCityAction = {
       type: ActionType.CHANGE_CITY,
-      payload: Cities[1]
+      payload: Cities[1],
     };
 
     const expectedState: AllOffersInitialStateTypes = {
@@ -135,10 +80,13 @@ describe(`All offers' reducers work correctly`, () => {
       currentSort: SortType.POPULAR,
       isDataLoaded: true,
       fetchStatus: FetchStatus.PENDING,
-      favoritesHaveBeenChanged: false
+      favoritesHaveBeenChanged: false,
+      error: null
     };
 
-    expect(allOffers(initialState, getChangeCurrentCityAction)).toEqual(expectedState);
+    expect(allOffers(initialState, getChangeCurrentCityAction)).toEqual(
+        expectedState
+    );
   });
 
   it(`Reducer should change sort type in the state`, () => {
@@ -148,12 +96,13 @@ describe(`All offers' reducers work correctly`, () => {
       currentSort: SortType.POPULAR,
       isDataLoaded: true,
       fetchStatus: FetchStatus.PENDING,
-      favoritesHaveBeenChanged: false
+      favoritesHaveBeenChanged: false,
+      error: null
     };
 
     const getChangeSortAction = {
       type: ActionType.CHANGE_SORT,
-      payload: SortType.TOP_RATED_FIRST
+      payload: SortType.TOP_RATED_FIRST,
     };
 
     const expectedState: AllOffersInitialStateTypes = {
@@ -162,7 +111,8 @@ describe(`All offers' reducers work correctly`, () => {
       currentSort: SortType.TOP_RATED_FIRST,
       isDataLoaded: true,
       fetchStatus: FetchStatus.PENDING,
-      favoritesHaveBeenChanged: false
+      favoritesHaveBeenChanged: false,
+      error: null
     };
 
     expect(allOffers(initialState, getChangeSortAction)).toEqual(expectedState);
@@ -175,50 +125,13 @@ describe(`All offers' reducers work correctly`, () => {
       currentSort: SortType.POPULAR,
       isDataLoaded: true,
       fetchStatus: FetchStatus.PENDING,
-      favoritesHaveBeenChanged: false
+      favoritesHaveBeenChanged: false,
+      error: null
     };
-
-    const adaptedTestOffer2Favorited = adaptToClient({
-      "city": {
-        "name": `Paris`,
-        "location": {
-          "latitude": 48.85661,
-          "longitude": 2.351499,
-          "zoom": 13,
-        },
-      },
-      "preview_image": `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/16.jpg`,
-      "images": [
-        `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/7.jpg`,
-        `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/8.jpg`,
-      ],
-      "title": `The house among olive `,
-      "is_favorite": true,
-      "is_premium": true,
-      "rating": 4,
-      "type": `room`,
-      "bedrooms": 2,
-      "max_adults": 2,
-      "price": 500,
-      "goods": [`Breakfast`, `Air conditioning`],
-      "host": {
-        "id": 25,
-        "name": `Madelina`,
-        "is_pro": true,
-        "avatar_url": `img/avatar-madelina.jpg`,
-      },
-      "description": `Relax, rejuvenate and unplug in this ultimate rustic getaway experience in the country.`,
-      "location": {
-        "latitude": 48.83861,
-        "longitude": 2.350499,
-        "zoom": 16,
-      },
-      "id": 2,
-    });
 
     const getChangeFavoriteStatusAction = {
       type: ActionType.CHANGE_FAVORITE_STATUS,
-      payload: adaptedTestOffer2Favorited
+      payload: adaptedTestOffer2Favorited,
     };
 
     const expectedState: AllOffersInitialStateTypes = {
@@ -227,10 +140,44 @@ describe(`All offers' reducers work correctly`, () => {
       currentSort: SortType.POPULAR,
       isDataLoaded: true,
       fetchStatus: FetchStatus.PENDING,
-      favoritesHaveBeenChanged: true
+      favoritesHaveBeenChanged: true,
+      error: null
     };
 
-    expect(allOffers(initialState, getChangeFavoriteStatusAction)).toEqual(expectedState);
+    expect(allOffers(initialState, getChangeFavoriteStatusAction)).toEqual(
+        expectedState
+    );
+  });
+
+  it(`Reducer should return default offers`, () => {
+    const initialState: AllOffersInitialStateTypes = {
+      currentCity: Cities[0],
+      allOffers: [adaptedTestOffer1],
+      currentSort: SortType.POPULAR,
+      isDataLoaded: true,
+      fetchStatus: FetchStatus.PENDING,
+      favoritesHaveBeenChanged: false,
+      error: null
+    };
+
+    const getChangeFavoriteStatusAction = {
+      type: ActionType.CHANGE_FAVORITE_STATUS,
+      payload: adaptedTestOffer2Favorited,
+    };
+
+    const expectedState: AllOffersInitialStateTypes = {
+      currentCity: Cities[0],
+      allOffers: [adaptedTestOffer1],
+      currentSort: SortType.POPULAR,
+      isDataLoaded: true,
+      fetchStatus: FetchStatus.PENDING,
+      favoritesHaveBeenChanged: true,
+      error: null
+    };
+
+    expect(allOffers(initialState, getChangeFavoriteStatusAction)).toEqual(
+        expectedState
+    );
   });
 
   it(`Reducer should change fetch status and favoritesHaveBeenChanged flag`, () => {
@@ -239,13 +186,14 @@ describe(`All offers' reducers work correctly`, () => {
       allOffers: [adaptedTestOffer1, adaptedTestOffer2],
       currentSort: SortType.POPULAR,
       isDataLoaded: true,
-      fetchStatus: FetchStatus.SENDING,
-      favoritesHaveBeenChanged: true
+      fetchStatus: FetchStatus.PENDING,
+      favoritesHaveBeenChanged: true,
+      error: null
     };
 
     const getChangeFetchStatusAction = {
       type: ActionType.CHANGE_FETCH_STATUS,
-      payload: {reducerName: NameSpace.ALL_OFFERS, status: FetchStatus.DONE}
+      payload: {reducerName: NameSpace.ALL_OFFERS, status: FetchStatus.DONE},
     };
 
     const expectedState: AllOffersInitialStateTypes = {
@@ -254,10 +202,13 @@ describe(`All offers' reducers work correctly`, () => {
       currentSort: SortType.POPULAR,
       isDataLoaded: true,
       fetchStatus: FetchStatus.DONE,
-      favoritesHaveBeenChanged: false
+      favoritesHaveBeenChanged: false,
+      error: null
     };
 
-    expect(allOffers(initialState, getChangeFetchStatusAction)).toEqual(expectedState);
+    expect(allOffers(initialState, getChangeFetchStatusAction)).toEqual(
+        expectedState
+    );
   });
 
   it(`Reducer should change fetch status and not favoritesHaveBeenChanged flag`, () => {
@@ -266,13 +217,17 @@ describe(`All offers' reducers work correctly`, () => {
       allOffers: [adaptedTestOffer1, adaptedTestOffer2],
       currentSort: SortType.POPULAR,
       isDataLoaded: true,
-      fetchStatus: FetchStatus.PENDING,
-      favoritesHaveBeenChanged: true
+      fetchStatus: FetchStatus.INIT,
+      favoritesHaveBeenChanged: true,
+      error: null
     };
 
     const getChangeFetchStatusAction = {
       type: ActionType.CHANGE_FETCH_STATUS,
-      payload: {reducerName: NameSpace.ALL_OFFERS, status: FetchStatus.SENDING}
+      payload: {
+        reducerName: NameSpace.ALL_OFFERS,
+        status: FetchStatus.PENDING,
+      },
     };
 
     const expectedState: AllOffersInitialStateTypes = {
@@ -280,11 +235,14 @@ describe(`All offers' reducers work correctly`, () => {
       allOffers: [adaptedTestOffer1, adaptedTestOffer2],
       currentSort: SortType.POPULAR,
       isDataLoaded: true,
-      fetchStatus: FetchStatus.SENDING,
-      favoritesHaveBeenChanged: true
+      fetchStatus: FetchStatus.PENDING,
+      favoritesHaveBeenChanged: true,
+      error: null
     };
 
-    expect(allOffers(initialState, getChangeFetchStatusAction)).toEqual(expectedState);
+    expect(allOffers(initialState, getChangeFetchStatusAction)).toEqual(
+        expectedState
+    );
   });
 
   it(`Reducer shouldn't change fetch status and favoritesHaveBeenChanged flag`, () => {
@@ -293,13 +251,17 @@ describe(`All offers' reducers work correctly`, () => {
       allOffers: [adaptedTestOffer1, adaptedTestOffer2],
       currentSort: SortType.POPULAR,
       isDataLoaded: true,
-      fetchStatus: FetchStatus.PENDING,
-      favoritesHaveBeenChanged: true
+      fetchStatus: FetchStatus.INIT,
+      favoritesHaveBeenChanged: true,
+      error: null
     };
 
     const getChangeFetchStatusAction = {
       type: ActionType.CHANGE_FETCH_STATUS,
-      payload: {reducerName: NameSpace.SINGLE_OFFER, status: FetchStatus.SENDING}
+      payload: {
+        reducerName: NameSpace.SINGLE_OFFER,
+        status: FetchStatus.PENDING,
+      },
     };
 
     const expectedState: AllOffersInitialStateTypes = {
@@ -307,11 +269,82 @@ describe(`All offers' reducers work correctly`, () => {
       allOffers: [adaptedTestOffer1, adaptedTestOffer2],
       currentSort: SortType.POPULAR,
       isDataLoaded: true,
-      fetchStatus: FetchStatus.PENDING,
-      favoritesHaveBeenChanged: true
+      fetchStatus: FetchStatus.INIT,
+      favoritesHaveBeenChanged: true,
+      error: null
     };
 
-    expect(allOffers(initialState, getChangeFetchStatusAction)).toEqual(expectedState);
+    expect(allOffers(initialState, getChangeFetchStatusAction)).toEqual(
+        expectedState
+    );
+  });
+
+  it(`Reducer should change error status`, () => {
+    const initialState: AllOffersInitialStateTypes = {
+      currentCity: Cities[0],
+      allOffers: [adaptedTestOffer1, adaptedTestOffer2],
+      currentSort: SortType.POPULAR,
+      isDataLoaded: true,
+      fetchStatus: FetchStatus.INIT,
+      favoritesHaveBeenChanged: true,
+      error: null
+    };
+
+    const getChangeErrorStatusAction = {
+      type: ActionType.CHANGE_ERROR_STATUS,
+      payload: {
+        reducerName: NameSpace.ALL_OFFERS,
+        errorCode: HttpCode.NOT_FOUND
+      },
+    };
+
+    const expectedState: AllOffersInitialStateTypes = {
+      currentCity: Cities[0],
+      allOffers: [adaptedTestOffer1, adaptedTestOffer2],
+      currentSort: SortType.POPULAR,
+      isDataLoaded: true,
+      fetchStatus: FetchStatus.INIT,
+      favoritesHaveBeenChanged: true,
+      error: HttpCode.NOT_FOUND
+    };
+
+    expect(allOffers(initialState, getChangeErrorStatusAction)).toEqual(
+        expectedState
+    );
+  });
+
+  it(`Reducer shouldn't change error status`, () => {
+    const initialState: AllOffersInitialStateTypes = {
+      currentCity: Cities[0],
+      allOffers: [adaptedTestOffer1, adaptedTestOffer2],
+      currentSort: SortType.POPULAR,
+      isDataLoaded: true,
+      fetchStatus: FetchStatus.INIT,
+      favoritesHaveBeenChanged: true,
+      error: null
+    };
+
+    const getChangeErrorStatusAction = {
+      type: ActionType.CHANGE_ERROR_STATUS,
+      payload: {
+        reducerName: NameSpace.SINGLE_OFFER,
+        errorCode: HttpCode.NOT_FOUND
+      },
+    };
+
+    const expectedState: AllOffersInitialStateTypes = {
+      currentCity: Cities[0],
+      allOffers: [adaptedTestOffer1, adaptedTestOffer2],
+      currentSort: SortType.POPULAR,
+      isDataLoaded: true,
+      fetchStatus: FetchStatus.INIT,
+      favoritesHaveBeenChanged: true,
+      error: null
+    };
+
+    expect(allOffers(initialState, getChangeErrorStatusAction)).toEqual(
+        expectedState
+    );
   });
 });
 
@@ -321,16 +354,61 @@ describe(`Async operations should work correctly`, () => {
     const dispatch = jest.fn();
     const fetchOffersDataLoader = fetchOffersData();
 
-    apiMock
-      .onGet(ApiRoute.HOTELS)
-      .reply(200, [testOffer1, testOffer2]);
+    apiMock.onGet(ApiRoute.HOTELS).reply(200, [testOffer1, testOffer2]);
+
+    return fetchOffersDataLoader(dispatch, () => {}, api).then(() => {
+      expect(dispatch).toHaveBeenCalledTimes(4);
+      expect(dispatch).toHaveBeenNthCalledWith(1, {
+        type: ActionType.CHANGE_ERROR_STATUS,
+        payload: {
+          errorCode: null,
+          reducerName: NameSpace.ALL_OFFERS,
+        }
+      });
+      expect(dispatch).toHaveBeenNthCalledWith(2, {
+        type: ActionType.CHANGE_FETCH_STATUS,
+        payload: {
+          status: FetchStatus.PENDING,
+          reducerName: NameSpace.ALL_OFFERS,
+        }
+      });
+      expect(dispatch).toHaveBeenNthCalledWith(3, {
+        type: ActionType.LOAD_ALL_OFFERS,
+        payload: [adaptedTestOffer1, adaptedTestOffer2],
+      });
+      expect(dispatch).toHaveBeenNthCalledWith(4, {
+        type: ActionType.CHANGE_FETCH_STATUS,
+        payload: {
+          status: FetchStatus.DONE,
+          reducerName: NameSpace.ALL_OFFERS,
+        }
+      });
+    });
+  });
+
+  it(`Should catch errors correctly when call to /hotels`, () => {
+    const apiMock = new MockAdapter(api);
+    const dispatch = jest.fn();
+    const fetchOffersDataLoader = fetchOffersData();
+
+    apiMock.onGet(ApiRoute.HOTELS).reply(400);
 
     return fetchOffersDataLoader(dispatch, () => {}, api)
-      .then(() => {
-        expect(dispatch).toHaveBeenCalledTimes(1);
+      .catch(() => {
+        expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch).toHaveBeenNthCalledWith(1, {
-          type: ActionType.LOAD_ALL_OFFERS,
-          payload: [adaptedTestOffer1, adaptedTestOffer2]
+          type: ActionType.CHANGE_ERROR_STATUS,
+          payload: {
+            errorCode: 400,
+            reducerName: NameSpace.ALL_OFFERS,
+          }
+        });
+        expect(dispatch).toHaveBeenNthCalledWith(2, {
+          type: ActionType.CHANGE_FETCH_STATUS,
+          payload: {
+            status: FetchStatus.ERROR,
+            reducerName: NameSpace.ALL_OFFERS,
+          }
         });
       });
   });
@@ -340,61 +418,54 @@ describe(`Async operations should work correctly`, () => {
     const dispatch = jest.fn();
     const testOfferId = 1;
     const favoriteStatus = FavoriteStatus.FAVORITE;
-    const changeCardFavoriteStatusLoader = changeCardFavoriteStatus(testOfferId, favoriteStatus);
-
-    const testOfferFavorited = {
-      "city": {
-        "name": `Paris`,
-        "location": {
-          "latitude": 48.85661,
-          "longitude": 2.351499,
-          "zoom": 13,
-        },
-      },
-      "preview_image": `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/16.jpg`,
-      "images": [
-        `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/7.jpg`,
-        `https://assets.htmlacademy.ru/intensives/javascript-3/hotel/8.jpg`,
-      ],
-      "title": `The house among olive `,
-      "is_favorite": true,
-      "is_premium": true,
-      "rating": 4,
-      "type": `room`,
-      "bedrooms": 2,
-      "max_adults": 2,
-      "price": 500,
-      "goods": [`Breakfast`, `Air conditioning`],
-      "host": {
-        "id": 25,
-        "name": `Madelina`,
-        "is_pro": true,
-        "avatar_url": `img/avatar-madelina.jpg`,
-      },
-      "description": `Relax, rejuvenate and unplug in this ultimate rustic getaway experience in the country.`,
-      "location": {
-        "latitude": 48.83861,
-        "longitude": 2.350499,
-        "zoom": 16,
-      },
-      "id": 1,
-    };
-    const adaptedTestOfferFavorited = adaptToClient(testOfferFavorited);
+    const changeCardFavoriteStatusLoader = changeCardFavoriteStatus(
+        testOfferId,
+        favoriteStatus
+    );
 
     apiMock
       .onPost(`${ApiRoute.FAVORITES}/${testOfferId}/${favoriteStatus}`)
       .reply(200, testOfferFavorited);
 
+    return changeCardFavoriteStatusLoader(dispatch, () => {}, api).then(() => {
+      expect(dispatch).toHaveBeenCalledTimes(2);
+      expect(dispatch).toHaveBeenNthCalledWith(1, {
+        type: ActionType.CHANGE_FAVORITE_STATUS,
+        payload: adaptedTestOfferFavorited,
+      });
+      expect(dispatch).toHaveBeenNthCalledWith(2, {
+        type: ActionType.CHANGE_FETCH_STATUS,
+        payload: {
+          status: FetchStatus.DONE,
+          reducerName: NameSpace.ALL_OFFERS,
+        },
+      });
+    });
+  });
+
+  it(`Should catch errors correctly when call to /favorites/id/status`, () => {
+    const apiMock = new MockAdapter(api);
+    const dispatch = jest.fn();
+    const testOfferId = 1;
+    const favoriteStatus = FavoriteStatus.FAVORITE;
+    const changeCardFavoriteStatusLoader = changeCardFavoriteStatus(
+        testOfferId,
+        favoriteStatus
+    );
+
+    apiMock
+      .onPost(`${ApiRoute.FAVORITES}/${testOfferId}/${favoriteStatus}`)
+      .reply(400);
+
     return changeCardFavoriteStatusLoader(dispatch, () => {}, api)
-      .then(() => {
-        expect(dispatch).toHaveBeenCalledTimes(2);
+      .catch(() => {
+        expect(dispatch).toHaveBeenCalledTimes(1);
         expect(dispatch).toHaveBeenNthCalledWith(1, {
-          type: ActionType.CHANGE_FAVORITE_STATUS,
-          payload: adaptedTestOfferFavorited
-        });
-        expect(dispatch).toHaveBeenNthCalledWith(2, {
           type: ActionType.CHANGE_FETCH_STATUS,
-          payload: {status: FetchStatus.DONE, reducerName: NameSpace.ALL_OFFERS}
+          payload: {
+            status: FetchStatus.ERROR,
+            reducerName: NameSpace.ALL_OFFERS,
+          }
         });
       });
   });

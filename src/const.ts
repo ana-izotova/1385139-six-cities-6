@@ -1,9 +1,12 @@
 import {City} from "./types";
 
-export const CARDS_PER_PAGE = 5;
-export const IMAGES_PER_PAGE = 6;
 export const BLUE_COLOR = `#4481c3`;
-export const COMMENT_MIN_LENGTH = 50;
+export const IMAGES_PER_PAGE = 6;
+export const COMMENTS_PER_PAGE = 10;
+export const Comment = {
+  MIN_LENGTH: 50,
+  MAX_LENGTH: 300
+};
 
 export const Cities: Array<City> = [
   {
@@ -89,8 +92,8 @@ export enum FavoriteStatus {
 }
 
 export enum FetchStatus {
+  INIT = `INIT`,
   PENDING = `PENDING`,
-  SENDING = `SENDING`,
   DONE = `DONE`,
   ERROR = `ERROR`
 }
@@ -102,3 +105,15 @@ export const RatingTitles: Array<string> = [
   `badly`,
   `terribly`,
 ];
+
+export enum NameSpace {
+  USER = `USER`,
+  ALL_OFFERS = `ALL_OFFERS`,
+  SINGLE_OFFER = `SINGLE_OFFER`,
+  FAVORITES = `FAVORITES`
+}
+
+export enum HttpCode {
+  UNAUTHORIZED = 401,
+  NOT_FOUND = 404
+}

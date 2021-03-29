@@ -7,24 +7,23 @@ import Map from "../map/map";
 import Header from "../header/header";
 import LoaderScreensaver from "../loader-screensaver/loader-screensaver";
 import {RoomScreenProps} from "./room-screen-types";
-import {AuthorizationStatus, IMAGES_PER_PAGE, FetchStatus, FavoriteStatus, AppRoute} from "../../const";
-import NotFoundScreen from "../not-found-screen/not-found-screen";
+import {AuthorizationStatus, IMAGES_PER_PAGE, FetchStatus, FavoriteStatus, AppRoute, COMMENTS_PER_PAGE} from "../../const";
 import {useDispatch, useSelector} from "react-redux";
-import {NameSpace, RootStateType} from "../../store/root-reducer";
+import {RootStateType} from "../../store/root-reducer";
 import {
-  changeCardFavoriteStatus,
   changeFavoriteOfferScreenStatus,
   fetchOfferComments,
   fetchOffersNearby,
   fetchSingleOffersData
 } from "../../store/api-actions";
-import {changeFetchStatus, clearSingleOffersData} from "../../store/actions";
+import {clearSingleOffersData} from "../../store/actions";
 import browserHistory from "../../browser-history";
+import ErrorScreen from "../error-screen/error-screen";
 
 const RoomScreen: React.FC<RoomScreenProps> = ({cardId}) => {
-  const {isOfferLoaded, offer, offersNearby, comments} = useSelector((state: RootStateType) => state.SINGLE_OFFER);
+  const {isOfferLoaded, offer, offersNearby, comments, error} = useSelector((state: RootStateType) => state.SINGLE_OFFER);
   const {authorizationStatus} = useSelector((state: RootStateType) => state.USER);
-  const {favoritesHaveBeenChanged, allOffers, fetchStatus: changeFavoriteFetchStatus} = useSelector((state: RootStateType) => state.ALL_OFFERS);
+  const {favoritesHaveBeenChanged, allOffers, fetchStatus} = useSelector((state: RootStateType) => state.ALL_OFFERS);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -38,30 +37,22 @@ const RoomScreen: React.FC<RoomScreenProps> = ({cardId}) => {
 
   useEffect(() => {
     dispatch(fetchOffersNearby(cardId));
-    // dispatch(fetchSingleOffersData(cardId));
   }, [favoritesHaveBeenChanged, cardId, dispatch, allOffers]);
 
   useLayoutEffect(() => {
     if (!isOfferLoaded) {
       return;
     }
-    try {
-      window.scroll({
-        top: 0,
-        left: 0,
-        behavior: `smooth`,
-      });
-    } catch (error) {
-      window.scrollTo(0, 0);
-    }
+
+    window.scrollTo(0, 0);
   }, [cardId, isOfferLoaded]);
+
+  if (error) {
+    return <ErrorScreen errorCode={error} />;
+  }
 
   if (!isOfferLoaded) {
     return <LoaderScreensaver />;
-  }
-
-  if (!offer) {
-    return <NotFoundScreen />;
   }
 
   const {
@@ -90,8 +81,7 @@ const RoomScreen: React.FC<RoomScreenProps> = ({cardId}) => {
       const statusToChange = isFavorite
         ? FavoriteStatus.UNFAVORED
         : FavoriteStatus.FAVORITE;
-      dispatch(changeCardFavoriteStatus(cardId, statusToChange));
-      dispatch(changeFetchStatus(FetchStatus.SENDING, NameSpace.ALL_OFFERS));
+      dispatch(changeFavoriteOfferScreenStatus(cardId, statusToChange));
     }
   };
 
@@ -127,10 +117,10 @@ const RoomScreen: React.FC<RoomScreenProps> = ({cardId}) => {
               <div className="property__name-wrapper">
                 <h1 className="property__name">{title}</h1>
                 <button
-                  className={`property__bookmark-button ${isFavorite ? `property__bookmark-button--active` : ``} button ${changeFavoriteFetchStatus === FetchStatus.ERROR ? `error-shake` : ``}`}
+                  className={`property__bookmark-button ${isFavorite ? `property__bookmark-button--active` : ``} button ${fetchStatus === FetchStatus.ERROR ? `error-shake` : ``}`}
                   type="button"
                   onClick={handleFavoriteClick}
-                  disabled={changeFavoriteFetchStatus === FetchStatus.SENDING}
+                  disabled={fetchStatus === FetchStatus.PENDING}
                 >
                   <svg
                     className="property__bookmark-icon"
@@ -199,11 +189,10 @@ const RoomScreen: React.FC<RoomScreenProps> = ({cardId}) => {
               </div>
               <section className="property__reviews reviews">
                 <h2 className="reviews__title">
-                  Reviews &middot;{` `}
-                  <span className="reviews__amount">{comments.length}</span>
+                  Reviews <span className="reviews__amount">{comments.length}</span>
                 </h2>
                 <ul className="reviews__list">
-                  {comments.map((comment) => (
+                  {comments.slice(0, COMMENTS_PER_PAGE).map((comment) => (
                     <CommentItem {...comment} key={comment.id} />
                   ))}
                 </ul>

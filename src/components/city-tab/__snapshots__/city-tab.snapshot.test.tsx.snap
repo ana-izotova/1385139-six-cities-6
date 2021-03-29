@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`City tabs should render correctly City tab should render correctly for current city 1`] = `
+<div>
+  <li
+    class="locations__item"
+  >
+    <a
+      class="locations__item-link tabs__item tabs__item--active"
+      href="#"
+    >
+      <span>
+        Paris
+      </span>
+    </a>
+  </li>
+</div>
+`;
+
+exports[`City tabs should render correctly City tab should render correctly for non-current city 1`] = `
+<div>
+  <li
+    class="locations__item"
+  >
+    <a
+      class="locations__item-link tabs__item "
+      href="#"
+    >
+      <span>
+        Cologne
+      </span>
+    </a>
+  </li>
+</div>
+`;

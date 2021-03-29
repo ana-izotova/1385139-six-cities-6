@@ -1,7 +1,7 @@
 import React, {FormEvent, useCallback, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {RootStateType} from "../../store/root-reducer";
-import {FetchStatus, COMMENT_MIN_LENGTH} from "../../const";
+import {FetchStatus, Comment} from "../../const";
 import {sendComment} from "../../store/api-actions";
 import NewCommentRatingInput from "../new-comment-rating-inputs/new-comment-rating-input";
 
@@ -54,13 +54,14 @@ const NewCommentForm: React.FC<NewCommentFormProps> = ({offerId}) => {
         placeholder="Tell how was your stay, what you like and what can be improved"
         onChange={({target}) => setCommentText(target.value)}
         value={commentText}
-        disabled={sendCommentFetchStatus === FetchStatus.SENDING}
+        data-testid="review"
+        disabled={sendCommentFetchStatus === FetchStatus.PENDING}
       ></textarea>
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
           To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay
           with at least <b className="reviews__text-amount">
-            {COMMENT_MIN_LENGTH} characters
+            {Comment.MIN_LENGTH} characters
           </b>
           .
         </p>
@@ -68,9 +69,10 @@ const NewCommentForm: React.FC<NewCommentFormProps> = ({offerId}) => {
           className={`reviews__submit form__submit button ${sendCommentFetchStatus === FetchStatus.ERROR ? `error-shake` : ``}`}
           type="submit"
           disabled={
-            commentText.length < COMMENT_MIN_LENGTH ||
+            commentText.length < Comment.MIN_LENGTH ||
+            commentText.length > Comment.MAX_LENGTH ||
             rating === null ||
-            sendCommentFetchStatus === FetchStatus.SENDING
+            sendCommentFetchStatus === FetchStatus.PENDING
           }
         >
           Submit

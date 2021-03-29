@@ -7,24 +7,8 @@ import {RootStateType} from "../../store/root-reducer";
 import {fetchFavoriteCards} from "../../store/api-actions";
 import LoaderScreensaver from "../loader-screensaver/loader-screensaver";
 import Footer from "../footer/footer";
-
-const EmptyFavorites: React.FC = () => {
-  return (
-    <section className="favorites favorites--empty">
-      <h1 className="visually-hidden">Favorites (empty)</h1>
-      <div className="favorites__status-wrapper">
-        <b className="favorites__status">Nothing yet saved.</b>
-        <p className="favorites__status-description">
-          Save properties to narrow down search or plan your future trips.
-        </p>
-      </div>
-    </section>
-  );
-};
-
-interface FavoriteCardsProps {
-  favoriteCards: Array<OfferCard>
-}
+import FavoritesScreenEmpty from "../favorites-screen-empty/favorites-screen-empty";
+import {FavoriteCardsProps} from "./favprites-screen-types";
 
 const FavoriteCards: React.FC<FavoriteCardsProps> = ({favoriteCards}) => {
   const favoriteCardsSortedByCity = favoriteCards.reduce<Record<string, Array<OfferCard>>>((acc, card) => {
@@ -83,7 +67,7 @@ const FavoritesScreen: React.FC = () => {
           {favoriteCards.length ? (
             <FavoriteCards favoriteCards={favoriteCards} />
           ) : (
-            <EmptyFavorites />
+            <FavoritesScreenEmpty />
           )}
         </div>
       </main>

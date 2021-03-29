@@ -6,5 +6,6 @@ export interface AllOffersInitialStateTypes {
   currentSort: string,
   isDataLoaded: boolean,
   fetchStatus: string,
-  favoritesHaveBeenChanged: boolean
+  favoritesHaveBeenChanged: boolean,
+  error: number
 }

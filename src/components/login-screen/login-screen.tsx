@@ -2,8 +2,7 @@ import React, {FormEvent, useRef} from "react";
 import Header from "../header/header";
 import {useDispatch, useSelector} from "react-redux";
 import {login} from "../../store/api-actions";
-import {NameSpace, RootStateType} from "../../store/root-reducer";
-import {changeFetchStatus} from "../../store/actions";
+import {RootStateType} from "../../store/root-reducer";
 import {FetchStatus} from "../../const";
 
 const LoginScreen: React.FC = () => {
@@ -19,7 +18,6 @@ const LoginScreen: React.FC = () => {
       login: emailRef.current.value,
       password: passwordRef.current.value,
     }));
-    dispatch(changeFetchStatus(FetchStatus.SENDING, NameSpace.USER));
   };
 
   return (
@@ -37,31 +35,35 @@ const LoginScreen: React.FC = () => {
               onSubmit={handleSubmit}
             >
               <div className="login__input-wrapper form__input-wrapper">
-                <label className="visually-hidden">E-mail</label>
+                <label className="visually-hidden" htmlFor="email">E-mail</label>
                 <input
                   ref={emailRef}
                   className="login__input form__input"
                   type="email"
                   name="email"
                   placeholder="Email"
+                  id="email"
+                  data-testid="email"
                   required
                 />
               </div>
               <div className="login__input-wrapper form__input-wrapper">
-                <label className="visually-hidden">Password</label>
+                <label className="visually-hidden" htmlFor="password">Password</label>
                 <input
                   ref={passwordRef}
                   className="login__input form__input"
                   type="password"
                   name="password"
                   placeholder="Password"
+                  id="password"
+                  data-testid="password"
                   required
                 />
               </div>
               <button
                 className="login__submit form__submit button"
                 type="submit"
-                disabled={userFetchStatus === FetchStatus.SENDING}
+                disabled={userFetchStatus === FetchStatus.PENDING}
               >
                 Sign in
               </button>

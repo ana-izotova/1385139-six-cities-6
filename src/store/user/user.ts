@@ -2,13 +2,13 @@ import {createReducer} from "@reduxjs/toolkit";
 import {changeFetchStatus, logout, requireAuthorization, setUserData} from "../actions";
 import {AuthorizationStatus, FetchStatus} from "../../const";
 import {UserInitialStateTypes} from "./user-types";
-import {NameSpace} from "../root-reducer";
+import {NameSpace} from "../../const";
 
-const initialState: UserInitialStateTypes = {
+export const initialState: UserInitialStateTypes = {
   authorizationStatus: AuthorizationStatus.NO_AUTH,
   login: ``,
   userAvatar: ``,
-  fetchStatus: FetchStatus.PENDING
+  fetchStatus: FetchStatus.INIT
 };
 
 export const user = createReducer(initialState, (builder) => {
