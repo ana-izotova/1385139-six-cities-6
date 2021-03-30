@@ -61,5 +61,3 @@ export interface OfferCard {
   host: Host,
   city: City
 }
-
-export type OfferCards = { cards: Array<OfferCard> };

@@ -28,7 +28,7 @@ const NewCommentForm: React.FC<NewCommentFormProps> = ({offerId}) => {
     dispatch(sendComment(offerId, {comment: commentText, rating}));
   };
 
-  const handleRatingChange = useCallback(
+  const onRatingChange = useCallback(
       (evt) => {
         const value = Number(evt.target.value);
         setRating(value);
@@ -44,7 +44,7 @@ const NewCommentForm: React.FC<NewCommentFormProps> = ({offerId}) => {
       </label>
       <NewCommentRatingInput
         rating={rating}
-        handleRatingChange={handleRatingChange}
+        handleRatingChange={onRatingChange}
         fetchStatus={sendCommentFetchStatus}
       />
       <textarea

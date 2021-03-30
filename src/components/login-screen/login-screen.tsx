@@ -3,22 +3,27 @@ import Header from "../header/header";
 import {useDispatch, useSelector} from "react-redux";
 import {login} from "../../store/api-actions";
 import {RootStateType} from "../../store/root-reducer";
-import {FetchStatus} from "../../const";
+import {AppRoute, AuthorizationStatus, FetchStatus} from "../../const";
+import browserHistory from "../../browser-history";
 
 const LoginScreen: React.FC = () => {
-  const {fetchStatus: userFetchStatus} = useSelector((state: RootStateType) => state.USER);
+  const {fetchStatus: userFetchStatus, authorizationStatus} = useSelector((state: RootStateType) => state.USER);
 
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
   const dispatch = useDispatch();
-  const handleSubmit = (evt: FormEvent) => {
+  const handleLoginFormSubmit = (evt: FormEvent) => {
     evt.preventDefault();
     dispatch(login({
       login: emailRef.current.value,
       password: passwordRef.current.value,
     }));
   };
+
+  if (authorizationStatus === AuthorizationStatus.AUTH) {
+    browserHistory.push(AppRoute.MAIN_SCREEN);
+  }
 
   return (
     <div className="page page--gray page--login">
@@ -32,7 +37,7 @@ const LoginScreen: React.FC = () => {
               className="login__form form"
               action="#"
               method="post"
-              onSubmit={handleSubmit}
+              onSubmit={handleLoginFormSubmit}
             >
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden" htmlFor="email">E-mail</label>
