@@ -1,4 +1,4 @@
-import React, {useEffect, useLayoutEffect} from "react";
+import React, {useEffect} from "react";
 import {convertRatingToPercents, capitalize} from "../../utils/common";
 import CommentItem from "../comment-item/comment-item";
 import NewCommentForm from "../new-comment-form/new-comment-form";
@@ -7,23 +7,37 @@ import Map from "../map/map";
 import Header from "../header/header";
 import LoaderScreensaver from "../loader-screensaver/loader-screensaver";
 import {RoomScreenProps} from "./room-screen-types";
-import {AuthorizationStatus, IMAGES_PER_PAGE, FetchStatus, FavoriteStatus, AppRoute, COMMENTS_PER_PAGE} from "../../const";
+import {
+  AuthorizationStatus,
+  IMAGES_PER_PAGE,
+  FetchStatus,
+  FavoriteStatus,
+  AppRoute,
+  COMMENTS_PER_PAGE,
+} from "../../const";
 import {useDispatch, useSelector} from "react-redux";
 import {RootStateType} from "../../store/root-reducer";
 import {
   changeFavoriteOfferScreenStatus,
   fetchOfferComments,
   fetchOffersNearby,
-  fetchSingleOffersData
+  fetchSingleOffersData,
 } from "../../store/api-actions";
 import {clearSingleOffersData} from "../../store/actions";
 import browserHistory from "../../browser-history";
 import ErrorScreen from "../error-screen/error-screen";
+import "./room-screen.css";
 
 const RoomScreen: React.FC<RoomScreenProps> = ({cardId}) => {
-  const {isOfferLoaded, offer, offersNearby, comments, error} = useSelector((state: RootStateType) => state.SINGLE_OFFER);
-  const {authorizationStatus} = useSelector((state: RootStateType) => state.USER);
-  const {favoritesHaveBeenChanged, allOffers, fetchStatus} = useSelector((state: RootStateType) => state.ALL_OFFERS);
+  const {isOfferLoaded, offer, offersNearby, comments, error} = useSelector(
+      (state: RootStateType) => state.SINGLE_OFFER
+  );
+  const {authorizationStatus} = useSelector(
+      (state: RootStateType) => state.USER
+  );
+  const {favoritesHaveBeenChanged, allOffers, fetchStatus} = useSelector(
+      (state: RootStateType) => state.ALL_OFFERS
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -38,14 +52,6 @@ const RoomScreen: React.FC<RoomScreenProps> = ({cardId}) => {
   useEffect(() => {
     dispatch(fetchOffersNearby(cardId));
   }, [favoritesHaveBeenChanged, cardId, dispatch, allOffers]);
-
-  useLayoutEffect(() => {
-    if (!isOfferLoaded) {
-      return;
-    }
-
-    window.scrollTo(0, 0);
-  }, [cardId, isOfferLoaded]);
 
   if (error) {
     return <ErrorScreen errorCode={error} />;
@@ -68,7 +74,7 @@ const RoomScreen: React.FC<RoomScreenProps> = ({cardId}) => {
     host,
     description,
     city,
-    isFavorite
+    isFavorite,
   } = offer;
   const {name: hostName, isPro: hostIsPro, avatarUrl: hostAvatar} = host;
   const ratingInPercents: string = convertRatingToPercents(rating);
@@ -117,7 +123,11 @@ const RoomScreen: React.FC<RoomScreenProps> = ({cardId}) => {
               <div className="property__name-wrapper">
                 <h1 className="property__name">{title}</h1>
                 <button
-                  className={`property__bookmark-button ${isFavorite ? `property__bookmark-button--active` : ``} button ${fetchStatus === FetchStatus.ERROR ? `error-shake` : ``}`}
+                  className={`property__bookmark-button ${
+                    isFavorite ? `property__bookmark-button--active` : ``
+                  } button ${
+                    fetchStatus === FetchStatus.ERROR ? `error-shake` : ``
+                  }`}
                   type="button"
                   onClick={handleFavoriteClick}
                   disabled={fetchStatus === FetchStatus.PENDING}
@@ -196,7 +206,7 @@ const RoomScreen: React.FC<RoomScreenProps> = ({cardId}) => {
                     <CommentItem {...comment} key={comment.id} />
                   ))}
                 </ul>
-                {loggedIn && <NewCommentForm offerId={cardId}/>}
+                {loggedIn && <NewCommentForm offerId={cardId} />}
               </section>
             </div>
           </div>

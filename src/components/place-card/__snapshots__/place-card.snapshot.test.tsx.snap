@@ -49,7 +49,7 @@ exports[`Place card should render correctly 1`] = `
           </span>
         </div>
         <button
-          class="place-card__bookmark-button false button"
+          class="place-card__bookmark-button false  button"
           type="button"
         >
           <svg

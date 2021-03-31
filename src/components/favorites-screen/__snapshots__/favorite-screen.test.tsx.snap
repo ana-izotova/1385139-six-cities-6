@@ -283,7 +283,7 @@ exports[`Favorite screen should render correctly Should render favorites list co
                         </span>
                       </div>
                       <button
-                        class="place-card__bookmark-button place-card__bookmark-button--active button"
+                        class="place-card__bookmark-button place-card__bookmark-button--active  button"
                         type="button"
                       >
                         <svg
@@ -398,7 +398,7 @@ exports[`Favorite screen should render correctly Should render favorites list co
                         </span>
                       </div>
                       <button
-                        class="place-card__bookmark-button place-card__bookmark-button--active button"
+                        class="place-card__bookmark-button place-card__bookmark-button--active  button"
                         type="button"
                       >
                         <svg
@@ -520,7 +520,7 @@ exports[`Favorite screen should render correctly Should render favorites list co
                         </span>
                       </div>
                       <button
-                        class="place-card__bookmark-button place-card__bookmark-button--active button"
+                        class="place-card__bookmark-button place-card__bookmark-button--active  button"
                         type="button"
                       >
                         <svg
@@ -661,7 +661,7 @@ exports[`Favorite screen should render correctly Should show loader screensaver 
         Loading, please wait...
       </h1>
       <div
-        class="sc-bdfBwQ fQKiUq"
+        class="loader-container"
       >
         <div
           aria-busy="true"

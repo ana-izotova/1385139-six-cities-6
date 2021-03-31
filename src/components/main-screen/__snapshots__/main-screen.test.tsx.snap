@@ -291,7 +291,7 @@ exports[`Main screen should render correctly Main screen should render correctly
                       </span>
                     </div>
                     <button
-                      class="place-card__bookmark-button place-card__bookmark-button--active button"
+                      class="place-card__bookmark-button place-card__bookmark-button--active  button"
                       type="button"
                     >
                       <svg

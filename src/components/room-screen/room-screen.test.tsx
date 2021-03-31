@@ -6,7 +6,30 @@ import {changeFavoriteOfferScreenStatus} from "../../store/api-actions";
 import {FavoriteStatus} from "../../const";
 import React from "react";
 
-jest.mock(`../../store/api-actions`);
+jest.mock(`../../store/api-actions`, () => {
+  return {
+    changeFavoriteOfferScreenStatus: jest.fn().mockImplementation(() => {
+      return {
+        type: `test`
+      };
+    }),
+    fetchOfferComments: jest.fn().mockImplementation(() => {
+      return {
+        type: `test`
+      };
+    }),
+    fetchOffersNearby: jest.fn().mockImplementation(() => {
+      return {
+        type: `test`
+      };
+    }),
+    fetchSingleOffersData: jest.fn().mockImplementation(() => {
+      return {
+        type: `test`
+      };
+    })
+  };
+});
 
 test(`Change card's favorite status on click`, () => {
   render(
