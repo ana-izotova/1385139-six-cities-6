@@ -10,7 +10,7 @@ const CityTab: React.FC<CityTabProps> = ({city}) => {
   );
   const isCurrentCity: boolean = city.name === currentCity.name;
   const dispatch = useDispatch();
-  const onUserClick = () => dispatch(changeCity(city));
+  const handleCityTabClick = () => dispatch(changeCity(city));
 
   return (
     <li className="locations__item">
@@ -18,7 +18,7 @@ const CityTab: React.FC<CityTabProps> = ({city}) => {
         className={`locations__item-link tabs__item ${
           isCurrentCity ? `tabs__item--active` : ``
         }`}
-        onClick={onUserClick}
+        onClick={handleCityTabClick}
       >
         <span>{city.name}</span>
       </a>

@@ -11,7 +11,7 @@ import FavoritesScreenEmpty from "../favorites-screen-empty/favorites-screen-emp
 import {FavoriteCardsProps} from "./favprites-screen-types";
 
 const FavoriteCards: React.FC<FavoriteCardsProps> = ({favoriteCards}) => {
-  const favoriteCardsSortedByCity = favoriteCards.reduce<Record<string, Array<OfferCard>>>((acc, card) => {
+  const getFavoriteCardsSortedByCity = favoriteCards.reduce<Record<string, Array<OfferCard>>>((acc, card) => {
     const key = card.city.name;
     acc[key] = acc[key] ? [...(acc[key]), card] : [card];
     return acc;
@@ -21,7 +21,7 @@ const FavoriteCards: React.FC<FavoriteCardsProps> = ({favoriteCards}) => {
     <section className="favorites">
       <h1 className="favorites__title">Saved listing</h1>
       <ul className="favorites__list">
-        {Object.entries(favoriteCardsSortedByCity).map((entry) => {
+        {Object.entries(getFavoriteCardsSortedByCity).map((entry) => {
           const [cityName, cards] = entry;
           return (
             <li className="favorites__locations-items" key={cityName}>

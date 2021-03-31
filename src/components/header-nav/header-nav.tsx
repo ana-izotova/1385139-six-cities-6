@@ -9,7 +9,7 @@ const HeaderNav: React.FC = () => {
   const {authorizationStatus, login, userAvatar} = useSelector((state: RootStateType) => state.USER);
 
   const dispatch = useDispatch();
-  const handleLogout = () => {
+  const handleLogoutButtonClick = () => {
     dispatch(logoutFromSite());
   };
 
@@ -40,7 +40,7 @@ const HeaderNav: React.FC = () => {
             <li className="header__nav-item user">
               <Link className="header__nav-link header__nav-link--profile" style={{
                 marginLeft: `10px`
-              }} href="#" to="/" onClick={handleLogout}>
+              }} href="#" to="/" onClick={handleLogoutButtonClick}>
                 <span className="header__user-name user__name">Exit</span>
               </Link>
             </li>
