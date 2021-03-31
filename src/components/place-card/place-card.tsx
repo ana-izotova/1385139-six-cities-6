@@ -3,10 +3,16 @@ import {Link} from "react-router-dom";
 import {ClassNames, PlaceCardProps} from "./place-card-types";
 import {capitalize, convertRatingToPercents} from "../../utils/common";
 import {useDispatch, useSelector} from "react-redux";
-import {AppRoute, AuthorizationStatus, FavoriteStatus, FetchStatus} from "../../const";
+import {
+  AppRoute,
+  AuthorizationStatus,
+  FavoriteStatus,
+  FetchStatus,
+} from "../../const";
 import {changeCardFavoriteStatus} from "../../store/api-actions";
 import {RootStateType} from "../../store/root-reducer";
 import browserHistory from "../../browser-history";
+import "./place-card.css";
 
 const getClassNames = (type: string): ClassNames => {
   let articleClassNames = `${type}__card place-card`;
@@ -43,8 +49,12 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
     cardInfoClassNames,
   } = getClassNames(offerType);
 
-  const {fetchStatus: changeFavoriteFetchStatus} = useSelector((state: RootStateType) => state.ALL_OFFERS);
-  const {authorizationStatus} = useSelector((state: RootStateType) => state.USER);
+  const {fetchStatus} = useSelector(
+      (state: RootStateType) => state.ALL_OFFERS
+  );
+  const {authorizationStatus} = useSelector(
+      (state: RootStateType) => state.USER
+  );
   const dispatch = useDispatch();
 
   const handleMouseHover = () => {
@@ -97,10 +107,10 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
           <button
             className={`place-card__bookmark-button ${
               isFavorite && `place-card__bookmark-button--active`
-            } button`}
+            } ${fetchStatus === FetchStatus.ERROR ? `error-shake` : ``} button`}
             type="button"
             onClick={handleFavoriteClick}
-            disabled={changeFavoriteFetchStatus === FetchStatus.PENDING}
+            disabled={fetchStatus === FetchStatus.PENDING}
           >
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>

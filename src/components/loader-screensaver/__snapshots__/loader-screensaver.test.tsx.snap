@@ -80,7 +80,7 @@ exports[`Favorite screen should render correctly 1`] = `
         Loading, please wait...
       </h1>
       <div
-        class="sc-bdfBwQ fQKiUq"
+        class="loader-container"
       >
         <div
           aria-busy="true"

@@ -3,6 +3,16 @@ import {render} from '@testing-library/react';
 import {TestMock} from "../../test-mocks/test-mock";
 import FavoritesScreen from "./favorites-screen";
 
+jest.mock(`../../store/api-actions`, () => {
+  return {
+    fetchFavoriteCards: jest.fn().mockImplementation(() => {
+      return {
+        type: `test`
+      };
+    })
+  };
+});
+
 describe(`Favorite screen should render correctly`, () => {
   it(`Should render empty favorites list when no favorites`, () => {
     const {container} = render(

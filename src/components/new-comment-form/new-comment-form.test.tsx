@@ -5,7 +5,15 @@ import {TestMock} from "../../test-mocks/test-mock";
 import {sendComment} from "../../store/api-actions";
 import userEvent from "@testing-library/user-event";
 
-jest.mock(`../../store/api-actions`);
+jest.mock(`../../store/api-actions`, () => {
+  return {
+    sendComment: jest.fn().mockImplementation(() => {
+      return {
+        type: `test`
+      };
+    })
+  };
+});
 
 test(`Send new comment logic works correctly`, async () => {
   render(

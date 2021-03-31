@@ -5,7 +5,15 @@ import {TestMock} from "../../test-mocks/test-mock";
 import {login} from "../../store/api-actions";
 import userEvent from "@testing-library/user-event";
 
-jest.mock(`../../store/api-actions`);
+jest.mock(`../../store/api-actions`, () => {
+  return {
+    login: jest.fn().mockImplementation(() => {
+      return {
+        type: `test`
+      };
+    })
+  };
+});
 
 test(`A click on sign in button should fire correct action`, () => {
   render(

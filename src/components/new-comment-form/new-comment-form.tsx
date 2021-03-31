@@ -4,6 +4,7 @@ import {RootStateType} from "../../store/root-reducer";
 import {FetchStatus, Comment} from "../../const";
 import {sendComment} from "../../store/api-actions";
 import NewCommentRatingInput from "../new-comment-rating-inputs/new-comment-rating-input";
+import "./new-comment-form.css";
 
 interface NewCommentFormProps {
   offerId: number

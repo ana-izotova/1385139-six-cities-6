@@ -1,10 +1,10 @@
-import React, {FormEvent, useRef} from "react";
+import React, {FormEvent, useEffect, useRef} from "react";
 import Header from "../header/header";
 import {useDispatch, useSelector} from "react-redux";
 import {login} from "../../store/api-actions";
 import {RootStateType} from "../../store/root-reducer";
 import {AppRoute, AuthorizationStatus, FetchStatus} from "../../const";
-import browserHistory from "../../browser-history";
+import {redirectToRoute} from "../../store/actions";
 
 const LoginScreen: React.FC = () => {
   const {fetchStatus: userFetchStatus, authorizationStatus} = useSelector((state: RootStateType) => state.USER);
@@ -13,6 +13,13 @@ const LoginScreen: React.FC = () => {
   const passwordRef = useRef(null);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (authorizationStatus === AuthorizationStatus.AUTH) {
+      dispatch(redirectToRoute(AppRoute.MAIN_SCREEN));
+    }
+  }, [authorizationStatus, dispatch]);
+
   const handleLoginFormSubmit = (evt: FormEvent) => {
     evt.preventDefault();
     dispatch(login({
@@ -20,10 +27,6 @@ const LoginScreen: React.FC = () => {
       password: passwordRef.current.value,
     }));
   };
-
-  if (authorizationStatus === AuthorizationStatus.AUTH) {
-    browserHistory.push(AppRoute.MAIN_SCREEN);
-  }
 
   return (
     <div className="page page--gray page--login">

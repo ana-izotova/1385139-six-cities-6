@@ -42,7 +42,7 @@ describe(`Custom middleware works correctly`, () => {
   it(`Non redirect because bad action`, () => {
     const url = `/test-url`;
     const {invoke} = mockRedux();
-    invoke({type: `TEST_ACTION`, payload: url});
+    invoke({type: `TEST_ACTION`, payload: url} as any);
     expect(fakeHistory.location.pathname).not.toBe(url);
   });
 });

@@ -5,7 +5,15 @@ import {TestMock} from "../../test-mocks/test-mock";
 import userEvent from "@testing-library/user-event";
 import {logoutFromSite} from "../../store/api-actions";
 
-jest.mock(`../../store/api-actions`);
+jest.mock(`../../store/api-actions`, () => {
+  return {
+    logoutFromSite: jest.fn().mockImplementation(() => {
+      return {
+        type: `test`
+      };
+    })
+  };
+});
 
 describe(`Logout logic should work correctly`, () => {
   it(`Sign in link should appear for unauthorized user`, () => {

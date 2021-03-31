@@ -7,7 +7,15 @@ import {changeCardFavoriteStatus} from "../../store/api-actions";
 import userEvent from "@testing-library/user-event";
 import {FavoriteStatus} from "../../const";
 
-jest.mock(`../../store/api-actions`);
+jest.mock(`../../store/api-actions`, () => {
+  return {
+    changeCardFavoriteStatus: jest.fn().mockImplementation(() => {
+      return {
+        type: `test`
+      };
+    })
+  };
+});
 
 describe(`Place card logic works correctly`, () => {
   it(`Place card hover & unhover events fire correct callback`, () => {
