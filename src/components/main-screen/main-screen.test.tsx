@@ -24,5 +24,3 @@ describe(`Main screen should render correctly`, () => {
     expect(container).toMatchSnapshot();
   });
 });
-
-

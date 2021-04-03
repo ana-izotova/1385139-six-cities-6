@@ -23,7 +23,7 @@ describe(`Place card logic works correctly`, () => {
 
     render(
         <TestMock authorized={true} emptyStore={false}>
-          <PlaceCard card={adaptedTestOffer} offerType={`cities`} activeCardIdChangeStateHandler={activeCardIdChangeStateHandler}/>
+          <PlaceCard card={adaptedTestOffer} offerType={`cities`} onActiveCardIdStateChange={activeCardIdChangeStateHandler}/>
         </TestMock>
     );
 

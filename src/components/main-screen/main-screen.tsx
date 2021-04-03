@@ -70,7 +70,7 @@ const MainScreen: React.FC = () => {
                       card={card}
                       offerType={`cities`}
                       key={card[`id`]}
-                      activeCardIdChangeStateHandler={setActiveCardId}
+                      onActiveCardIdStateChange={setActiveCardId}
                     />
                   ))}
                 </div>

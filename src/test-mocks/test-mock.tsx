@@ -1,4 +1,4 @@
-import React, {Dispatch} from 'react';
+import React from 'react';
 import configureStore from 'redux-mock-store';
 import * as redux from 'react-redux';
 import {Router} from 'react-router-dom';

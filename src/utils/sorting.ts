@@ -25,11 +25,11 @@ export const sortCards = (
 ): Array<OfferCard> => {
   switch (sortType) {
     case SortType.PRICE_HIGH_TO_LOW:
-      return cards.sort(sortCardsByPriceHighToLow);
+      return cards.slice().sort(sortCardsByPriceHighToLow);
     case SortType.PRICE_LOW_TO_HIGH:
-      return cards.sort(sortCardsByPriceLowToHigh);
+      return cards.slice().sort(sortCardsByPriceLowToHigh);
     case SortType.TOP_RATED_FIRST:
-      return cards.sort(sortByRating);
+      return cards.slice().sort(sortByRating);
     default:
       return cards;
   }

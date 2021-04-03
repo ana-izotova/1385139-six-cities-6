@@ -30,7 +30,7 @@ const getClassNames = (type: string): ClassNames => {
 const PlaceCard: React.FC<PlaceCardProps> = ({
   card,
   offerType,
-  activeCardIdChangeStateHandler,
+  onActiveCardIdStateChange,
 }) => {
   const {
     previewImage,
@@ -58,11 +58,11 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
   const dispatch = useDispatch();
 
   const handleMouseHover = () => {
-    activeCardIdChangeStateHandler(id);
+    onActiveCardIdStateChange(id);
   };
 
   const handleMouseLeave = () => {
-    activeCardIdChangeStateHandler(null);
+    onActiveCardIdStateChange(null);
   };
 
   const handleFavoriteClick = () => {
